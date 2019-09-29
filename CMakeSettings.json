@@ -1,23 +1,11 @@
 ﻿{
     "configurations": [
         {
-            "name": "x64-Release-with-debug-info",
-            "generator": "Ninja",
-            "configurationType": "RelWithDebInfo",
-            "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-            "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
-            "cmakeCommandArgs": "",
-            "buildCommandArgs": "-v",
-            "ctestCommandArgs": "",
-            "inheritEnvironments": [ "msvc_x64_x64" ],
-            "variables": []
-        },
-        {
             "name": "x64-Release",
             "generator": "Ninja",
             "configurationType": "Release",
-            "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-            "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+            "buildRoot": "${env.USERPROFILE}\\Documents\\Projects\\Komodo\\build",
+            "installRoot": "${env.USERPROFILE}\\Documents\\Projects\\Komodo\\install",
             "cmakeCommandArgs": "",
             "buildCommandArgs": "-v",
             "ctestCommandArgs": "",
@@ -28,8 +16,8 @@
             "name": "x64-Debug",
             "generator": "Ninja",
             "configurationType": "Debug",
-            "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-            "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+            "buildRoot": "${env.USERPROFILE}\\Documents\\Projects\\Komodo\\build",
+            "installRoot": "${env.USERPROFILE}\\Documents\\Projects\\Komodo\\install",
             "cmakeCommandArgs": "",
             "buildCommandArgs": "-v",
             "ctestCommandArgs": "",
