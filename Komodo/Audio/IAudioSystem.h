@@ -3,7 +3,7 @@
 class IAudioSystem
 {
 public:
-    bool Initialized = false;
+    bool m_initialized = false;
 
     virtual ~IAudioSystem()
     {

@@ -4,17 +4,30 @@
 cmake_minimum_required (VERSION 3.8)
 cmake_policy(SET CMP0079 NEW)
 
-project ("Komodo")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+project (Komodo)
 
 # Include sub-projects.
-add_subdirectory ("Komodo")
+add_subdirectory (Komodo)
+
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # GLFW
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 find_package(glfw3 3.3 REQUIRED)
-
 target_link_libraries(Komodo glfw3)
+
 find_package(OpenGL REQUIRED)
 target_include_directories(Komodo PUBLIC ${OPENGL_INCLUDE_DIR})
 target_link_libraries(Komodo ${OPENGL_gl_LIBRARY})
 target_link_libraries(Komodo ${OPENGL_glu_LIBRARY})
+
+# GLM
+find_package(glm REQUIRED)
+target_include_directories(Komodo PUBLIC ${GLM_INCLUDE_DIR})
+
+# pugixml
+add_subdirectory (pugixml)
+target_link_libraries(Komodo pugixml)
+target_include_directories(Komodo PUBLIC pugixml/src)

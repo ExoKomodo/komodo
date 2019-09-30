@@ -3,7 +3,7 @@
 class ILogger
 {
 public:
-    bool Initialized = false;
+    bool m_initialized = false;
 
     virtual ~ILogger()
     {

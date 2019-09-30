@@ -3,7 +3,7 @@
 class IDataFiles
 {
 public:
-    bool Initialized = false;
+    bool m_initialized = false;
 
     virtual ~IDataFiles()
     {

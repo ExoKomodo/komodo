@@ -7,7 +7,7 @@ class DataFiles : public IDataFiles
 public:
     DataFiles()
     {
-        this->Initialized = true;
+        this->m_initialized = true;
     }
 
     ~DataFiles()

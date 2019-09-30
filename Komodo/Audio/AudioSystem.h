@@ -7,7 +7,7 @@ class AudioSystem : public IAudioSystem
 public:
     AudioSystem()
     {
-        this->Initialized = true;
+        this->m_initialized = true;
     }
 
     ~AudioSystem()
