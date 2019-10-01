@@ -2,13 +2,19 @@
 
 #include <iostream>
 
-#include "macros.h"
+#include <Komodo/include/macros.h>
 
 #include "Audio/AudioSystem.h"
+
 #include "DataFiles/DataFiles.h"
-#include "Input/InputManager.h"
+
+#include "Input/IInputManager.h"
+#include "Input/OpenGLInputManager.h"
+
 #include "Logger/Logger.h"
-#include "Video/VideoSystem.h"
+
+#include "Video/IVideoSystem.h"
+#include "Video/OpenGLVideoSystem.h"
 
 extern IDataFiles* gp_data_files = nullptr;
 extern IAudioSystem* gp_audio_system = nullptr;

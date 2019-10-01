@@ -10,7 +10,7 @@ public:
         
     }
 
-    virtual void info(const char* message) = 0;
-    virtual void warning(const char* message) = 0;
-    virtual void error(const char* message) = 0;
+    virtual void v_info(const char* message, bool printToConsole = true) = 0;
+    virtual void v_warning(const char* message, bool printToConsole = true) = 0;
+    virtual void v_error(const char* message, bool printToConsole = true) = 0;
 };

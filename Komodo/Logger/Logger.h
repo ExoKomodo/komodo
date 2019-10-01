@@ -4,7 +4,6 @@
 #include <string>
 #include <pugixml.hpp>
 #include <fstream>
-#include <filesystem>
 
 class Logger : public ILogger
 {
@@ -13,8 +12,7 @@ public:
     {
         if (log_file_name)
         {
-            std::filesystem::path full_path = std::filesystem::current_path() / log_file_name;
-            this->m_log_file.open(full_path.string(), std::ios::out | std::ios::trunc);
+            this->m_log_file.open(log_file_name, std::ios::out | std::ios::trunc);
             if (!this->m_log_file.is_open())
             {
                 std::cerr << "Log file did not open!\n";
@@ -45,27 +43,27 @@ public:
         std::cout << "Successfully shutdown Logger!\n";
     }
 
-    virtual void info(const char* message)
+    void v_info(const char* message, bool printToConsole = true)
     {
         if (message != nullptr)
         {
-            this->write_log(this->m_info_prefix, message);
+            this->write_log(this->m_info_prefix, message, printToConsole);
         }
     }
 
-    virtual void warning(const char* message)
+    void v_warning(const char* message, bool printToConsole = true)
     {
         if (message != nullptr)
         {
-            this->write_log(this->m_warning_prefix, message);
+            this->write_log(this->m_warning_prefix, message, printToConsole);
         }
     }
 
-    virtual void error(const char* message)
+    void v_error(const char* message, bool printToConsole = true)
     {
         if (message != nullptr)
         {
-            this->write_log(this->m_error_prefix, message);
+            this->write_log(this->m_error_prefix, message, printToConsole);
         }
     }
 
@@ -84,12 +82,15 @@ protected:
         new_node.append_child(pugi::node_pcdata).set_value(message);
     }
 
-    void write_log(const char* prefix, const char* message)
+    void write_log(const char* prefix, const char* message, bool printToConsole = true)
     {
         std::string log_message(prefix);
         log_message.append(": ");
         log_message.append(message);
-        std::cout << log_message << std::endl;
+        if (printToConsole)
+        {
+            std::cout << log_message << std::endl;
+        }
         if (this->m_log_file)
         {
             this->write_to_xml(prefix, log_message.c_str());

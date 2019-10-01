@@ -7,7 +7,7 @@ int main()
         return 1;
     }
 
-	gp_logger->info("Welcome to Komodo game engine!");
+	gp_logger->v_info("Welcome to Komodo game engine!");
 
     gp_video_system->v_create_window(640, 480, "Komodo");
 
@@ -42,7 +42,7 @@ bool initialize_systems()
         return false;
     }
 
-    gp_input_manager = new InputManager();
+    gp_input_manager = new OpenGLInputManager();
     if (!gp_input_manager || !gp_input_manager->m_initialized)
     {
         std::cerr << "Input Manager failed to initialize!";
@@ -56,7 +56,7 @@ bool initialize_systems()
         return false;
     }
     
-    gp_video_system = new VideoSystem();
+    gp_video_system = new OpenGLVideoSystem();
     if (!gp_video_system || !gp_video_system->m_initialized)
     {
         std::cerr << "Video System failed to initialize!";
@@ -68,7 +68,7 @@ bool initialize_systems()
 
 void shutdown_systems()
 {
-    gp_logger->info("Shutting down systems...");
+    gp_logger->v_info("Shutting down systems...");
 
     SAFE_DELETE(gp_video_system);
     SAFE_DELETE(gp_audio_system);
