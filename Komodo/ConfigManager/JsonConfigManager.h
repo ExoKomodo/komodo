@@ -1,14 +1,15 @@
 #pragma once
 
 #include "IConfigManager.h"
+
 #include <map>
 #include <nhlomann/single_include/nlohmann/json.hpp>
 #include <fstream>
 #include <string>
-#include "../Logger/ILogger.h"
+#include <iostream>
 
 // Forward declarations
-ILogger* gp_logger;
+extern ILogger* gp_logger;
 
 class JsonConfigManager : public IConfigManager
 {
@@ -29,11 +30,9 @@ public:
         if (json)
         {
             *config_value = json->value(config_key, -1);
+            return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
     
     bool v_get_config_value_from_file(const char* config_file_name, const char* config_key, double* config_value)
@@ -42,11 +41,9 @@ public:
         if (json)
         {
             *config_value = json->value(config_key, -1);
+            return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     bool v_get_config_value_from_file(const char* config_file_name, const char* config_key, char** config_value)
@@ -54,12 +51,15 @@ public:
         auto json = this->get_json_from_config_file(config_file_name);
         if (json)
         {
-            *config_value = json->value(config_key, nullptr);
+            char* value = json->value(config_key, nullptr);
+
+            if (value != nullptr)
+            {
+                *config_value = value;
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
 protected:

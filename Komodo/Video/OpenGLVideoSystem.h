@@ -1,11 +1,15 @@
 #pragma once
 
-#include "IVideoSystem.h"
-#include "../Input/IInputManager.h"
-
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-IInputManager* gp_input_manager;
+#include "IVideoSystem.h"
+#include "../Logger/ILogger.h"
+#include "../Input/IInputManager.h"
+
+// Forward declarations
+extern IInputManager* gp_input_manager;
+extern ILogger* gp_logger;
 
 class OpenGLVideoSystem : public IVideoSystem
 {
@@ -25,7 +29,7 @@ public:
     ~OpenGLVideoSystem()
     {
         glfwTerminate();
-        std::cout << "Successfully shutdown OpenGL Video System!\n";
+        gp_logger->v_info("Successfully shutdown OpenGL Video System!");
     }
 
     void v_close_window()
@@ -41,6 +45,7 @@ public:
         if (this->m_window)
         {
             glfwMakeContextCurrent(this->m_window);
+            gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
             glfwSwapInterval(this->m_vsync_enabled ? 1 : 0);
             
             glfwGetFramebufferSize(this->m_window, &this->m_width, &this->m_height);
@@ -51,7 +56,7 @@ public:
         }
         else
         {
-            std::cerr << "Window creation failed!\n";
+            gp_logger->v_error("Window creation failed!");
             return false;
         }
         return true;
@@ -93,7 +98,13 @@ public:
     static void on_window_size_change(GLFWwindow* window, int width, int height)
     {
         glViewport(0, 0, width, height);
-        std::cout << "Resize to " << width << " by " << height << std::endl;
+        
+        std::string message("Resizing window to ");
+        message.append(std::to_string(width));
+        message.append(" by ");
+        message.append(std::to_string(height));
+
+        gp_logger->v_info(message.c_str());
     }
    
 protected:
@@ -109,7 +120,10 @@ protected:
 
     static void glfw_error_callback(int error, const char* description)
     {
-        std::cerr << "GLFW Error: " << description << std::endl;
+        std::string message("GLFW Error: ");
+        message.append(description);
+
+        gp_logger->v_error(message.c_str());
     }
 
     /*********

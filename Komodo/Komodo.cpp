@@ -9,17 +9,19 @@ int main()
 
 	gp_logger->v_info("Welcome to Komodo game engine!");
 
-    gp_video_system->v_create_window(640, 480, "Komodo");
-
-    bool done = false;
-    while (!done)
+    if (gp_video_system->v_create_window(640, 480, "Komodo"))
     {
-        gp_video_system->v_update();
-        if (gp_video_system->m_closed)
+        bool done = false;
+        while (!done)
         {
-            done = true;
+            gp_video_system->v_update();
+            if (gp_video_system->m_closed)
+            {
+                done = true;
+            }
         }
     }
+
 
     shutdown_systems();
 

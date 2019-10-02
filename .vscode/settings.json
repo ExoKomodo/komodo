@@ -1,2 +1,6 @@
 {
+    "files.associations": {
+        "*.script": "lua",
+        "iosfwd": "cpp"
+    }
 }
