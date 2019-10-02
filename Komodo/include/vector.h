@@ -1,27 +1,7 @@
 #pragma once
 
-struct Vector2
-{
-    double x;
-    double y;
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
-    Vector2(double x = 0, double y = 0)
-    {
-        this->x = x;
-        this->y = y;
-    }
-};
-
-struct Vector3
-{
-    double x;
-    double y;
-    double z;
-
-    Vector3(double x = 0, double y = 0, double z = 0)
-    {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-    }
-};
+typedef glm::vec2 Vector2;

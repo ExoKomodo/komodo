@@ -28,17 +28,17 @@ int main()
 
 bool initialize_systems()
 {
-    gp_logger = new Logger("log.xml");
-    if (!gp_logger || !gp_logger->m_initialized)
+    gp_config_manager = new JsonConfigManager();
+    if (!gp_config_manager || !gp_config_manager->m_initialized)
     {
-        std::cerr << "Logger failed to initialize!";
+        std::cerr << "Config Manager failed to initialize!";
         return false;
     }
 
-    gp_data_files = new DataFiles();
-    if (!gp_data_files || !gp_data_files->m_initialized)
+    gp_logger = new Logger("Komodo.log");
+    if (!gp_logger || !gp_logger->m_initialized)
     {
-        std::cerr << "Data Files failed to initialize!";
+        std::cerr << "Logger failed to initialize!";
         return false;
     }
 
@@ -73,7 +73,7 @@ void shutdown_systems()
     SAFE_DELETE(gp_video_system);
     SAFE_DELETE(gp_audio_system);
     SAFE_DELETE(gp_input_manager);
-    SAFE_DELETE(gp_data_files);
+    SAFE_DELETE(gp_config_manager);
 
     SAFE_DELETE(gp_logger);
 }

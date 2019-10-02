@@ -7,7 +7,6 @@
 #include <string>
 
 // Forward declarations
-ILogger* gp_logger;
 IVideoSystem* gp_video_system;
 
 class OpenGLInputManager : public IInputManager

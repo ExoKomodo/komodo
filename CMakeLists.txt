@@ -27,7 +27,8 @@ target_link_libraries(Komodo ${OPENGL_glu_LIBRARY})
 find_package(glm REQUIRED)
 target_include_directories(Komodo PUBLIC ${GLM_INCLUDE_DIR})
 
-# pugixml
-add_subdirectory (pugixml)
-target_link_libraries(Komodo pugixml)
-target_include_directories(Komodo PUBLIC pugixml/src)
+# json
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+add_subdirectory(nhlomann)
+#add_library(komodo ...)
+#target_link_libraries(komodo PRIVATE nlohmann_json::nlohmann_json)

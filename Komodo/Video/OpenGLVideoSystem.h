@@ -25,7 +25,7 @@ public:
     ~OpenGLVideoSystem()
     {
         glfwTerminate();
-        std::cout << "Successfully shutdown Video System!\n";
+        std::cout << "Successfully shutdown OpenGL Video System!\n";
     }
 
     void v_close_window()
