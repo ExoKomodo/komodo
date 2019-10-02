@@ -2,30 +2,36 @@
 
 int main()
 {
+    int return_code = 0;
     if (!initialize_systems())
     {
-        return 1;
+        return_code = 1;
     }
-
-	gp_logger->v_info("Welcome to Komodo game engine!");
-
-    if (gp_video_system->v_create_window(640, 480, "Komodo"))
+    else
     {
-        bool done = false;
-        while (!done)
+        gp_logger->v_info("Welcome to Komodo game engine!");
+
+        if (gp_video_system->v_create_window(640, 480, "Komodo"))
         {
-            gp_video_system->v_update();
-            if (gp_video_system->m_closed)
+            bool done = false;
+            while (!done)
             {
-                done = true;
+                gp_video_system->v_update();
+                if (gp_video_system->m_closed)
+                {
+                    done = true;
+                }
             }
         }
+        else
+        {
+            return_code = 2;
+        }
+        
     }
-
-
     shutdown_systems();
 
-	return 0;
+	return return_code;
 }
 
 bool initialize_systems()
