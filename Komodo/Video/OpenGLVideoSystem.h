@@ -50,7 +50,11 @@ public:
         if (this->m_window)
         {
             glfwMakeContextCurrent(this->m_window);
-            gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+            if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+            {
+                gp_logger->v_error("Failed to initialize GLAD");
+                return false;
+            }
             glfwSwapInterval(this->m_vsync_enabled ? 1 : 0);
             
             glfwGetFramebufferSize(this->m_window, &this->m_width, &this->m_height);
