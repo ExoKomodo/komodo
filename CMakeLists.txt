@@ -15,13 +15,15 @@ add_subdirectory (Komodo)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # GLFW
-find_package(glfw3 3.3 REQUIRED)
-target_link_libraries(Komodo glfw3)
+add_subdirectory(glfw)
+include_directories(glfw/include)
 
+target_link_libraries(Komodo glfw ${GLFW_LIBRARIES} ${OPENGL_glu_LIBRARY})
+
+# OpenGL
 find_package(OpenGL REQUIRED)
 target_include_directories(Komodo PUBLIC ${OPENGL_INCLUDE_DIR})
 target_link_libraries(Komodo ${OPENGL_gl_LIBRARY})
-target_link_libraries(Komodo ${OPENGL_glu_LIBRARY})
 
 # GLM
 find_package(glm REQUIRED)
