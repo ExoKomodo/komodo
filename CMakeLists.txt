@@ -20,6 +20,13 @@ include_directories(glfw/include)
 
 target_link_libraries(Komodo glfw ${GLFW_LIBRARIES} ${OPENGL_glu_LIBRARY})
 
+# GLAD
+set(GLAD_DIR "glad")
+add_library("glad" "${GLAD_DIR}/src/glad.c")
+target_include_directories("glad" PRIVATE "${GLAD_DIR}/include")
+target_include_directories(Komodo PRIVATE "${GLAD_DIR}/include")
+target_link_libraries(Komodo "glad" "${CMAKE_DL_LIBS}")
+
 # OpenGL
 find_package(OpenGL REQUIRED)
 target_include_directories(Komodo PUBLIC ${OPENGL_INCLUDE_DIR})
