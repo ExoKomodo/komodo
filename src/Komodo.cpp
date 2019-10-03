@@ -15,6 +15,16 @@ int main()
         if (gp_video_system->v_create_window(640, 480, "Komodo"))
         {
             bool done = false;
+            if (
+                !gp_shader_manager->add_shaders(
+                    "shaders/openGL/simple/fragment_shader.glsl",
+                    "shaders/openGL/simple/vertex_shader.glsl"
+                )
+            )
+            {
+                return_code = 3;
+                done = true;
+            }
             while (!done)
             {
                 gp_video_system->v_update();
@@ -72,6 +82,13 @@ bool initialize_systems()
         return false;
     }
 
+    gp_shader_manager = new OpenGLShaderManager();
+    if (!gp_shader_manager || !gp_shader_manager->m_initialized)
+    {
+        std::cerr << "Shader Manager failed to initialize!";
+        return false;
+    }
+
     return true;
 }
 
@@ -79,6 +96,7 @@ void shutdown_systems()
 {
     gp_logger->v_info("Shutting down systems...");
 
+    SAFE_DELETE(gp_shader_manager);
     SAFE_DELETE(gp_video_system);
     SAFE_DELETE(gp_audio_system);
     SAFE_DELETE(gp_input_manager);

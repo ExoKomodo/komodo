@@ -97,7 +97,7 @@ public:
             else
             {
                 glClearColor(m_clear_red, m_clear_green, m_clear_blue, m_clear_alpha);
-                glClear(GL_COLOR_BUFFER_BIT);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glfwSwapBuffers(this->m_window);
                 glfwPollEvents();
             }
