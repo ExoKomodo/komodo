@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project (Komodo)
 
 # Include sub-projects.
-add_subdirectory (Komodo)
+add_subdirectory (src)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
