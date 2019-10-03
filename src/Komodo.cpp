@@ -9,6 +9,7 @@ int main()
     }
     else
     {
+        gp_logger->v_add_output("komodo.log");
         gp_logger->v_info("Welcome to Komodo game engine!");
 
         if (gp_video_system->v_create_window(640, 480, "Komodo"))
@@ -36,17 +37,17 @@ int main()
 
 bool initialize_systems()
 {
+    gp_logger = new Logger();
+    if (!gp_logger || !gp_logger->m_initialized)
+    {
+        std::cerr << "Logger failed to initialize!";
+        return false;
+    }
+
     gp_config_manager = new JsonConfigManager();
     if (!gp_config_manager || !gp_config_manager->m_initialized)
     {
         std::cerr << "Config Manager failed to initialize!";
-        return false;
-    }
-
-    gp_logger = new Logger("Komodo.log");
-    if (!gp_logger || !gp_logger->m_initialized)
-    {
-        std::cerr << "Logger failed to initialize!";
         return false;
     }
 

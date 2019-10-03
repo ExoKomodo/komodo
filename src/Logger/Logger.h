@@ -5,34 +5,26 @@
 #include <fstream>
 #include <filesystem>
 #include <ctime>
+#include <vector>
 
 class Logger : public ILogger
 {
 public:
-    Logger(const char* log_file_name = nullptr)
+    Logger()
     {
-        if (log_file_name)
-        {
-            this->m_log_file.open(log_file_name, std::ios::out | std::ios::trunc);
-            if (!this->m_log_file.is_open())
-            {
-                std::cerr << "Log file did not open!\n";
-            }
-            else
-            {
-                //time_t now = time(0);
-                //this->m_log_file << "KOMODO GAME ENGINE: " << ctime(&now) << std::endl;
-            }
-        }
         m_initialized = true;
     }
 
     ~Logger()
     {
-        if (this->m_log_file)
+        for (auto it = this->m_output_streams.begin(); it != this->m_output_streams.end(); ++it)
         {
-            this->m_log_file.close();
+            if ((*it)->is_open())
+            {
+                (*it)->close();
+            }
         }
+        
         std::cout << "Successfully shutdown Logger!\n";
     }
 
@@ -60,8 +52,25 @@ public:
         }
     }
 
+    bool v_add_output(const char* output_file_name)
+    {
+        std::ofstream* output_stream = new std::ofstream();
+        output_stream->open(output_file_name, std::ios::out | std::ios::trunc);
+        if (output_stream->is_open())
+        {
+            this->m_output_streams.push_back(output_stream);
+            this->v_info("Successfully added new logging output");
+            return true;
+        }
+        else
+        {
+            this->v_error("Failed in adding new logging output");
+            return false;
+        }
+    }
+
 protected:
-    std::ofstream m_log_file;
+    std::vector<std::ofstream*> m_output_streams;
 
     const char* m_info_prefix = "INFO: ";
     const char* m_warning_prefix = "WARNING: ";
@@ -69,13 +78,17 @@ protected:
 
     void write_log(const char* prefix, const char* message, bool printToConsole = true)
     {
-        if (printToConsole)
+        if (prefix == this->m_info_prefix || prefix == this->m_warning_prefix)
         {
             std::cout << prefix << message << std::endl;
         }
-        if (this->m_log_file)
+        else
         {
-            this->m_log_file << prefix << message << std::endl;
+            std::cerr << prefix << message << std::endl;
+        }
+        for (auto it = this->m_output_streams.begin(); it != this->m_output_streams.end(); ++it)
+        {
+            (**it) << message << std::endl;
         }
     }
 };
