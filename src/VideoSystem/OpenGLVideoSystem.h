@@ -5,7 +5,7 @@
 
 #include "IVideoSystem.h"
 #include "../Logger/ILogger.h"
-#include "../Input/IInputManager.h"
+#include "../InputManager/IInputManager.h"
 
 // Forward declarations
 extern IInputManager* gp_input_manager;

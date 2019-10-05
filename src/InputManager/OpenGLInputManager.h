@@ -2,7 +2,7 @@
 
 #include "IInputManager.h"
 #include "../Logger/ILogger.h"
-#include "../Video/OpenGLVideoSystem.h"
+#include "../VideoSystem/OpenGLVideoSystem.h"
 #include <GLFW/glfw3.h>
 #include <string>
 
