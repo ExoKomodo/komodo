@@ -39,5 +39,3 @@ target_include_directories(Komodo PUBLIC ${GLM_INCLUDE_DIR})
 # json
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 add_subdirectory(nhlomann)
-#add_library(komodo ...)
-#target_link_libraries(komodo PRIVATE nlohmann_json::nlohmann_json)

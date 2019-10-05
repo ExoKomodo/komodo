@@ -6,7 +6,7 @@ class ILogger
 {
 public:
     bool m_initialized = false;
-
+    
     virtual ~ILogger()
     {
         
