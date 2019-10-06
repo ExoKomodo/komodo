@@ -4,9 +4,4 @@ class IAudioSystem
 {
 public:
     bool m_initialized = false;
-
-    virtual ~IAudioSystem()
-    {
-
-    }
 };

@@ -1,16 +1,11 @@
 #pragma once
 
-#include <src/include/vector.h>
+#include <include/vector.h>
 
 class IInputManager
 {
 public:
     bool m_initialized = false;
-
-    virtual ~IInputManager()
-    {
-        
-    }
 
     /*********
     * Cursor *

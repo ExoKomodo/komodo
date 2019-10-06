@@ -1,4 +1,4 @@
-﻿#include "Komodo.h"
+﻿#include <include/Komodo.h>
 
 int main()
 {
