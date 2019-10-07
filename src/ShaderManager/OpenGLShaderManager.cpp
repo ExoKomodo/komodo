@@ -10,7 +10,7 @@ OpenGLShaderManager::~OpenGLShaderManager()
     gp_logger->v_info("Successfully shutdown OpenGL Shader Manager!");
 }
 
-bool OpenGLShaderManager::add_shaders(const char* fragment_shader_path, const char* vertex_shader_path)
+unsigned int OpenGLShaderManager::add_shader(const char* fragment_shader_path, const char* vertex_shader_path)
 {
     GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -26,20 +26,13 @@ bool OpenGLShaderManager::add_shaders(const char* fragment_shader_path, const ch
             result = this->link_shaders(program_id, fragment_shader_id, vertex_shader_id);
             if (result)
             {
-                this->m_shader_name_to_program_id[fragment_shader_path] = program_id;
-                this->m_shader_name_to_program_id[vertex_shader_path] = program_id;
+                this->m_shaders.insert(program_id);
+                return program_id;
             }
-            return result;
-        }
-        else
-        {
-            return false;   
         }
     }
-    else
-    {
-        return false;
-    }
+
+    return 0;
 }
 
 bool OpenGLShaderManager::compile_shader(const char* shader_path, GLuint shader_id)
@@ -76,6 +69,7 @@ bool OpenGLShaderManager::compile_shader(const char* shader_path, GLuint shader_
     glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &info_log_length);
     if (info_log_length > 0 )
     {
+        gp_logger->v_error("Encountered problems compiling shaders");
         std::vector<char> shader_error_message(info_log_length + 1);
         glGetShaderInfoLog(shader_id, info_log_length, nullptr, &shader_error_message[0]);
         gp_logger->v_error(&shader_error_message[0]);
@@ -113,4 +107,17 @@ bool OpenGLShaderManager::link_shaders(GLuint program_id, GLuint fragment_shader
     glDeleteShader(vertex_shader_id);
 
     return true;
+}
+
+bool OpenGLShaderManager::use_shader(unsigned int shader_id)
+{
+    if (this->m_shaders.count(shader_id) != 0)
+    {
+        glUseProgram(shader_id);
+    }
+    else
+    {
+        gp_logger->v_error("Shader not added.");
+        return false;
+    }
 }

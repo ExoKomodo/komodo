@@ -15,15 +15,14 @@ int main()
         if (gp_video_system->v_create_window(640, 480, "Komodo"))
         {
             bool done = false;
-            if (
-                !gp_shader_manager->add_shaders(
-                    "shaders/openGL/simple/fragment_shader.glsl",
-                    "shaders/openGL/simple/vertex_shader.glsl"
-                )
-            )
+            auto shader = gp_shader_manager->add_shader(
+                "shaders/openGL/simple/fragment_shader.glsl",
+                "shaders/openGL/simple/vertex_shader.glsl"
+            );
+            if (!shader)
             {
-                return_code = 3;
                 done = true;
+                return_code = 3;
             }
             while (!done)
             {

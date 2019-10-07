@@ -1,8 +1,6 @@
 #include <include/ShaderManager/IShaderManager.h>
 
-#include <include/Logger/ILogger.h>
-
-#include <map>
+#include <set>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -11,6 +9,7 @@
 #include <GLFW/glfw3.h>
 
 // Forward declarations
+#include <include/Logger/ILogger.h>
 extern ILogger* gp_logger;
 
 class OpenGLShaderManager : public IShaderManager
@@ -20,10 +19,11 @@ public:
 
     ~OpenGLShaderManager();
 
-    bool add_shaders(const char* fragment_shader_path, const char* vertex_shader_path);
+    unsigned int add_shader(const char* fragment_shader_path, const char* vertex_shader_path);
+    bool use_shader(unsigned int shader_id);
 
 protected:
-    std::map<const char*, GLuint> m_shader_name_to_program_id;
+    std::set<GLuint> m_shaders;
 
     bool compile_shader(const char* shader_path, GLuint shader_id);
 

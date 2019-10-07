@@ -10,7 +10,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(Komodo)
 add_executable(Komodo 
     ${PROJECT_SOURCE_DIR}/src/Komodo.cpp
-    ${PROJECT_SOURCE_DIR}/src/Komodo.h
 )
 
 # Add includes
