@@ -28,5 +28,7 @@ IVideoSystem* gp_video_system = nullptr;
 #include <include/ShaderManager/OpenGLShaderManager.h>
 #include <include/VideoSystem/OpenGLVideoSystem.h>
 
+int game_loop();
 bool initialize_systems();
+int komodo_exit(int exit_code = 0);
 void shutdown_systems();

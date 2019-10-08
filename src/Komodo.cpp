@@ -2,46 +2,43 @@
 
 int main()
 {
-    int return_code = 0;
     if (!initialize_systems())
     {
-        return_code = 1;
+        return komodo_exit(1);
     }
-    else
+    gp_logger->v_add_output("komodo.log");
+    gp_logger->v_info("Welcome to Komodo game engine!");
+
+    if (!gp_video_system->v_create_window(640, 480, "Komodo"))
     {
-        gp_logger->v_add_output("komodo.log");
-        gp_logger->v_info("Welcome to Komodo game engine!");
-
-        if (gp_video_system->v_create_window(640, 480, "Komodo"))
-        {
-            bool done = false;
-            auto shader = gp_shader_manager->add_shader(
-                "shaders/openGL/simple/fragment_shader.glsl",
-                "shaders/openGL/simple/vertex_shader.glsl"
-            );
-            if (!shader)
-            {
-                done = true;
-                return_code = 3;
-            }
-            while (!done)
-            {
-                gp_video_system->v_update();
-                if (gp_video_system->m_closed)
-                {
-                    done = true;
-                }
-            }
-        }
-        else
-        {
-            return_code = 2;
-        }
-        
+        return komodo_exit(2);
     }
-    shutdown_systems();
+    
+    auto shader = gp_shader_manager->add_shader(
+        "shaders/openGL/simple/fragment_shader.glsl",
+        "shaders/openGL/simple/vertex_shader.glsl"
+    );
+    if (!shader)
+    {
+        return komodo_exit(3);
+    }
+    
+    int game_return_code = game_loop();
+    return komodo_exit(game_return_code);
+}
 
-	return return_code;
+int game_loop()
+{
+    bool done = false;
+    while (!done)
+    {
+        gp_video_system->v_update();
+        if (gp_video_system->m_closed)
+        {
+            done = true;
+        }
+    }
+    return 0;
 }
 
 bool initialize_systems()
@@ -89,6 +86,13 @@ bool initialize_systems()
     }
 
     return true;
+}
+
+int komodo_exit(int exit_code)
+{
+    shutdown_systems();
+
+    return exit_code;
 }
 
 void shutdown_systems()
