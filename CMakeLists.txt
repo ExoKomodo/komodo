@@ -44,6 +44,16 @@ target_sources(Komodo
     PRIVATE ${PROJECT_SOURCE_DIR}/src/ShaderManager/OpenGLShaderManager.cpp
 )
 
+## Sprite
+target_sources(Komodo
+    PRIVATE ${PROJECT_SOURCE_DIR}/src/Sprite/OpenGLSprite.cpp
+)
+
+## Sprite Manager
+target_sources(Komodo
+    PRIVATE ${PROJECT_SOURCE_DIR}/src/SpriteManager/OpenGLSpriteManager.cpp
+)
+
 ## Video System
 target_sources(Komodo
     PRIVATE ${PROJECT_SOURCE_DIR}/src/VideoSystem/OpenGLVideoSystem.cpp

@@ -8,6 +8,8 @@
 #include <include/InputManager/IInputManager.h>
 #include <include/Logger/ILogger.h>
 #include <include/ShaderManager/IShaderManager.h>
+#include <include/Sprite/ISprite.h>
+#include <include/SpriteManager/ISpriteManager.h>
 #include <include/VideoSystem/IVideoSystem.h>
 
 /*
@@ -19,6 +21,7 @@ IConfigManager* gp_config_manager = nullptr;
 IInputManager* gp_input_manager = nullptr;
 ILogger* gp_logger = nullptr;
 IShaderManager* gp_shader_manager = nullptr;
+ISpriteManager* gp_sprite_manager = nullptr;
 IVideoSystem* gp_video_system = nullptr;
 
 #include <include/AudioSystem/AudioSystem.h>
@@ -26,6 +29,8 @@ IVideoSystem* gp_video_system = nullptr;
 #include <include/InputManager/OpenGLInputManager.h>
 #include <include/Logger/Logger.h>
 #include <include/ShaderManager/OpenGLShaderManager.h>
+#include <include/Sprite/OpenGLSprite.h>
+#include <include/SpriteManager/OpenGLSpriteManager.h>
 #include <include/VideoSystem/OpenGLVideoSystem.h>
 
 int game_loop();

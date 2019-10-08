@@ -10,7 +10,7 @@ OpenGLShaderManager::~OpenGLShaderManager()
     gp_logger->v_info("Successfully shutdown OpenGL Shader Manager!");
 }
 
-unsigned int OpenGLShaderManager::add_shader(const char* fragment_shader_path, const char* vertex_shader_path)
+unsigned int OpenGLShaderManager::v_add_shader(const char* fragment_shader_path, const char* vertex_shader_path)
 {
     GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -109,7 +109,7 @@ bool OpenGLShaderManager::link_shaders(GLuint program_id, GLuint fragment_shader
     return true;
 }
 
-bool OpenGLShaderManager::use_shader(unsigned int shader_id)
+bool OpenGLShaderManager::v_use_shader(unsigned int shader_id)
 {
     if (this->m_shaders.count(shader_id) != 0)
     {

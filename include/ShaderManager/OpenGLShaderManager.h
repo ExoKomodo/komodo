@@ -19,8 +19,9 @@ public:
 
     ~OpenGLShaderManager();
 
-    unsigned int add_shader(const char* fragment_shader_path, const char* vertex_shader_path);
-    bool use_shader(unsigned int shader_id);
+    unsigned int v_add_shader(const char* fragment_shader_path, const char* vertex_shader_path);
+
+    bool v_use_shader(unsigned int shader_id);
 
 protected:
     std::set<GLuint> m_shaders;

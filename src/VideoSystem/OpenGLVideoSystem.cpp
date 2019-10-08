@@ -82,6 +82,9 @@ void OpenGLVideoSystem::v_update()
         {
             glClearColor(m_clear_red, m_clear_green, m_clear_blue, m_clear_alpha);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            gp_sprite_manager->v_draw_sprites();
+
             glfwSwapBuffers(this->m_window);
             glfwPollEvents();
         }

@@ -1,16 +1,17 @@
 #pragma once
 
-#include <include/VideoSystem/IVideoSystem.h>
-#include <include/Logger/ILogger.h>
-#include <include/InputManager/IInputManager.h>
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <string>
 
 // Forward declarations
+#include <include/VideoSystem/IVideoSystem.h>
+#include <include/Logger/ILogger.h>
+#include <include/InputManager/IInputManager.h>
+#include <include/SpriteManager/OpenGLSpriteManager.h>
 extern IInputManager* gp_input_manager;
 extern ILogger* gp_logger;
+extern ISpriteManager* gp_sprite_manager;
 
 class OpenGLVideoSystem : public IVideoSystem
 {

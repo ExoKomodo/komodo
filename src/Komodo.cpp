@@ -1,5 +1,7 @@
 ﻿#include <include/Komodo.h>
 
+unsigned int test_shader;
+
 int main()
 {
     if (!initialize_systems())
@@ -14,14 +16,15 @@ int main()
         return komodo_exit(2);
     }
     
-    auto shader = gp_shader_manager->add_shader(
+    test_shader = gp_shader_manager->v_add_shader(
         "shaders/openGL/simple/fragment_shader.glsl",
         "shaders/openGL/simple/vertex_shader.glsl"
     );
-    if (!shader)
+    if (!test_shader)
     {
         return komodo_exit(3);
     }
+    gp_sprite_manager->v_add_sprite(new OpenGLSprite(test_shader));
     
     int game_return_code = game_loop();
     return komodo_exit(game_return_code);
@@ -53,35 +56,42 @@ bool initialize_systems()
     gp_config_manager = new JsonConfigManager();
     if (!gp_config_manager || !gp_config_manager->m_initialized)
     {
-        std::cerr << "Config Manager failed to initialize!";
+        gp_logger->v_error("Config Manager failed to initialize!");
         return false;
     }
 
     gp_input_manager = new OpenGLInputManager();
     if (!gp_input_manager || !gp_input_manager->m_initialized)
     {
-        std::cerr << "Input Manager failed to initialize!";
+        gp_logger->v_error("Input Manager failed to initialize!");
         return false;
     }
     
     gp_audio_system = new AudioSystem();
     if (!gp_audio_system || !gp_audio_system->m_initialized)
     {
-        std::cerr << "Audio System failed to initialize!";
+        gp_logger->v_error("Audio System failed to initialize!");
         return false;
     }
     
     gp_video_system = new OpenGLVideoSystem();
     if (!gp_video_system || !gp_video_system->m_initialized)
     {
-        std::cerr << "Video System failed to initialize!";
+        gp_logger->v_error("Video System failed to initialize!");
         return false;
     }
 
     gp_shader_manager = new OpenGLShaderManager();
     if (!gp_shader_manager || !gp_shader_manager->m_initialized)
     {
-        std::cerr << "Shader Manager failed to initialize!";
+        gp_logger->v_error("Shader Manager failed to initialize!");
+        return false;
+    }
+
+    gp_sprite_manager = new OpenGLSpriteManager();
+    if (!gp_sprite_manager || !gp_sprite_manager->m_initialized)
+    {
+        gp_logger->v_error("Sprite Manager failed to initialize!");
         return false;
     }
 
@@ -99,6 +109,7 @@ void shutdown_systems()
 {
     gp_logger->v_info("Shutting down systems...");
 
+    SAFE_DELETE(gp_sprite_manager);
     SAFE_DELETE(gp_shader_manager);
     SAFE_DELETE(gp_video_system);
     SAFE_DELETE(gp_audio_system);

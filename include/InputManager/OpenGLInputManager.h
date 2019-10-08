@@ -2,8 +2,8 @@
 
 #include <include/InputManager/IInputManager.h>
 #include <include/Logger/ILogger.h>
-#include <include/vector.h>
 #include <include/VideoSystem/OpenGLVideoSystem.h>
+#include <include/vector.h>
 
 #include <GLFW/glfw3.h>
 #include <string>
