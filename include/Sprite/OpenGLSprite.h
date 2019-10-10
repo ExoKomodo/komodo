@@ -14,15 +14,23 @@ extern IShaderManager* gp_shader_manager;
 class OpenGLSprite : public ISprite
 {
 public:
-    OpenGLSprite(unsigned int shader = 0);
+    OpenGLSprite(
+        unsigned int shader,
+        float vertices[],
+        int number_of_vertices,
+        unsigned int indices[],
+        int number_of_indices
+    );
     bool v_draw();
 
 protected:
-    float m_vertices[9] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
-    };
+    size_t m_number_of_vertices;
+    float* m_vertices;
+
+    size_t m_number_of_indices;
+    unsigned int* m_indices;
+
     unsigned int m_vertex_array_object;
     unsigned int m_vertex_buffer_object;
+    unsigned int m_element_buffer_object;
 };

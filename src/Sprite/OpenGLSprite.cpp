@@ -1,11 +1,31 @@
 #include <include/Sprite/OpenGLSprite.h>
 
-OpenGLSprite::OpenGLSprite(unsigned int shader)
+OpenGLSprite::OpenGLSprite(
+    unsigned int shader,
+    float vertices[],
+    int number_of_vertices,
+    unsigned int indices[],
+    int number_of_indices
+)
 {
+    this->m_number_of_vertices = number_of_vertices;
+    this->m_vertices = new float[this->m_number_of_vertices];
+    for (size_t i = 0; i < this->m_number_of_vertices; ++i)
+    {
+        this->m_vertices[i] = vertices[i];
+    }
+    this->m_number_of_indices = number_of_indices;
+    this->m_indices = new unsigned int[this->m_number_of_indices];
+    for (size_t i = 0; i < this->m_number_of_indices; ++i)
+    {
+        this->m_indices[i] = indices[i];
+    }
     this->m_shader = shader;
     
+    // Generate buffers
     glGenVertexArrays(1, &this->m_vertex_array_object);
     glGenBuffers(1, &this->m_vertex_buffer_object);
+    glGenBuffers(1, &this->m_element_buffer_object);
     
     glBindVertexArray(this->m_vertex_array_object);
     
@@ -13,8 +33,17 @@ OpenGLSprite::OpenGLSprite(unsigned int shader)
     glBindBuffer(GL_ARRAY_BUFFER, this->m_vertex_buffer_object);
     glBufferData(
         GL_ARRAY_BUFFER,
-        sizeof(this->m_vertices),
+        sizeof(float) * this->m_number_of_vertices,
         this->m_vertices,
+        GL_STATIC_DRAW
+    );
+
+    // Copy the elements into an OpenGL buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->m_element_buffer_object);
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        sizeof(unsigned int) * this->m_number_of_indices,
+        this->m_indices,
         GL_STATIC_DRAW
     );
 
@@ -40,7 +69,13 @@ bool OpenGLSprite::v_draw()
         gp_shader_manager->v_use_shader(this->m_shader);
         
         glBindVertexArray(this->m_vertex_array_object);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(
+            GL_TRIANGLES,
+            this->m_number_of_indices,
+            GL_UNSIGNED_INT,
+            0
+        );
+        glBindVertexArray(0);
 
         return true;
     }

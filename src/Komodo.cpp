@@ -24,7 +24,25 @@ int main()
     {
         return komodo_exit(3);
     }
-    gp_sprite_manager->v_add_sprite(new OpenGLSprite(test_shader));
+    float vertices[] = {
+        0.5f,  0.5f, 0.0f,  // top right
+        0.5f, -0.5f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f  // top left 
+    };
+    unsigned int indices[] = {
+        0, 1, 3,   // first triangle
+        1, 2, 3    // second triangle
+    };
+    gp_sprite_manager->v_add_sprite(
+        new OpenGLSprite(
+            test_shader,
+            vertices,
+            sizeof(vertices) / sizeof(float),
+            indices,
+            sizeof(indices) / sizeof(unsigned int)
+        )
+    );
     
     int game_return_code = game_loop();
     return komodo_exit(game_return_code);
