@@ -71,9 +71,10 @@ bool OpenGLSprite::v_draw()
     if (this->m_shader && this->m_vertices)
     {
         float timeValue = glfwGetTime();
-        this->m_color.x = sin(timeValue);
-        this->m_color.y = sin(timeValue) + 0.5f;
-        this->m_color.z = cos(timeValue);
+        this->m_color.x = 1.0f;
+        this->m_color.y = 1.0f;
+        this->m_color.z = 1.0f;
+        this->m_color.w = 1.0f;
         gp_shader_manager->v_use_shader(this->m_shader, this->m_color);
         
         glBindVertexArray(this->m_vertex_array_object);

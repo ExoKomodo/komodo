@@ -114,8 +114,12 @@ bool OpenGLShaderManager::v_use_shader(unsigned int shader_id, Vector4 color)
     if (this->m_shaders.count(shader_id) != 0)
     {
         glUseProgram(shader_id);
-        int colorLocation = glGetUniformLocation(shader_id, "color");
-        glUniform4f(colorLocation, color.x, color.y, color.z, color.w);
+        
+        int color_location = glGetUniformLocation(shader_id, "color");
+        glUniform4f(color_location, color.x, color.y, color.z, color.w);
+        
+        int world_space_location = glGetUniformLocation(shader_id, "world_space");
+        glUniform3f(world_space_location, 10.0f, 10.0f, 10.0f);
     }
     else
     {

@@ -25,10 +25,10 @@ int main()
         return komodo_exit(3);
     }
     float vertices[] = {
-        0.5f,  0.5f, 0.0f,  // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f  // top left 
+        7.5f, 7.5f, 0.0f,  // top right
+        7.5f, 2.5f, 0.0f,  // bottom right
+        2.5f, 2.5f, 0.0f, // bottom left
+        2.5f, 7.5f, 0.0f  // top left
     };
     unsigned int indices[] = {
         0, 1, 3,   // first triangle
