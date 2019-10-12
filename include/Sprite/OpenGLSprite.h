@@ -19,15 +19,16 @@ public:
         float vertices[],
         int number_of_vertices,
         unsigned int indices[],
-        int number_of_indices
+        int number_of_indices,
+        Vector4 color=Vector4()
     );
     bool v_draw();
 
 protected:
-    size_t m_number_of_vertices;
+    unsigned int m_number_of_vertices;
     float* m_vertices;
 
-    size_t m_number_of_indices;
+    unsigned int m_number_of_indices;
     unsigned int* m_indices;
 
     unsigned int m_vertex_array_object;

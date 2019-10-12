@@ -109,11 +109,13 @@ bool OpenGLShaderManager::link_shaders(GLuint program_id, GLuint fragment_shader
     return true;
 }
 
-bool OpenGLShaderManager::v_use_shader(unsigned int shader_id)
+bool OpenGLShaderManager::v_use_shader(unsigned int shader_id, Vector4 color)
 {
     if (this->m_shaders.count(shader_id) != 0)
     {
         glUseProgram(shader_id);
+        int colorLocation = glGetUniformLocation(shader_id, "color");
+        glUniform4f(colorLocation, color.x, color.y, color.z, color.w);
     }
     else
     {

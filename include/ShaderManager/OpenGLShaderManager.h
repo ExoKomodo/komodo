@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <glm/vec4.hpp>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -21,7 +23,7 @@ public:
 
     unsigned int v_add_shader(const char* fragment_shader_path, const char* vertex_shader_path);
 
-    bool v_use_shader(unsigned int shader_id);
+    bool v_use_shader(unsigned int shader_id, Vector4 color);
 
 protected:
     std::set<GLuint> m_shaders;

@@ -5,22 +5,26 @@ OpenGLSprite::OpenGLSprite(
     float vertices[],
     int number_of_vertices,
     unsigned int indices[],
-    int number_of_indices
+    int number_of_indices,
+    Vector4 color
 )
+    : ISprite(
+        shader,
+        color
+    )
+    , m_number_of_vertices(number_of_vertices)
+    , m_number_of_indices(number_of_indices)
 {
-    this->m_number_of_vertices = number_of_vertices;
     this->m_vertices = new float[this->m_number_of_vertices];
     for (size_t i = 0; i < this->m_number_of_vertices; ++i)
     {
         this->m_vertices[i] = vertices[i];
     }
-    this->m_number_of_indices = number_of_indices;
     this->m_indices = new unsigned int[this->m_number_of_indices];
     for (size_t i = 0; i < this->m_number_of_indices; ++i)
     {
         this->m_indices[i] = indices[i];
     }
-    this->m_shader = shader;
     
     // Generate buffers
     glGenVertexArrays(1, &this->m_vertex_array_object);
@@ -66,7 +70,11 @@ bool OpenGLSprite::v_draw()
 {
     if (this->m_shader && this->m_vertices)
     {
-        gp_shader_manager->v_use_shader(this->m_shader);
+        float timeValue = glfwGetTime();
+        this->m_color.x = sin(timeValue);
+        this->m_color.y = sin(timeValue) + 0.5f;
+        this->m_color.z = cos(timeValue);
+        gp_shader_manager->v_use_shader(this->m_shader, this->m_color);
         
         glBindVertexArray(this->m_vertex_array_object);
         glDrawElements(
