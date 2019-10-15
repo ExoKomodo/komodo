@@ -40,7 +40,9 @@ int main()
             vertices,
             sizeof(vertices) / sizeof(float),
             indices,
-            sizeof(indices) / sizeof(unsigned int)
+            sizeof(indices) / sizeof(unsigned int),
+            Vector3(1.0f, 1.0f, 1.0f),
+            "assets/brick.jpg"
         )
     );
     

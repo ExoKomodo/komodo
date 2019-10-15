@@ -1,15 +1,24 @@
 #version 330 core
 
-layout(location = 0) in vec3 position_in_world_space;
+layout(location = 0) in vec3 aWorldSpacePosition;
+layout(location = 1) in vec3 aColor;
+layout(location = 2) in vec2 aTextureCoordinates;
 
-uniform vec3 world_space;
+out vec3 color;
+out vec2 textureCoordinates;
+
+uniform vec3 worldSpace;
 
 void main() {
     // Translate world coordinates to their proper position within the defined world space
     gl_Position = vec4(
-        (position_in_world_space.x - world_space.x / 2) / world_space.x,
-        (position_in_world_space.y - world_space.y / 2) / world_space.y,
-        (position_in_world_space.z - world_space.z / 2) / world_space.z,
+        (aWorldSpacePosition.x - worldSpace.x / 2) / worldSpace.x,
+        (aWorldSpacePosition.y - worldSpace.y / 2) / worldSpace.y,
+        (aWorldSpacePosition.z - worldSpace.z / 2) / worldSpace.z,
         1.0
     );
+    // gl_Position = vec4(aWorldSpacePosition.xyz, 1.0);
+
+    color = aColor;
+    textureCoordinates = aTextureCoordinates;
 }

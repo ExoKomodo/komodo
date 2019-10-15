@@ -88,3 +88,10 @@ target_include_directories(Komodo PUBLIC ${GLM_INCLUDE_DIR})
 ## nhlomann json
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 add_subdirectory(nhlomann)
+
+## stb_image
+target_sources(Komodo
+    PRIVATE ${PROJECT_SOURCE_DIR}/include/stb_image.cpp
+)
+
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
