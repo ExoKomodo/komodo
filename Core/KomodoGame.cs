@@ -48,6 +48,11 @@ namespace Komodo.Core
             _komodoMonoGame.Exit();
         }
 
+        public void Initialize()
+        {
+            _graphicsManagerMonoGame.Initialize();
+        }
+
         public void ResetElapsedTime()
         {
             _komodoMonoGame.ResetElapsedTime();

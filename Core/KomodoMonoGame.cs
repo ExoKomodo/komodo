@@ -11,7 +11,6 @@ namespace Komodo.Core
         #region Members
 
         #region Public Members
-        public SpriteBatch _spriteBatch;
         #endregion Public Members
 
         #region Protected Members
@@ -38,12 +37,14 @@ namespace Komodo.Core
 
         protected override void Initialize()
         {
+            // Framework should initialize all resources before wrapping classes can initialize
             base.Initialize();
+
+            _komodoGame.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)

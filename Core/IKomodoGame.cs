@@ -24,6 +24,7 @@ namespace Komodo.Core
         void Draw(GameTime gameTime);
         void Draw(GameTime gameTime, Color clearColor);
         void Exit();
+        void Initialize();
         void ResetElapsedTime();
         void Run();
         void RunOneFrame();
