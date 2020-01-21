@@ -65,7 +65,6 @@ namespace Komodo.Core
         {
             _komodoGame = komodoGame;
             Content.RootDirectory = "Content/MonoGame";
-            IsMouseVisible = true;
         }
         #endregion Constructors
     }
