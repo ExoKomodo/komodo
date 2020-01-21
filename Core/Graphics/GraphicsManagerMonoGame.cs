@@ -1,3 +1,5 @@
+using Komodo.Core.Sprites;
+
 using Microsoft.Xna.Framework;
 
 namespace Komodo.Core.Graphics
@@ -7,13 +9,14 @@ namespace Komodo.Core.Graphics
         #region Members
 
         #region Public Members
+        public GraphicsDeviceManager _graphicsDeviceManager;
+        public SpriteManagerMonoGame _spriteManagerMonoGame;
         #endregion Public Members
         
         #region Protected Members
         #endregion Protected Members
         
         #region Private Members
-        private GraphicsDeviceManager _graphicsDeviceManager;
         private KomodoMonoGame _komodoMonoGame;
         #endregion Private Members
 
@@ -25,6 +28,13 @@ namespace Komodo.Core.Graphics
         public void Clear(Color clearColor)
         {
             _graphicsDeviceManager.GraphicsDevice.Clear(clearColor);
+        }
+
+        // Initialize is called after all framework resources have been initialized and allocated
+        public void Initialize()
+        {
+            // Sprite manager requires framework graphics resources to be initialized
+            _spriteManagerMonoGame = new SpriteManagerMonoGame(this);   
         }
         #endregion Public Member Methods
         

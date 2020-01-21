@@ -1,9 +1,9 @@
 // TODO: Remove dependency on MonoGame: GraphicsManager
 using Microsoft.Xna.Framework;
 
-namespace Komodo.Core.Graphics
+namespace Komodo.Core.Sprites
 {
-    public interface IGraphicsManager
+    public interface ISpriteManager
     {
         #region Members
 
@@ -21,8 +21,6 @@ namespace Komodo.Core.Graphics
         #region Member Methods
         
         #region Public Member Methods
-        void Clear(Color clearColor);
-        void Initialize();
         #endregion Public Member Methods
         
         #endregion Member Methods
