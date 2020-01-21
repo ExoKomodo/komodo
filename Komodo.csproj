@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb" Visible="false" />
+    <MonoGameContentReference Include="Content\MonoGame\Content.mgcb" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
