@@ -22,6 +22,7 @@ namespace Komodo.Core
         
         #region Public Member Methods
         void Draw(GameTime gameTime);
+        void Draw(GameTime gameTime, Color clearColor);
         void Exit();
         void ResetElapsedTime();
         void Run();

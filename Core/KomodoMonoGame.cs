@@ -11,14 +11,13 @@ namespace Komodo.Core
         #region Members
 
         #region Public Members
+        public SpriteBatch _spriteBatch;
         #endregion Public Members
 
         #region Protected Members
         #endregion Protected Members
 
         #region Private Members
-        private GraphicsManagerMonoGame _graphicsManager;
-        private SpriteBatch _spriteBatch;
         private IKomodoGame _komodoGame;
         #endregion Private Members
 
@@ -32,8 +31,7 @@ namespace Komodo.Core
         #region Protected Member Methods
         protected override void Draw(GameTime gameTime)
         {
-            _komodoGame.Draw(gameTime);
-            _graphicsManager.Clear(Color.Red);
+            _komodoGame.Draw(gameTime, Color.Red);
 
             base.Draw(gameTime);
         }
@@ -65,7 +63,6 @@ namespace Komodo.Core
         public KomodoMonoGame(IKomodoGame komodoGame)
         {
             _komodoGame = komodoGame;
-            _graphicsManager = new GraphicsManagerMonoGame(this);
             Content.RootDirectory = "Content/MonoGame";
             IsMouseVisible = true;
         }

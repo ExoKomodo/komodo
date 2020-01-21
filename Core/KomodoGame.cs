@@ -1,4 +1,6 @@
-# TODO: Remove dependency on MonoGame: KomodoGame
+// TODO: Remove dependency on MonoGame: KomodoGame
+using Komodo.Core.Graphics;
+
 using Microsoft.Xna.Framework;
 
 namespace Komodo.Core
@@ -14,6 +16,7 @@ namespace Komodo.Core
         #endregion Protected Members
         
         #region Private Members
+        private GraphicsManagerMonoGame _graphicsManagerMonoGame;
         private KomodoMonoGame _komodoMonoGame;
         #endregion Private Members
 
@@ -23,6 +26,7 @@ namespace Komodo.Core
         public KomodoGame()
         {
             _komodoMonoGame = new KomodoMonoGame(this);
+            _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame);
         }
         #endregion Constructors
 
@@ -31,7 +35,12 @@ namespace Komodo.Core
         #region Public Member Methods
         public void Draw(GameTime gameTime)
         {
+            Draw(gameTime, Color.Transparent);
+        }
 
+        public void Draw(GameTime gameTime, Color clearColor)
+        {
+            _graphicsManagerMonoGame.Clear(clearColor);
         }
         
         public void Exit()
