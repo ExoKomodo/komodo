@@ -27,6 +27,7 @@ namespace Komodo.Core
         {
             _komodoMonoGame = new KomodoMonoGame(this);
             _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame);
+            _graphicsManagerMonoGame.IsMouseVisible = true;
         }
         #endregion Constructors
 

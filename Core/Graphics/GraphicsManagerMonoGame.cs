@@ -9,6 +9,19 @@ namespace Komodo.Core.Graphics
         #region Members
 
         #region Public Members
+        public bool IsMouseVisible {
+            get
+            {
+                return _komodoMonoGame == null ? false : _komodoMonoGame.IsMouseVisible;
+            }
+            set
+            {
+                if (_komodoMonoGame != null)
+                {
+                    _komodoMonoGame.IsMouseVisible = value;
+                }
+            }
+        }
         public GraphicsDeviceManager _graphicsDeviceManager;
         public SpriteManagerMonoGame _spriteManagerMonoGame;
         #endregion Public Members

@@ -8,6 +8,7 @@ namespace Komodo.Core.Graphics
         #region Members
 
         #region Public Members
+        bool IsMouseVisible { get; set; }
         #endregion Public Members
         
         #region Protected Members
