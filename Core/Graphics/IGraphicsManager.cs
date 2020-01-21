@@ -1,4 +1,4 @@
-using System;
+# TODO: Remove dependency on MonoGame: GraphicsManager
 using Microsoft.Xna.Framework;
 
 namespace Komodo.Core.Graphics

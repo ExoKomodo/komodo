@@ -1,3 +1,4 @@
+# TODO: Remove dependency on MonoGame: KomodoGame
 using Microsoft.Xna.Framework;
 
 namespace Komodo.Core
