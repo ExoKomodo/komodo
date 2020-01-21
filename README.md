@@ -1,1 +1,0 @@
-Reference https://docs.microsoft.com/en-us/cpp/build/get-started-linux-cmake?view=vs-2019 for information on CMake projects and an example with Bullet3.
