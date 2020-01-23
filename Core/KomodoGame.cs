@@ -1,4 +1,6 @@
 // TODO: Remove dependency on MonoGame: KomodoGame
+using System.Collections.Generic;
+using Komodo.Core.Engine.Entities;
 using Komodo.Core.Engine.Graphics;
 
 using Microsoft.Xna.Framework;
@@ -7,9 +9,21 @@ namespace Komodo.Core
 {
     public class KomodoGame : IKomodoGame
     {
+        #region Constructors
+        public KomodoGame()
+        {
+            _komodoMonoGame = new KomodoMonoGame(this);
+            _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame);
+            _graphicsManagerMonoGame.IsMouseVisible = true;
+
+            Entities = new List<IEntity>();
+        }
+        #endregion Constructors
+
         #region Members
 
         #region Public Members
+        public List<IEntity> Entities { get; set; }
         #endregion Public Members
         
         #region Protected Members
@@ -22,15 +36,6 @@ namespace Komodo.Core
 
         #endregion Members
 
-        #region Constructors
-        public KomodoGame()
-        {
-            _komodoMonoGame = new KomodoMonoGame(this);
-            _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame);
-            _graphicsManagerMonoGame.IsMouseVisible = true;
-        }
-        #endregion Constructors
-
         #region Member Methods
         
         #region Public Member Methods
@@ -42,6 +47,10 @@ namespace Komodo.Core
         public void Draw(GameTime gameTime, Color clearColor)
         {
             _graphicsManagerMonoGame.Clear(clearColor);
+
+            _graphicsManagerMonoGame._spriteManagerMonoGame.BeginDraw();
+            _graphicsManagerMonoGame._spriteManagerMonoGame.Draw(Entities);
+            _graphicsManagerMonoGame._spriteManagerMonoGame.EndDraw();
         }
         
         public void Exit()
@@ -71,7 +80,10 @@ namespace Komodo.Core
 
         public void Update(GameTime gameTime)
         {
-            
+            foreach (var entity in Entities)
+            {
+                entity.Update(gameTime);
+            }
         }
         #endregion Public Member Methods
         

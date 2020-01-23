@@ -12,12 +12,6 @@ namespace Komodo.Core.Engine.Graphics
         bool IsMouseVisible { get; set; }
         List<Resolution> Resolutions { get; }
         #endregion Public Members
-        
-        #region Protected Members
-        #endregion Protected Members
-        
-        #region Private Members
-        #endregion Private Members
 
         #endregion Members
 

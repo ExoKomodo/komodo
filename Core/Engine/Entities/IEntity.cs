@@ -1,14 +1,19 @@
 using System.Collections.Generic;
-using Komodo.Core.Engine.Entities;
+
+using Komodo.Core.Engine.Components;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Komodo.Core.Engine.Graphics.Sprites
+namespace Komodo.Core.Engine.Entities
 {
-    public interface ISpriteManager
+    public interface IEntity
     {
         #region Members
 
         #region Public Members
+        List<IComponent> Components { get; }
+        Vector3 Position { get; set; }
+        float Rotation { get; set; }
         #endregion Public Members
 
         #endregion Members
@@ -16,10 +21,8 @@ namespace Komodo.Core.Engine.Graphics.Sprites
         #region Member Methods
         
         #region Public Member Methods
-        void BeginDraw();
-        void Draw(List<IEntity> entities);
-        // void DrawText(Texture2D texture);
-        void EndDraw();
+        void Draw(SpriteBatch spriteBatch);
+        void Update(GameTime gameTime);
         #endregion Public Member Methods
         
         #endregion Member Methods
