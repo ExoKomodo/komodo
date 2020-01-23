@@ -24,17 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <MonoGameContentReference Include="Content\MonoGame\Content.mgcb" Visible="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
+  <ProjectReference Include="..\Komodo\Komodo.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.*" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.*" />
-    <PackageReference Include="MonoGame.Content.Builder" Version="3.7.*" />
   </ItemGroup>
 
 </Project>
