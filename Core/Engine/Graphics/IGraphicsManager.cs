@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Komodo.Core.Engine.Scenes;
+
 namespace Komodo.Core.Engine.Graphics
 {
     public interface IGraphicsManager
@@ -22,6 +24,7 @@ namespace Komodo.Core.Engine.Graphics
         void Clear(Color clearColor);
         Texture2D CreateTexture(Color[] data, int width, int height);
         Texture2D CreateTexture(Color[,] data, int width, int height);
+        void DrawScene(IScene scene);
         void Initialize();
         void SetFullscreen(bool isFullscreen, bool shouldApplyChanges = true);
         void SetResolution(Resolution resolution, bool shouldApplyChanges = true);

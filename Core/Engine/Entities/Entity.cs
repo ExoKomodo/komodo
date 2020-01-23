@@ -95,9 +95,12 @@ namespace Komodo.Core.Engine.Entities
 
         public void Update(GameTime gameTime)
         {
-            foreach (var component in Components)
+            if (Components != null)
             {
-                component.Update(gameTime);
+                foreach (var component in Components)
+                {
+                    component.Update(gameTime);
+                }
             }
         }
         #endregion Public Member Methods

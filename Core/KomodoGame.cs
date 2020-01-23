@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Komodo.Behaviors;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Entities;
+using Komodo.Core.Engine.Scenes;
 using Komodo.Core.Engine.Graphics;
 
 using Microsoft.Xna.Framework;
@@ -19,14 +20,14 @@ namespace Komodo.Core
             _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame);
             _graphicsManagerMonoGame.IsMouseVisible = true;
 
-            MainEntity = new Entity();
+            MainScene = new Scene();
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public IEntity MainEntity { get; set; }
+        public IScene MainScene { get; set; }
         #endregion Public Members
         
         #region Protected Members
@@ -51,9 +52,7 @@ namespace Komodo.Core
         {
             _graphicsManagerMonoGame.Clear(clearColor);
 
-            _graphicsManagerMonoGame._spriteManagerMonoGame.BeginDraw();
-            _graphicsManagerMonoGame._spriteManagerMonoGame.Draw(MainEntity);
-            _graphicsManagerMonoGame._spriteManagerMonoGame.EndDraw();
+            _graphicsManagerMonoGame.DrawScene(MainScene);
         }
         
         public void Exit()
@@ -74,10 +73,13 @@ namespace Komodo.Core
                 data[pixel] = Color.Blue;
             }
             var texture = _graphicsManagerMonoGame.CreateTexture(data, width, height);
-
-            MainEntity.Components = new List<IComponent> {
-                new SpriteComponent(MainEntity, texture),
-                new MoveRightAndDownBehavior(MainEntity),
+            var entity = new Entity();
+            entity.Components = new List<IComponent> {
+                new SpriteComponent(entity, texture),
+                new MoveRightAndDownBehavior(entity),
+            };
+            MainScene.Entities = new List<IEntity> {
+                entity
             };
         }
 
@@ -98,7 +100,7 @@ namespace Komodo.Core
 
         public void Update(GameTime gameTime)
         {
-            MainEntity.Update(gameTime);
+            MainScene.Update(gameTime);
         }
         #endregion Public Member Methods
         
