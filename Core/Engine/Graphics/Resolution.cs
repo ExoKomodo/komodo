@@ -1,4 +1,4 @@
-namespace Komodo.Core.Graphics
+namespace Komodo.Core.Engine.Graphics
 {
     public struct Resolution
     {

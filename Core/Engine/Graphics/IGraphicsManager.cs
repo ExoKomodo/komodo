@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace Komodo.Core.Graphics
+namespace Komodo.Core.Engine.Graphics
 {
     public interface IGraphicsManager
     {

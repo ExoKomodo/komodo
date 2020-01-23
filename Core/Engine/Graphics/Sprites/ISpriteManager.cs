@@ -1,6 +1,6 @@
-namespace Komodo.Core.Input
+namespace Komodo.Core.Engine.Graphics.Sprites
 {
-    public class InputManager
+    public interface ISpriteManager
     {
         #region Members
 
@@ -20,15 +20,6 @@ namespace Komodo.Core.Input
         #region Public Member Methods
         #endregion Public Member Methods
         
-        #region Protected Member Methods
-        #endregion Protected Member Methods
-        
-        #region Private Member Methods
-        #endregion Private Member Methods
-        
         #endregion Member Methods
-
-        #region Constructors
-        #endregion Constructors
     }
 }
