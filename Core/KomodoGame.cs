@@ -1,5 +1,6 @@
 // TODO: Remove dependency on MonoGame: KomodoGame
 using System.Collections.Generic;
+using Komodo.Behaviors;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Entities;
 using Komodo.Core.Engine.Graphics;
@@ -76,6 +77,7 @@ namespace Komodo.Core
 
             MainEntity.Components = new List<IComponent> {
                 new SpriteComponent(MainEntity, texture),
+                new MoveRightAndDownBehavior(MainEntity),
             };
         }
 
