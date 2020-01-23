@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Komodo.Core.Graphics.Sprites;
+using Komodo.Core.Engine.Graphics.Sprites;
 
 using Microsoft.Xna.Framework;
 
-namespace Komodo.Core.Graphics
+namespace Komodo.Core.Engine.Graphics
 {
     internal class GraphicsManagerMonoGame : IGraphicsManager
     {

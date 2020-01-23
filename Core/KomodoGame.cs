@@ -1,5 +1,5 @@
 // TODO: Remove dependency on MonoGame: KomodoGame
-using Komodo.Core.Graphics;
+using Komodo.Core.Engine.Graphics;
 
 using Microsoft.Xna.Framework;
 

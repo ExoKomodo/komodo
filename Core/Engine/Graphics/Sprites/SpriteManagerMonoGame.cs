@@ -1,8 +1,6 @@
-using Komodo.Core.Graphics;
-
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Komodo.Core.Graphics.Sprites
+namespace Komodo.Core.Engine.Graphics.Sprites
 {
     internal class SpriteManagerMonoGame : ISpriteManager
     {
