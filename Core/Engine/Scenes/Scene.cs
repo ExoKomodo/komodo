@@ -55,6 +55,32 @@ namespace Komodo.Core.Engine.Scenes
         #region Member Methods
 
         #region Public Member Methods
+        public void AddEntity(IEntity entityToAdd)
+        {
+            if (Entities == null)
+            {
+                Entities = new List<IEntity>();
+            }
+            Entities.Add(entityToAdd);
+            if (entityToAdd.ParentScene != null)
+            {
+                entityToAdd.ParentScene.RemoveEntity(entityToAdd);
+            }
+            entityToAdd.ParentScene = this;
+        }
+
+        public void ClearEntities()
+        {
+            if (Entities != null)
+            {
+                foreach (var entity in Entities)
+                {
+                    entity.ParentScene = null;
+                }
+                Entities.Clear();
+            }
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             if (Entities != null)
@@ -64,6 +90,16 @@ namespace Komodo.Core.Engine.Scenes
                     entity.Draw(spriteBatch);
                 }
             }
+        }
+
+        public bool RemoveEntity(IEntity entityToRemove)
+        {
+            if (Entities != null)
+            {
+                entityToRemove.ParentScene = null;
+                return Entities.Remove(entityToRemove);
+            }
+            return false;
         }
 
         public void Update(GameTime gameTime)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Komodo.Core.Engine.Components;
+using Komodo.Core.Engine.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,7 +13,8 @@ namespace Komodo.Core.Engine.Entities
         {
             Children = new List<IEntity>();
             Components = new List<IComponent>();
-            Parent = null;
+            ParentEntity = null;
+            ParentScene = null;
             Position = Vector3.Zero;
             Rotation = 0.0f;
             Scale = Vector2.One;
@@ -39,20 +41,31 @@ namespace Komodo.Core.Engine.Entities
             {
                 return _components;
             }
-            set
+            protected set
             {
                 _components = value;
             }
         }
-        public IEntity Parent
+        public IEntity ParentEntity
         {
             get
             {
-                return _parent;
+                return _parentEntity;
             }
             set
             {
-                _parent = value;
+                _parentEntity = value;
+            }
+        }
+        public IScene ParentScene
+        {
+            get
+            {
+                return _parentScene;
+            }
+            set
+            {
+                _parentScene = value;
             }
         }
         public Vector3 Position { get; set; }
@@ -63,7 +76,8 @@ namespace Komodo.Core.Engine.Entities
         #region Protected Members
         protected List<IEntity> _children;
         protected List<IComponent> _components;
-        protected IEntity _parent;
+        protected IEntity _parentEntity;
+        protected IScene _parentScene;
         #endregion Protected Members
 
         #region Private Members
@@ -74,6 +88,27 @@ namespace Komodo.Core.Engine.Entities
         #region Member Methods
 
         #region Public Member Methods
+        public void AddComponent(IComponent componentToAdd)
+        {
+            if (Components == null)
+            {
+                Components = new List<IComponent>();
+            }
+            Components.Add(componentToAdd);
+            if (componentToAdd.Parent != null)
+            {
+                componentToAdd.Parent.RemoveComponent(componentToAdd);
+            }
+            componentToAdd.Parent = this;
+        }
+        public void ClearComponents()
+        {
+            foreach (var component in Components)
+            {
+                component.Parent = null;
+            }
+            Components.Clear();
+        }
         public void Draw(SpriteBatch spriteBatch)
         {
             if (Children != null)
@@ -92,7 +127,15 @@ namespace Komodo.Core.Engine.Entities
                 }
             }
         }
-
+        public bool RemoveComponent(IComponent componentToRemove)
+        {
+            if (Components != null)
+            {
+                componentToRemove.Parent = null;
+                return Components.Remove(componentToRemove);
+            }
+            return false;
+        }
         public void Update(GameTime gameTime)
         {
             if (Components != null)

@@ -74,13 +74,9 @@ namespace Komodo.Core
             }
             var texture = _graphicsManagerMonoGame.CreateTexture(data, width, height);
             var entity = new Entity();
-            entity.Components = new List<IComponent> {
-                new SpriteComponent(entity, texture),
-                new MoveRightAndDownBehavior(entity),
-            };
-            MainScene.Entities = new List<IEntity> {
-                entity
-            };
+            entity.AddComponent(new SpriteComponent(texture));
+            entity.AddComponent(new MoveRightAndDownBehavior());
+            MainScene.AddEntity(entity);
         }
 
         public void ResetElapsedTime()

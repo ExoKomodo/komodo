@@ -7,19 +7,29 @@ namespace Komodo.Core.Engine.Components
     public abstract class BehaviorComponent : IComponent
     {
         #region Constructors
-        public BehaviorComponent(IEntity parent)
+        public BehaviorComponent()
         {
-            Parent = parent;
+            Parent = null;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public IEntity Parent { get; protected set; }
+        public IEntity Parent {
+            get
+            {
+                return _parent;
+            }
+            set
+            {
+                _parent = value;
+            }
+        }
         #endregion Public Members
 
         #region Protected Members
+        protected IEntity _parent { get; set; }
         #endregion Protected Members
 
         #region Private Members
@@ -33,7 +43,6 @@ namespace Komodo.Core.Engine.Components
         public void Draw(SpriteBatch spriteBatch)
         {
         }
-
         public abstract void Update(GameTime gameTime);
         #endregion Public Member Methods
 

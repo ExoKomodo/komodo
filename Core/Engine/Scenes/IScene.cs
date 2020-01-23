@@ -21,7 +21,10 @@ namespace Komodo.Core.Engine.Scenes
         #region Member Methods
         
         #region Public Member Methods
+        void AddEntity(IEntity entityToAdd);
+        void ClearEntities();
         void Draw(SpriteBatch spriteBatch);
+        bool RemoveEntity(IEntity entityToRemove);
         void Update(GameTime gameTime);
         #endregion Public Member Methods
         
