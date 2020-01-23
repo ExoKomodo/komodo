@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Komodo.Core.Engine.Graphics.Sprites;
+using Komodo.Core.Engine.Scenes;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -103,6 +104,16 @@ namespace Komodo.Core.Engine.Graphics
             texture.SetData(transformedData);
 
             return texture;
+        }
+
+        public void DrawScene(IScene scene)
+        {
+            _spriteManagerMonoGame.BeginDraw();
+            foreach (var entity in scene.Entities)
+            {
+                _spriteManagerMonoGame.Draw(entity);
+            }
+            _spriteManagerMonoGame.EndDraw();
         }
 
         // Initialize is called after all framework resources have been initialized and allocated

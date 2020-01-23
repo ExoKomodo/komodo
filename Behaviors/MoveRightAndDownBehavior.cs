@@ -7,9 +7,6 @@ namespace Komodo.Behaviors
     public class MoveRightAndDownBehavior : BehaviorComponent
     {
         #region Constructors
-        public MoveRightAndDownBehavior(IEntity parent) : base(parent)
-        {
-        }
         #endregion Constructors
 
         #region Members

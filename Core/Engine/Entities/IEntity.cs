@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using Komodo.Core.Engine.Components;
+using Komodo.Core.Engine.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,8 +13,9 @@ namespace Komodo.Core.Engine.Entities
 
         #region Public Members
         List<IEntity> Children { get; set; }
-        List<IComponent> Components { get; set; }
-        IEntity Parent { get; set; }
+        List<IComponent> Components { get; }
+        IEntity ParentEntity { get; set; }
+        IScene ParentScene { get; set; }
         Vector3 Position { get; set; }
         float Rotation { get; set; }
         Vector2 Scale { get; set; }
@@ -24,7 +26,10 @@ namespace Komodo.Core.Engine.Entities
         #region Member Methods
         
         #region Public Member Methods
+        void AddComponent(IComponent componentToAdd);
+        void ClearComponents();
         void Draw(SpriteBatch spriteBatch);
+        bool RemoveComponent(IComponent componentToRemove);
         void Update(GameTime gameTime);
         #endregion Public Member Methods
         
