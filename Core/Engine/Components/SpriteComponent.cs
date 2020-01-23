@@ -7,22 +7,17 @@ namespace Komodo.Core.Engine.Components
     public class SpriteComponent : IComponent
     {
         #region Constructors
-        public SpriteComponent(Entity parentEntity, Texture2D texture)
+        public SpriteComponent(IEntity parent, Texture2D texture)
         {
-            ParentEntity = parentEntity;
+            Parent = parent;
             Texture = texture;
-            
-            Scale = Vector2.One;
-            Tint = Color.White;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public Vector2 Scale { get; set; }
-        public Color Tint { get; set; }
-        public Entity ParentEntity { get; set; }
+        public IEntity Parent { get; protected set; }
         public Texture2D Texture { get; set; }
         #endregion Public Members
 
@@ -41,14 +36,14 @@ namespace Komodo.Core.Engine.Components
         {
             spriteBatch.Draw(
                 Texture,
-                new Vector2(ParentEntity.Position.X, ParentEntity.Position.Y),
+                new Vector2(Parent.Position.X, Parent.Position.Y),
                 null,
-                Tint,
-                ParentEntity.Rotation,
+                Color.White,
+                Parent.Rotation,
                 Vector2.Zero,
-                Scale,
+                Parent.Scale,
                 SpriteEffects.None,
-                ParentEntity.Position.Z
+                Parent.Position.Z
             );
         }
 

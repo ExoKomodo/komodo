@@ -9,7 +9,7 @@ namespace Komodo.Core.Engine.Components
         #region Members
 
         #region Public Members
-        Entity ParentEntity { get; }
+        IEntity Parent { get; }
         #endregion Public Members
 
         #endregion Members

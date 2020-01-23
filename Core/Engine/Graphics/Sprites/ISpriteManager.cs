@@ -17,7 +17,7 @@ namespace Komodo.Core.Engine.Graphics.Sprites
         
         #region Public Member Methods
         void BeginDraw();
-        void Draw(List<IEntity> entities);
+        void Draw(IEntity entity);
         // void DrawText(Texture2D texture);
         void EndDraw();
         #endregion Public Member Methods

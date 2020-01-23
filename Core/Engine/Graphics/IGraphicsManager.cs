@@ -1,6 +1,7 @@
 // TODO: Remove dependency on MonoGame: GraphicsManager
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Graphics
 {
@@ -19,6 +20,8 @@ namespace Komodo.Core.Engine.Graphics
         
         #region Public Member Methods
         void Clear(Color clearColor);
+        Texture2D CreateTexture(Color[] data, int width, int height);
+        Texture2D CreateTexture(Color[,] data, int width, int height);
         void Initialize();
         void SetFullscreen(bool isFullscreen, bool shouldApplyChanges = true);
         void SetResolution(Resolution resolution, bool shouldApplyChanges = true);
