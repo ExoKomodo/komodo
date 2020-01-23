@@ -1,4 +1,7 @@
-using Komodo.Core.Sprites;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Komodo.Core.Graphics.Sprites;
 
 using Microsoft.Xna.Framework;
 
@@ -6,6 +9,14 @@ namespace Komodo.Core.Graphics
 {
     internal class GraphicsManagerMonoGame : IGraphicsManager
     {
+        #region Constructors
+        public GraphicsManagerMonoGame(KomodoMonoGame komodoMonoGame)
+        {
+            _komodoMonoGame = komodoMonoGame;
+            _graphicsDeviceManager = new GraphicsDeviceManager(_komodoMonoGame);
+        }
+        #endregion Constructors
+
         #region Members
 
         #region Public Members
@@ -20,6 +31,23 @@ namespace Komodo.Core.Graphics
                 {
                     _komodoMonoGame.IsMouseVisible = value;
                 }
+            }
+        }
+
+        public List<Resolution> Resolutions
+        {
+            get
+            {
+                var resolutions = new List<Resolution>();
+                var modes = _graphicsDeviceManager?.GraphicsDevice?.Adapter?.SupportedDisplayModes.ToList();
+                if (modes != null)
+                {
+                    foreach (var mode in modes)
+                    {
+                        resolutions.Add(new Resolution(mode.Width, mode.Height));
+                    }
+                }
+                return resolutions;
             }
         }
         public GraphicsDeviceManager _graphicsDeviceManager;
@@ -47,24 +75,58 @@ namespace Komodo.Core.Graphics
         public void Initialize()
         {
             // Sprite manager requires framework graphics resources to be initialized
-            _spriteManagerMonoGame = new SpriteManagerMonoGame(this);   
+            _spriteManagerMonoGame = new SpriteManagerMonoGame(this);
+
+            var resolution = Resolutions.First();
+            SetResolution(resolution);
+            SetFullscreen(false);
+        }
+
+        public void SetFullscreen(bool isFullscreen, bool shouldApplyChanges = true)
+        {
+            _graphicsDeviceManager.IsFullScreen = isFullscreen;
+            if (shouldApplyChanges)
+            {                
+                _graphicsDeviceManager.ApplyChanges();
+            }
+        }
+
+        public void SetResolution(Resolution resolution, bool shouldApplyChanges = true)
+        {
+            var modes = _graphicsDeviceManager.GraphicsDevice.Adapter.SupportedDisplayModes;
+            foreach (var mode in modes)
+            {
+                if (mode.Width == resolution.Width && mode.Height == resolution.Height)
+                {
+                    _graphicsDeviceManager.PreferredBackBufferWidth = resolution.Width;
+                    _graphicsDeviceManager.PreferredBackBufferHeight = resolution.Height;
+                    if (shouldApplyChanges)
+                    {                
+                        _graphicsDeviceManager.ApplyChanges();
+                    }
+                    return;
+                }
+            }
+            // TODO: Add ResolutionNotSupportedException
+            throw new Exception("Resolution not supported");
+        }
+
+        public void ToggleFullscreen(bool shouldApplyChanges = true)
+        {
+            _graphicsDeviceManager.ToggleFullScreen();
+            if (shouldApplyChanges)
+            {                
+                _graphicsDeviceManager.ApplyChanges();
+            }
         }
         #endregion Public Member Methods
-        
+
         #region Protected Member Methods
         #endregion Protected Member Methods
-        
+
         #region Private Member Methods
         #endregion Private Member Methods
-        
-        #endregion Member Methods
 
-        #region Constructors
-        public GraphicsManagerMonoGame(KomodoMonoGame komodoMonoGame)
-        {
-            _komodoMonoGame = komodoMonoGame;
-            _graphicsDeviceManager = new GraphicsDeviceManager(_komodoMonoGame);
-        }
-        #endregion Constructors
+        #endregion Member Methods
     }
 }
