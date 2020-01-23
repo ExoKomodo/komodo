@@ -10,37 +10,60 @@ namespace Komodo.Core.Engine.Entities
         #region Constructors
         public Entity()
         {
+            Children = new List<IEntity>();
             Components = new List<IComponent>();
+            Parent = null;
             Position = Vector3.Zero;
             Rotation = 0.0f;
+            Scale = Vector2.One;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public List<IComponent> Components {
+        public List<IEntity> Children
+        {
+            get
+            {
+                return _children;
+            }
+            set
+            {
+                _children = value;
+            }
+        }
+        public List<IComponent> Components
+        {
             get
             {
                 return _components;
             }
-            protected set
+            set
             {
                 _components = value;
             }
         }
-        public Entity(Vector3 position, float rotation) 
+        public IEntity Parent
         {
-            this.Position = position;
-                this.Rotation = rotation;
-               
+            get
+            {
+                return _parent;
+            }
+            set
+            {
+                _parent = value;
+            }
         }
-                public Vector3 Position { get; set; }
+        public Vector3 Position { get; set; }
         public float Rotation { get; set; }
+        public Vector2 Scale { get; set; }
         #endregion Public Members
 
         #region Protected Members
+        protected List<IEntity> _children;
         protected List<IComponent> _components;
+        protected IEntity _parent;
         #endregion Protected Members
 
         #region Private Members
@@ -53,9 +76,20 @@ namespace Komodo.Core.Engine.Entities
         #region Public Member Methods
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var component in Components)
+            if (Children != null)
             {
-                component.Draw(spriteBatch);
+                foreach (var child in Children)
+                {
+                    child.Draw(spriteBatch);
+                }
+            }
+
+            if (Components != null)
+            {
+                foreach (var component in Components)
+                {
+                    component.Draw(spriteBatch);
+                }
             }
         }
 

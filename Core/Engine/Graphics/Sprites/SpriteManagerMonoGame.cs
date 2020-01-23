@@ -30,12 +30,9 @@ namespace Komodo.Core.Engine.Graphics.Sprites
             _spriteBatchMonoGame.Begin();
         }
 
-        public void Draw(List<IEntity> entities)
+        public void Draw(IEntity entity)
         {
-            foreach (var entity in entities)
-            {
-                entity.Draw(_spriteBatchMonoGame);
-            }
+            entity.Draw(_spriteBatchMonoGame);
         }
 
         public void EndDraw()

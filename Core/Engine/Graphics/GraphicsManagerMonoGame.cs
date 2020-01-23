@@ -4,6 +4,7 @@ using System.Linq;
 using Komodo.Core.Engine.Graphics.Sprites;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Graphics
 {
@@ -69,6 +70,39 @@ namespace Komodo.Core.Engine.Graphics
         public void Clear(Color clearColor)
         {
             _graphicsDeviceManager.GraphicsDevice.Clear(clearColor);
+        }
+
+        public Texture2D CreateTexture(Color[] data, int width, int height)
+        {
+            if (data.Count() != width * height)
+            {
+                // TODO: Create a ColorDataIsWrongSizeException
+                throw new Exception("Color data is the wrong size");
+            }
+            var texture = new Texture2D(_graphicsDeviceManager.GraphicsDevice, width, height);
+            texture.SetData(data);
+
+            return texture;
+        }
+        public Texture2D CreateTexture(Color[,] data, int width, int height)
+        {
+            if (data.Length != width * height)
+            {
+                // TODO: Create a ColorDataIsWrongSizeException
+                throw new Exception("Color data is the wrong size");
+            }
+            var texture = new Texture2D(_graphicsDeviceManager.GraphicsDevice, width, height);
+            var transformedData = new Color[width * height];
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    transformedData[i * j + j] = data[i, j];
+                }
+            }
+            texture.SetData(transformedData);
+
+            return texture;
         }
 
         // Initialize is called after all framework resources have been initialized and allocated

@@ -11,9 +11,12 @@ namespace Komodo.Core.Engine.Entities
         #region Members
 
         #region Public Members
-        List<IComponent> Components { get; }
+        List<IEntity> Children { get; set; }
+        List<IComponent> Components { get; set; }
+        IEntity Parent { get; set; }
         Vector3 Position { get; set; }
         float Rotation { get; set; }
+        Vector2 Scale { get; set; }
         #endregion Public Members
 
         #endregion Members

@@ -1,9 +1,11 @@
 // TODO: Remove dependency on MonoGame: KomodoGame
 using System.Collections.Generic;
+using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Entities;
 using Komodo.Core.Engine.Graphics;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core
 {
@@ -16,14 +18,14 @@ namespace Komodo.Core
             _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame);
             _graphicsManagerMonoGame.IsMouseVisible = true;
 
-            Entities = new List<IEntity>();
+            MainEntity = new Entity();
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public List<IEntity> Entities { get; set; }
+        public IEntity MainEntity { get; set; }
         #endregion Public Members
         
         #region Protected Members
@@ -49,7 +51,7 @@ namespace Komodo.Core
             _graphicsManagerMonoGame.Clear(clearColor);
 
             _graphicsManagerMonoGame._spriteManagerMonoGame.BeginDraw();
-            _graphicsManagerMonoGame._spriteManagerMonoGame.Draw(Entities);
+            _graphicsManagerMonoGame._spriteManagerMonoGame.Draw(MainEntity);
             _graphicsManagerMonoGame._spriteManagerMonoGame.EndDraw();
         }
         
@@ -61,6 +63,20 @@ namespace Komodo.Core
         public void Initialize()
         {
             _graphicsManagerMonoGame.Initialize();
+
+            int width = 100;
+            int height = 100;
+            Color[] data = new Color[width * height];
+            for (int pixel = 0; pixel < width * height; pixel++)
+            {
+                //the function applies the color according to the specified pixel
+                data[pixel] = Color.Blue;
+            }
+            var texture = _graphicsManagerMonoGame.CreateTexture(data, width, height);
+
+            MainEntity.Components = new List<IComponent> {
+                new SpriteComponent(MainEntity, texture),
+            };
         }
 
         public void ResetElapsedTime()
@@ -80,10 +96,7 @@ namespace Komodo.Core
 
         public void Update(GameTime gameTime)
         {
-            foreach (var entity in Entities)
-            {
-                entity.Update(gameTime);
-            }
+            MainEntity.Update(gameTime);
         }
         #endregion Public Member Methods
         
