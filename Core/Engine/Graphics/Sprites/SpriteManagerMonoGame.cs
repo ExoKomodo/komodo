@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Komodo.Core.Engine.Components;
+using Komodo.Core.Engine.Entities;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Graphics.Sprites
@@ -22,6 +25,23 @@ namespace Komodo.Core.Engine.Graphics.Sprites
         #region Member Methods
         
         #region Public Member Methods
+        public void BeginDraw()
+        {
+            _spriteBatchMonoGame.Begin();
+        }
+
+        public void Draw(List<IEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                entity.Draw(_spriteBatchMonoGame);
+            }
+        }
+
+        public void EndDraw()
+        {
+            _spriteBatchMonoGame.End();
+        }
         #endregion Public Member Methods
         
         #region Protected Member Methods
