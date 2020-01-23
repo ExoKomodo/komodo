@@ -2,7 +2,7 @@ using Komodo.Core.Graphics;
 
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Komodo.Core.Sprites
+namespace Komodo.Core.Graphics.Sprites
 {
     internal class SpriteManagerMonoGame : ISpriteManager
     {
