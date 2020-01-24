@@ -1,14 +1,16 @@
+using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Components
 {
-    public interface IComponent
+    public interface IComponent : ISerializable<IComponent>
     {
         #region Members
 
         #region Public Members
+        [JsonIgnore]
         IEntity Parent { get; set; }
         #endregion Public Members
 

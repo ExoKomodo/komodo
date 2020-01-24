@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Scenes;
 using Microsoft.Xna.Framework;
@@ -7,14 +7,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Entities
 {
-    public interface IEntity
+    public interface IEntity : ISerializable<IEntity>
     {
         #region Members
 
         #region Public Members
-        List<IEntity> Children { get; set; }
         List<IComponent> Components { get; }
-        IEntity ParentEntity { get; set; }
         IScene ParentScene { get; set; }
         Vector3 Position { get; set; }
         float Rotation { get; set; }

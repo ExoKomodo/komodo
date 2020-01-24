@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Scenes;
 using Microsoft.Xna.Framework;
@@ -11,9 +13,7 @@ namespace Komodo.Core.Engine.Entities
         #region Constructors
         public Entity()
         {
-            Children = new List<IEntity>();
             Components = new List<IComponent>();
-            ParentEntity = null;
             ParentScene = null;
             Position = Vector3.Zero;
             Rotation = 0.0f;
@@ -24,17 +24,6 @@ namespace Komodo.Core.Engine.Entities
         #region Members
 
         #region Public Members
-        public List<IEntity> Children
-        {
-            get
-            {
-                return _children;
-            }
-            set
-            {
-                _children = value;
-            }
-        }
         public List<IComponent> Components
         {
             get
@@ -44,17 +33,6 @@ namespace Komodo.Core.Engine.Entities
             protected set
             {
                 _components = value;
-            }
-        }
-        public IEntity ParentEntity
-        {
-            get
-            {
-                return _parentEntity;
-            }
-            set
-            {
-                _parentEntity = value;
             }
         }
         public IScene ParentScene
@@ -76,7 +54,6 @@ namespace Komodo.Core.Engine.Entities
         #region Protected Members
         protected List<IEntity> _children;
         protected List<IComponent> _components;
-        protected IEntity _parentEntity;
         protected IScene _parentScene;
         #endregion Protected Members
 
@@ -94,13 +71,14 @@ namespace Komodo.Core.Engine.Entities
             {
                 Components = new List<IComponent>();
             }
-            Components.Add(componentToAdd);
             if (componentToAdd.Parent != null)
             {
                 componentToAdd.Parent.RemoveComponent(componentToAdd);
             }
+            Components.Add(componentToAdd);
             componentToAdd.Parent = this;
         }
+
         public void ClearComponents()
         {
             foreach (var component in Components)
@@ -109,16 +87,75 @@ namespace Komodo.Core.Engine.Entities
             }
             Components.Clear();
         }
-        public void Draw(SpriteBatch spriteBatch)
+
+        public void Deserialize(SerializedObject serializedObject)
         {
-            if (Children != null)
+            var type = Type.GetType(serializedObject.Type);
+            if (type == this.GetType())
             {
-                foreach (var child in Children)
+                ParentScene = null;
+                Components = new List<IComponent>();
+                Position = new Vector3();
+                Rotation = 0.0f;
+                Scale = new Vector2();
+
+                if (serializedObject.Properties.ContainsKey("Components"))
                 {
-                    child.Draw(spriteBatch);
+                    var obj = serializedObject.Properties["Components"];
+                    if (obj is List<IComponent>)
+                    {
+                        var components = obj as List<IComponent>;
+                        foreach (var component in components)
+                        {
+                            component.Parent = this;
+                            this.AddComponent(component);
+                        }
+                    }
+                }
+                if (
+                    serializedObject.Properties.ContainsKey("PositionX")
+                    && serializedObject.Properties.ContainsKey("PositionY")
+                    && serializedObject.Properties.ContainsKey("PositionZ")
+                )
+                {
+                    var x = serializedObject.Properties["PositionX"];
+                    var y = serializedObject.Properties["PositionY"];
+                    var z = serializedObject.Properties["PositionZ"];
+                    if (x is float && y is float && z is float)
+                    {
+                        Position = new Vector3((float)x, (float)y, (float)z);
+                    }
+                }
+                if (serializedObject.Properties.ContainsKey("Rotation"))
+                {
+                    var rotation = serializedObject.Properties["Rotation"];
+                    if (rotation is float)
+                    {
+                        Rotation = (float)rotation;
+                    }
+                }
+                if (
+                    serializedObject.Properties.ContainsKey("ScaleX")
+                    && serializedObject.Properties.ContainsKey("ScaleY")
+                )
+                {
+                    var x = serializedObject.Properties["ScaleX"];
+                    var y = serializedObject.Properties["ScaleY"];
+                    if (x is float && y is float)
+                    {
+                        Scale = new Vector2((float)x, (float)y);
+                    }
                 }
             }
+            else
+            {
+                // TODO: Add InvalidTypeException to Deserialize
+                throw new Exception("Not correct type");
+            }
+        }
 
+        public void Draw(SpriteBatch spriteBatch)
+        {
             if (Components != null)
             {
                 foreach (var component in Components)
@@ -127,6 +164,7 @@ namespace Komodo.Core.Engine.Entities
                 }
             }
         }
+        
         public bool RemoveComponent(IComponent componentToRemove)
         {
             if (Components != null)
@@ -136,6 +174,31 @@ namespace Komodo.Core.Engine.Entities
             }
             return false;
         }
+
+        public SerializedObject Serialize()
+        {
+            var serializedObject = new SerializedObject();
+            serializedObject.Type = this.GetType().ToString();
+            
+            var components = new List<SerializedObject>();
+            foreach (var component in Components)
+            {
+                components.Add(component.Serialize());
+            }
+            serializedObject.Properties["Components"] = components;
+
+            serializedObject.Properties["PositionX"] = Position.X;
+            serializedObject.Properties["PositionY"] = Position.Y;
+            serializedObject.Properties["PositionZ"] = Position.Z;
+            
+            serializedObject.Properties["Rotation"] = Rotation;
+            
+            serializedObject.Properties["Scale.X"] = Scale.X;
+            serializedObject.Properties["Scale.Y"] = Scale.X;
+
+            return serializedObject;
+        }
+
         public void Update(GameTime gameTime)
         {
             if (Components != null)
@@ -146,6 +209,7 @@ namespace Komodo.Core.Engine.Entities
                 }
             }
         }
+
         #endregion Public Member Methods
 
         #region Protected Member Methods

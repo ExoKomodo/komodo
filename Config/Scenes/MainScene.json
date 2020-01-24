@@ -1,0 +1,32 @@
+{
+    "Type": "Komodo.Core.Engine.Scenes.Scene",
+    "Properties": {
+        "Entities": [
+            {
+                "Type": "Komodo.Core.Engine.Entities.Entity",
+                "Properties": {
+                    "Components": [
+                        {
+                            "Type": null,
+                            "Properties": {},
+                            "Value": null
+                        },
+                        {
+                            "Type": null,
+                            "Properties": {},
+                            "Value": null
+                        }
+                    ],
+                    "PositionX": 0,
+                    "PositionY": 0,
+                    "PositionZ": 0,
+                    "Rotation": 0,
+                    "Scale.X": 1,
+                    "Scale.Y": 1
+                },
+                "Value": null
+            }
+        ]
+    },
+    "Value": null
+}

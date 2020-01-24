@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
-using Komodo.Core.Engine.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Komodo.Core.Engine.Entities;
+using System.Text.Json.Serialization;
 
 namespace Komodo.Core.Engine.Scenes
 {
@@ -29,6 +30,7 @@ namespace Komodo.Core.Engine.Scenes
                 _entities = value;
             }
         }
+        [JsonIgnore]
         public IScene Parent
         {
             get
@@ -61,11 +63,11 @@ namespace Komodo.Core.Engine.Scenes
             {
                 Entities = new List<IEntity>();
             }
-            Entities.Add(entityToAdd);
             if (entityToAdd.ParentScene != null)
             {
                 entityToAdd.ParentScene.RemoveEntity(entityToAdd);
             }
+            Entities.Add(entityToAdd);
             entityToAdd.ParentScene = this;
         }
 
@@ -78,6 +80,39 @@ namespace Komodo.Core.Engine.Scenes
                     entity.ParentScene = null;
                 }
                 Entities.Clear();
+            }
+        }
+
+        public void Deserialize(SerializedObject serializedObject)
+        {
+            var type = Type.GetType(serializedObject.Type);
+            if (type == this.GetType())
+            {
+                Entities = new List<IEntity>();
+                Parent = null;
+
+                if (serializedObject.Properties.ContainsKey("Entities"))
+                {
+                    var obj = serializedObject.Properties["Entities"];
+                    if (obj is List<IEntity>)
+                    {
+                        var entities = obj as List<IEntity>;
+                        foreach (var entity in entities)
+                        {
+                            entity.ParentScene = this;
+                            this.AddEntity(entity);
+                        }
+                    }
+                }
+                if (serializedObject.Properties.ContainsKey("Parent"))
+                {
+                    Parent = serializedObject.Properties["Parent"] as IScene;
+                }
+            }
+            else
+            {
+                // TODO: Add InvalidTypeException to Deserialize
+                throw new Exception("Not correct type");
             }
         }
 
@@ -100,6 +135,25 @@ namespace Komodo.Core.Engine.Scenes
                 return Entities.Remove(entityToRemove);
             }
             return false;
+        }
+
+        public SerializedObject Serialize()
+        {
+            var serializedObject = new SerializedObject();
+            serializedObject.Type = this.GetType().ToString();
+            
+            if (Parent != null)
+            {
+                serializedObject.Properties["Parent"] = Parent.Serialize();
+            }
+            var entities = new List<SerializedObject>();
+            foreach (var entity in Entities)
+            {
+                entities.Add(entity.Serialize());
+            }
+            serializedObject.Properties["Entities"] = entities;
+
+            return serializedObject;
         }
 
         public void Update(GameTime gameTime)
