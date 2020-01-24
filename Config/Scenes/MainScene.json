@@ -1,0 +1,30 @@
+{
+    "Type": "Komodo.Core.Engine.Scenes.Scene",
+    "Fields": {
+        "Entities": [
+            {
+                "Type": "Komodo.Core.Engine.Entities.Entity",
+                "Fields": {
+                    "Children": [],
+                    "Components": [
+                        {
+                            "Type": "Komodo.Core.Engine.Components.SpriteComponent",
+                            "Fields": {},
+                            "Value": null
+                        },
+                        {
+                            "Type": "Komodo.Behaviors.MoveRightAndDownBehavior",
+                            "Fields": {},
+                            "Value": null
+                        }
+                    ],
+                    "Position": {},
+                    "Rotation": 0,
+                    "Scale": {}
+                },
+                "Value": null
+            }
+        ]
+    },
+    "Value": null
+}

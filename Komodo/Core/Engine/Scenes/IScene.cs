@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Entities;
 using Microsoft.Xna.Framework;
@@ -13,6 +13,7 @@ namespace Komodo.Core.Engine.Scenes
 
         #region Public Members
         List<IEntity> Entities { get; set; }
+        [JsonIgnore]
         IScene Parent { get; set; }
         #endregion Public Members
 

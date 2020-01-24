@@ -1,13 +1,15 @@
 // TODO: Remove dependency on MonoGame: KomodoGame
-using System.Collections.Generic;
 using Komodo.Behaviors;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Entities;
 using Komodo.Core.Engine.Scenes;
 using Komodo.Core.Engine.Graphics;
 
+using System.Text.Json;
+
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Komodo.Core
 {
@@ -77,6 +79,8 @@ namespace Komodo.Core
             entity.AddComponent(new SpriteComponent(texture));
             entity.AddComponent(new MoveRightAndDownBehavior());
             MainScene.AddEntity(entity);
+
+            ParseScenes();
         }
 
         public void ResetElapsedTime()
@@ -101,6 +105,15 @@ namespace Komodo.Core
         #endregion Public Member Methods
         
         #region Protected Member Methods
+        public void ParseScenes()
+        {
+            // var thing = new List<int>().GetType().ToString();
+            // var type = System.Type.GetType(thing);
+            var thing = SerializedObject.Serialize(MainScene);
+            var serializedScene = JsonSerializer.Serialize<SerializedObject>(thing);
+            File.WriteAllText("Config/Scenes/MainScene.json", serializedScene);
+            throw new System.Exception();
+        }
         #endregion Protected Member Methods
         
         #region Private Member Methods

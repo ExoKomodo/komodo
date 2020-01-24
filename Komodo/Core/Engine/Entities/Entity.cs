@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Scenes;
 using Microsoft.Xna.Framework;
@@ -46,6 +47,7 @@ namespace Komodo.Core.Engine.Entities
                 _components = value;
             }
         }
+        [JsonIgnore]
         public IEntity ParentEntity
         {
             get
@@ -57,6 +59,7 @@ namespace Komodo.Core.Engine.Entities
                 _parentEntity = value;
             }
         }
+        [JsonIgnore]
         public IScene ParentScene
         {
             get
@@ -94,11 +97,11 @@ namespace Komodo.Core.Engine.Entities
             {
                 Components = new List<IComponent>();
             }
-            Components.Add(componentToAdd);
             if (componentToAdd.Parent != null)
             {
                 componentToAdd.Parent.RemoveComponent(componentToAdd);
             }
+            Components.Add(componentToAdd);
             componentToAdd.Parent = this;
         }
         public void ClearComponents()

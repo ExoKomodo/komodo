@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Komodo.Core.Engine.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Komodo.Core.Engine.Entities;
+using System.Text.Json.Serialization;
 
 namespace Komodo.Core.Engine.Scenes
 {
@@ -29,6 +29,7 @@ namespace Komodo.Core.Engine.Scenes
                 _entities = value;
             }
         }
+        [JsonIgnore]
         public IScene Parent
         {
             get
@@ -61,11 +62,11 @@ namespace Komodo.Core.Engine.Scenes
             {
                 Entities = new List<IEntity>();
             }
-            Entities.Add(entityToAdd);
             if (entityToAdd.ParentScene != null)
             {
                 entityToAdd.ParentScene.RemoveEntity(entityToAdd);
             }
+            Entities.Add(entityToAdd);
             entityToAdd.ParentScene = this;
         }
 
@@ -101,6 +102,7 @@ namespace Komodo.Core.Engine.Scenes
             }
             return false;
         }
+
 
         public void Update(GameTime gameTime)
         {

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,6 +18,7 @@ namespace Komodo.Core.Engine.Components
         #region Members
 
         #region Public Members
+        [JsonIgnore]
         public IEntity Parent {
             get
             {
@@ -27,6 +29,7 @@ namespace Komodo.Core.Engine.Components
                 _parent = value;
             }
         }
+        [JsonIgnore]
         public Texture2D Texture { get; set; }
         #endregion Public Members
 
