@@ -44,7 +44,7 @@ namespace Komodo.Core.Engine.Components
         #region Public Member Methods
         public void Deserialize(SerializedObject serializedObject)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -53,7 +53,9 @@ namespace Komodo.Core.Engine.Components
 
         public SerializedObject Serialize()
         {
-            throw new System.NotImplementedException();
+            var serializedObject = new SerializedObject();
+
+            return serializedObject;
         }
 
         public abstract void Update(GameTime gameTime);

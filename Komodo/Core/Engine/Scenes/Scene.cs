@@ -96,7 +96,12 @@ namespace Komodo.Core.Engine.Scenes
                     var obj = serializedObject.Properties["Entities"];
                     if (obj is List<IEntity>)
                     {
-                        Entities = obj as List<IEntity>;
+                        var entities = obj as List<IEntity>;
+                        foreach (var entity in entities)
+                        {
+                            entity.ParentScene = this;
+                            this.AddEntity(entity);
+                        }
                     }
                 }
                 if (serializedObject.Properties.ContainsKey("Parent"))

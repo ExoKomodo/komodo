@@ -12,11 +12,7 @@ namespace Komodo.Core.Engine.Entities
         #region Members
 
         #region Public Members
-        List<IEntity> Children { get; set; }
         List<IComponent> Components { get; }
-        [JsonIgnore]
-        IEntity ParentEntity { get; set; }
-        [JsonIgnore]
         IScene ParentScene { get; set; }
         Vector3 Position { get; set; }
         float Rotation { get; set; }
