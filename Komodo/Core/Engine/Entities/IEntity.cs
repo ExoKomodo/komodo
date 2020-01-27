@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Entities
 {
-    public interface IEntity
+    public interface IEntity : ISerializable<IEntity>
     {
         #region Members
 

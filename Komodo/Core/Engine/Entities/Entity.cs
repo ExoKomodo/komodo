@@ -104,6 +104,7 @@ namespace Komodo.Core.Engine.Entities
             Components.Add(componentToAdd);
             componentToAdd.Parent = this;
         }
+
         public void ClearComponents()
         {
             foreach (var component in Components)
@@ -112,6 +113,11 @@ namespace Komodo.Core.Engine.Entities
             }
             Components.Clear();
         }
+
+        public void Deserialize(SerializedObject serializedObject)
+        {
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             if (Children != null)
@@ -130,6 +136,7 @@ namespace Komodo.Core.Engine.Entities
                 }
             }
         }
+        
         public bool RemoveComponent(IComponent componentToRemove)
         {
             if (Components != null)
@@ -139,6 +146,15 @@ namespace Komodo.Core.Engine.Entities
             }
             return false;
         }
+
+        public SerializedObject Serialize()
+        {
+            var serializedObject = new SerializedObject();
+            serializedObject.Type = this.GetType().ToString();
+
+            return serializedObject;
+        }
+
         public void Update(GameTime gameTime)
         {
             if (Components != null)
@@ -149,6 +165,7 @@ namespace Komodo.Core.Engine.Entities
                 }
             }
         }
+
         #endregion Public Member Methods
 
         #region Protected Member Methods

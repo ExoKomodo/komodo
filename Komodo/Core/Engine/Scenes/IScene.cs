@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Scenes
 {
-    public interface IScene
+    public interface IScene : ISerializable<IScene>
     {
         #region Members
 

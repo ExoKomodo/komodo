@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Components
 {
-    public interface IComponent
+    public interface IComponent : ISerializable<IComponent>
     {
         #region Members
 
