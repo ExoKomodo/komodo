@@ -1,4 +1,4 @@
-// TODO: Remove dependency on MonoGame: KomodoGame
+// TODO: Remove dependency on MonoGame: Color
 using Komodo.Behaviors;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Entities;
@@ -9,6 +9,7 @@ using System.Text.Json;
 
 using Microsoft.Xna.Framework;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Komodo.Core
 {
@@ -106,20 +107,20 @@ namespace Komodo.Core
         #region Protected Member Methods
         public void ParseScenes()
         {
-            // var thing = new List<int>().GetType().ToString();
-            // var type = System.Type.GetType(thing);
-            // var serializedScene = MainScene.Serialize();
-            // MainScene.Deserialize(serializedScene);
-            // Directory.CreateDirectory("Config/Scenes");
-            // File.WriteAllText(
-            //     "Config/Scenes/MainScene.json",
-            //     JsonSerializer.Serialize<SerializedObject>(serializedScene)
-            // );
+            var thing = new List<int>().GetType().ToString();
+            var type = System.Type.GetType(thing);
+            var serializedScene = MainScene.Serialize();
+            MainScene.Deserialize(serializedScene);
+            Directory.CreateDirectory("Config/Scenes");
+            File.WriteAllText(
+                "Config/Scenes/MainScene.json",
+                JsonSerializer.Serialize<SerializedObject>(serializedScene)
+            );
             
             // var thing = SerializedObject.Serialize(MainScene);
             // var serializedScene = JsonSerializer.Serialize<SerializedObject>(thing);
             // File.WriteAllText("Config/Scenes/MainScene.json", serializedScene);
-            // throw new System.Exception();
+            throw new System.Exception();
         }
         #endregion Protected Member Methods
         

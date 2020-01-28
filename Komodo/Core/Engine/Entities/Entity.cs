@@ -15,9 +15,9 @@ namespace Komodo.Core.Engine.Entities
         {
             Components = new List<IComponent>();
             ParentScene = null;
-            Position = Vector3.Zero;
+            Position = KomodoVector3.Zero;
             Rotation = 0.0f;
-            Scale = Vector2.One;
+            Scale = KomodoVector2.One;
         }
         #endregion Constructors
 
@@ -46,9 +46,9 @@ namespace Komodo.Core.Engine.Entities
                 _parentScene = value;
             }
         }
-        public Vector3 Position { get; set; }
+        public KomodoVector3 Position { get; set; }
         public float Rotation { get; set; }
-        public Vector2 Scale { get; set; }
+        public KomodoVector2 Scale { get; set; }
         #endregion Public Members
 
         #region Protected Members
@@ -95,9 +95,9 @@ namespace Komodo.Core.Engine.Entities
             {
                 ParentScene = null;
                 Components = new List<IComponent>();
-                Position = new Vector3();
+                Position = new KomodoVector3();
                 Rotation = 0.0f;
-                Scale = new Vector2();
+                Scale = new KomodoVector2();
 
                 if (serializedObject.Properties.ContainsKey("Components"))
                 {
@@ -123,7 +123,7 @@ namespace Komodo.Core.Engine.Entities
                     var z = serializedObject.Properties["PositionZ"];
                     if (x is float && y is float && z is float)
                     {
-                        Position = new Vector3((float)x, (float)y, (float)z);
+                        Position = new KomodoVector3((float)x, (float)y, (float)z);
                     }
                 }
                 if (serializedObject.Properties.ContainsKey("Rotation"))
@@ -143,7 +143,7 @@ namespace Komodo.Core.Engine.Entities
                     var y = serializedObject.Properties["ScaleY"];
                     if (x is float && y is float)
                     {
-                        Scale = new Vector2((float)x, (float)y);
+                        Scale = new KomodoVector2((float)x, (float)y);
                     }
                 }
             }

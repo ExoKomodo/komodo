@@ -1,3 +1,4 @@
+using Komodo.Core;
 using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Entities;
 using Komodo.Core.Engine.Graphics;
@@ -54,12 +55,12 @@ namespace Komodo.Core.Engine.Components
         {
             spriteBatch.Draw(
                 Texture.MonoGameTexture,
-                new Vector2(Parent.Position.X, Parent.Position.Y),
+                Parent.Position.XY.MonoGameVector,
                 null,
                 Color.White,
                 Parent.Rotation,
-                Vector2.Zero,
-                Parent.Scale,
+                KomodoVector2.Zero.MonoGameVector,
+                Parent.Scale.MonoGameVector,
                 SpriteEffects.None,
                 Parent.Position.Z
             );

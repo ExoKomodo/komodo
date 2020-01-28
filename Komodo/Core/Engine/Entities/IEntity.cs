@@ -14,9 +14,9 @@ namespace Komodo.Core.Engine.Entities
         #region Public Members
         List<IComponent> Components { get; }
         IScene ParentScene { get; set; }
-        Vector3 Position { get; set; }
+        KomodoVector3 Position { get; set; }
         float Rotation { get; set; }
-        Vector2 Scale { get; set; }
+        KomodoVector2 Scale { get; set; }
         #endregion Public Members
 
         #endregion Members

@@ -1,7 +1,6 @@
-// TODO: Remove dependency on MonoGame: GraphicsManager
+// TODO: Remove dependency on MonoGame: Color
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using Komodo.Core.Engine.Scenes;
 
