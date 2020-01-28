@@ -1,3 +1,4 @@
+using Komodo.Core;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Entities;
 using Microsoft.Xna.Framework;
@@ -27,9 +28,9 @@ namespace Komodo.Behaviors
         #region Public Member Methods
         public override void Update(GameTime gameTime)
         {
-            Parent.Position = Vector3.Add(
+            Parent.Position = KomodoVector3.Add(
                 Parent.Position,
-                new Vector3(
+                new KomodoVector3(
                     (float)(50f * gameTime.ElapsedGameTime.TotalSeconds),
                     (float)(100f * gameTime.ElapsedGameTime.TotalSeconds),
                     0f
