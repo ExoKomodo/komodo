@@ -108,18 +108,18 @@ namespace Komodo.Core
         {
             // var thing = new List<int>().GetType().ToString();
             // var type = System.Type.GetType(thing);
-            var serializedScene = MainScene.Serialize();
-            MainScene.Deserialize(serializedScene);
-            Directory.CreateDirectory("Config/Scenes");
-            File.WriteAllText(
-                "Config/Scenes/MainScene.json",
-                JsonSerializer.Serialize<SerializedObject>(serializedScene)
-            );
+            // var serializedScene = MainScene.Serialize();
+            // MainScene.Deserialize(serializedScene);
+            // Directory.CreateDirectory("Config/Scenes");
+            // File.WriteAllText(
+            //     "Config/Scenes/MainScene.json",
+            //     JsonSerializer.Serialize<SerializedObject>(serializedScene)
+            // );
             
             // var thing = SerializedObject.Serialize(MainScene);
             // var serializedScene = JsonSerializer.Serialize<SerializedObject>(thing);
             // File.WriteAllText("Config/Scenes/MainScene.json", serializedScene);
-            throw new System.Exception();
+            // throw new System.Exception();
         }
         #endregion Protected Member Methods
         
