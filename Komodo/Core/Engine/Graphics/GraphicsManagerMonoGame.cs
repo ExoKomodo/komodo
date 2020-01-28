@@ -73,36 +73,14 @@ namespace Komodo.Core.Engine.Graphics
             _graphicsDeviceManager.GraphicsDevice.Clear(clearColor);
         }
 
-        public Texture2D CreateTexture(Color[] data, int width, int height)
+        public KomodoTexture CreateTexture(Color[] data, int width, int height)
         {
-            if (data.Count() != width * height)
-            {
-                // TODO: Create a ColorDataIsWrongSizeException
-                throw new Exception("Color data is the wrong size");
-            }
-            var texture = new Texture2D(_graphicsDeviceManager.GraphicsDevice, width, height);
-            texture.SetData(data);
-
+            var texture = new KomodoTexture(this, data, width, height);
             return texture;
         }
-        public Texture2D CreateTexture(Color[,] data, int width, int height)
+        public KomodoTexture CreateTexture(Color[,] data)
         {
-            if (data.Length != width * height)
-            {
-                // TODO: Create a ColorDataIsWrongSizeException
-                throw new Exception("Color data is the wrong size");
-            }
-            var texture = new Texture2D(_graphicsDeviceManager.GraphicsDevice, width, height);
-            var transformedData = new Color[width * height];
-            for (int i = 0; i < height; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    transformedData[i * j + j] = data[i, j];
-                }
-            }
-            texture.SetData(transformedData);
-
+            var texture = new KomodoTexture(this, data);
             return texture;
         }
 

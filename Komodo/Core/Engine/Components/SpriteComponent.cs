@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Entities;
+using Komodo.Core.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,7 +9,7 @@ namespace Komodo.Core.Engine.Components
     public class SpriteComponent : IComponent
     {
         #region Constructors
-        public SpriteComponent(Texture2D texture)
+        public SpriteComponent(KomodoTexture texture)
         {
             Parent = null;
             Texture = texture;
@@ -29,8 +30,7 @@ namespace Komodo.Core.Engine.Components
                 _parent = value;
             }
         }
-        [JsonIgnore]
-        public Texture2D Texture { get; set; }
+        public KomodoTexture Texture { get; set; }
         #endregion Public Members
 
         #region Protected Members
@@ -53,7 +53,7 @@ namespace Komodo.Core.Engine.Components
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
-                Texture,
+                Texture.MonoGameTexture,
                 new Vector2(Parent.Position.X, Parent.Position.Y),
                 null,
                 Color.White,
@@ -68,6 +68,9 @@ namespace Komodo.Core.Engine.Components
         public SerializedObject Serialize()
         {
             var serializedObject = new SerializedObject();
+            serializedObject.Type = this.GetType().ToString();
+            
+            // serializedObject.Properties["Texture"] = Texture;
 
             return serializedObject;
         }

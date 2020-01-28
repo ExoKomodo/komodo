@@ -22,8 +22,8 @@ namespace Komodo.Core.Engine.Graphics
         
         #region Public Member Methods
         void Clear(Color clearColor);
-        Texture2D CreateTexture(Color[] data, int width, int height);
-        Texture2D CreateTexture(Color[,] data, int width, int height);
+        KomodoTexture CreateTexture(Color[] data, int width, int height);
+        KomodoTexture CreateTexture(Color[,] data);
         void DrawScene(IScene scene);
         void Initialize();
         void SetFullscreen(bool isFullscreen, bool shouldApplyChanges = true);
