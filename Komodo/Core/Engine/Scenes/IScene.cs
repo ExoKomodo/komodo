@@ -15,6 +15,7 @@ namespace Komodo.Core.Engine.Scenes
         List<IEntity> Entities { get; set; }
         [JsonIgnore]
         IScene Parent { get; set; }
+        KomodoGame Game { get; set; }
         #endregion Public Members
 
         #endregion Members

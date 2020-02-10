@@ -10,6 +10,7 @@ namespace Komodo.Core.Engine.Components
         #region Constructors
         public BehaviorComponent()
         {
+            IsEnabled = true;
             Parent = null;
         }
         #endregion Constructors
@@ -17,8 +18,17 @@ namespace Komodo.Core.Engine.Components
         #region Members
 
         #region Public Members
+        public bool IsEnabled { get; set; }
+        public KomodoGame Game
+        {
+            get
+            {
+                return Parent.ParentScene.Game;
+            }
+        }
         [JsonIgnore]
-        public IEntity Parent {
+        public IEntity Parent
+        {
             get
             {
                 return _parent;

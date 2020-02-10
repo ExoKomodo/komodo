@@ -14,6 +14,7 @@ namespace Komodo.Core.Engine.Entities
         public Entity()
         {
             Components = new List<IComponent>();
+            IsEnabled = true;
             ParentScene = null;
             Position = KomodoVector3.Zero;
             Rotation = 0.0f;
@@ -35,6 +36,7 @@ namespace Komodo.Core.Engine.Entities
                 _components = value;
             }
         }
+        public bool IsEnabled { get; set; }
         public IScene ParentScene
         {
             get
@@ -160,7 +162,10 @@ namespace Komodo.Core.Engine.Entities
             {
                 foreach (var component in Components)
                 {
-                    component.Draw(spriteBatch);
+                    if (component.IsEnabled)
+                    {
+                        component.Draw(spriteBatch);
+                    }
                 }
             }
         }
@@ -203,9 +208,15 @@ namespace Komodo.Core.Engine.Entities
         {
             if (Components != null)
             {
-                foreach (var component in Components)
-                {
-                    component.Update(gameTime);
+                for (int i = 0; i < Components.Count; i++) {
+                    if (Components.Count > i)
+                    {
+                        var component = Components[i];
+                        if (component.IsEnabled)
+                        {
+                            component.Update(gameTime);
+                        }
+                    }
                 }
             }
         }
