@@ -1,7 +1,4 @@
 // TODO: Remove dependency on MonoGame: Color
-using Komodo.Behaviors;
-using Komodo.Core.Engine.Components;
-using Komodo.Core.Engine.Entities;
 using Komodo.Core.Engine.Scenes;
 using Komodo.Core.Engine.Graphics;
 
@@ -10,6 +7,7 @@ using System.Text.Json;
 using Microsoft.Xna.Framework;
 using System.IO;
 using System.Collections.Generic;
+using Komodo.Core.Engine.Input;
 
 namespace Komodo.Core
 {
@@ -22,17 +20,34 @@ namespace Komodo.Core
             _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame);
             _graphicsManagerMonoGame.IsMouseVisible = true;
 
-            MainScene = new Scene();
+            ActiveScene = new Scene();
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public IScene MainScene { get; set; }
+        public IScene ActiveScene {
+            get
+            {
+                return _activeScene;
+            }
+            set
+            {
+                _activeScene = value;
+                _activeScene.Game = this;
+            }
+        }
+        public IGraphicsManager GraphicsManager {
+            get
+            {
+                return this._graphicsManagerMonoGame;
+            }
+        }
         #endregion Public Members
         
         #region Protected Members
+        protected IScene _activeScene;
         #endregion Protected Members
         
         #region Private Members
@@ -54,9 +69,9 @@ namespace Komodo.Core
         {
             _graphicsManagerMonoGame.Clear(clearColor);
 
-            _graphicsManagerMonoGame.DrawScene(MainScene);
+            _graphicsManagerMonoGame.DrawScene(ActiveScene);
         }
-        
+
         public void Exit()
         {
             _komodoMonoGame.Exit();
@@ -65,22 +80,6 @@ namespace Komodo.Core
         public void Initialize()
         {
             _graphicsManagerMonoGame.Initialize();
-
-            int width = 100;
-            int height = 100;
-            Color[] data = new Color[width * height];
-            for (int pixel = 0; pixel < width * height; pixel++)
-            {
-                //the function applies the color according to the specified pixel
-                data[pixel] = Color.Blue;
-            }
-            var texture = _graphicsManagerMonoGame.CreateTexture(data, width, height);
-            var entity = new Entity();
-            entity.AddComponent(new SpriteComponent(texture));
-            entity.AddComponent(new MoveRightAndDownBehavior());
-            MainScene.AddEntity(entity);
-
-            ParseScenes();
         }
 
         public void ResetElapsedTime()
@@ -100,7 +99,9 @@ namespace Komodo.Core
 
         public void Update(GameTime gameTime)
         {
-            MainScene.Update(gameTime);
+            InputManager.Update();
+
+            ActiveScene.Update(gameTime);
         }
         #endregion Public Member Methods
         
@@ -109,17 +110,17 @@ namespace Komodo.Core
         {
             var thing = new List<int>().GetType().ToString();
             var type = System.Type.GetType(thing);
-            var serializedScene = MainScene.Serialize();
-            MainScene.Deserialize(serializedScene);
+            var serializedScene = ActiveScene.Serialize();
+            ActiveScene.Deserialize(serializedScene);
             Directory.CreateDirectory("Config/Scenes");
             File.WriteAllText(
-                "Config/Scenes/MainScene.json",
+                "Config/Scenes/ActiveScene.json",
                 JsonSerializer.Serialize<SerializedObject>(serializedScene)
             );
             
-            // var thing = SerializedObject.Serialize(MainScene);
+            // var thing = SerializedObject.Serialize(ActiveScene);
             // var serializedScene = JsonSerializer.Serialize<SerializedObject>(thing);
-            // File.WriteAllText("Config/Scenes/MainScene.json", serializedScene);
+            // File.WriteAllText("Config/Scenes/ActiveScene.json", serializedScene);
             throw new System.Exception();
         }
         #endregion Protected Member Methods

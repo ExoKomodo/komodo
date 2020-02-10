@@ -12,6 +12,7 @@ namespace Komodo.Core.Engine.Components
         #region Constructors
         public SpriteComponent(KomodoTexture texture)
         {
+            IsEnabled = true;
             Parent = null;
             Texture = texture;
         }
@@ -20,6 +21,7 @@ namespace Komodo.Core.Engine.Components
         #region Members
 
         #region Public Members
+        public bool IsEnabled { get; set; }
         [JsonIgnore]
         public IEntity Parent {
             get

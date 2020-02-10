@@ -161,6 +161,18 @@ namespace Komodo.Core
             var addedVector = Vector3.Add(left.MonoGameVector, right.MonoGameVector);
             return new KomodoVector3(addedVector.X, addedVector.Y, addedVector.Z);
         }
+
+        public static KomodoVector3 Multiply(KomodoVector3 vector, float scale)
+        {
+            var addedVector = Vector3.Multiply(vector.MonoGameVector, scale);
+            return new KomodoVector3(addedVector.X, addedVector.Y, addedVector.Z);
+        }
+
+        public static KomodoVector3 Normalize(KomodoVector3 vectorToNormalize)
+        {
+            vectorToNormalize.MonoGameVector.Normalize();
+            return new KomodoVector3(vectorToNormalize.X, vectorToNormalize.Y, vectorToNormalize.Z);
+        }
         #endregion Public Static Methods
 
         #endregion Static Methods

@@ -59,6 +59,10 @@ namespace Komodo.Core
         
         #region Public Static Members
         public static KomodoVector2 One => new KomodoVector2(1f, 1f);
+        public static KomodoVector2 Down => new KomodoVector2(0f, 1f);
+        public static KomodoVector2 Left => new KomodoVector2(-1f, 0f);
+        public static KomodoVector2 Right => new KomodoVector2(1f, 0f);
+        public static KomodoVector2 Up => new KomodoVector2(0f, -1f);
         public static KomodoVector2 Zero => new KomodoVector2();
         #endregion Public Static Members
         
@@ -78,6 +82,23 @@ namespace Komodo.Core
         #region Static Methods
 
         #region Public Static Methods
+        public static KomodoVector2 Add(KomodoVector2 left, KomodoVector2 right)
+        {
+            var addedVector = Vector2.Add(left.MonoGameVector, right.MonoGameVector);
+            return new KomodoVector2(addedVector.X, addedVector.Y);
+        }
+
+        public static KomodoVector2 Multiply(KomodoVector2 vector, float scale)
+        {
+            var addedVector = Vector2.Multiply(vector.MonoGameVector, scale);
+            return new KomodoVector2(addedVector.X, addedVector.Y);
+        }
+        
+        public static KomodoVector2 Normalize(KomodoVector2 vectorToNormalize)
+        {
+            vectorToNormalize.MonoGameVector.Normalize();
+            return new KomodoVector2(vectorToNormalize.X, vectorToNormalize.Y);
+        }
         #endregion Public Static Methods
 
         #endregion Static Methods

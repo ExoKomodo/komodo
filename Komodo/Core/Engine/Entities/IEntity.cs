@@ -13,6 +13,7 @@ namespace Komodo.Core.Engine.Entities
 
         #region Public Members
         List<IComponent> Components { get; }
+        bool IsEnabled { get; set; }
         IScene ParentScene { get; set; }
         KomodoVector3 Position { get; set; }
         float Rotation { get; set; }

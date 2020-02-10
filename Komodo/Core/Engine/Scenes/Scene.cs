@@ -42,6 +42,7 @@ namespace Komodo.Core.Engine.Scenes
                 _parent = value;
             }
         }
+        public KomodoGame Game { get; set; }
         #endregion Public Members
 
         #region Protected Members
@@ -122,7 +123,10 @@ namespace Komodo.Core.Engine.Scenes
             {
                 foreach (var entity in Entities)
                 {
-                    entity.Draw(spriteBatch);
+                    if (entity.IsEnabled)
+                    {
+                        entity.Draw(spriteBatch);
+                    }
                 }
             }
         }
@@ -160,9 +164,15 @@ namespace Komodo.Core.Engine.Scenes
         {
             if (Entities != null)
             {
-                foreach (var entity in Entities)
-                {
-                    entity.Update(gameTime);
+                for (int i = 0; i < Entities.Count; i++) {
+                    if (Entities.Count > i)
+                    {
+                        var entity = Entities[i];
+                        if (entity.IsEnabled)
+                        {
+                            entity.Update(gameTime);
+                        }
+                    }
                 }
             }
         }
