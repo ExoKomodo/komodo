@@ -54,7 +54,7 @@ namespace Komodo.Core.Engine.Graphics
         {
             if (graphicsManager is GraphicsManagerMonoGame)
             {
-                var graphicsDevice = ((GraphicsManagerMonoGame)graphicsManager)._graphicsDeviceManager.GraphicsDevice;
+                var graphicsDevice = ((GraphicsManagerMonoGame)graphicsManager).GraphicsDeviceManager.GraphicsDevice;
                 MonoGameTexture = new Texture2D(graphicsDevice, Width, Height);
                 MonoGameTexture.SetData(Data);
             }

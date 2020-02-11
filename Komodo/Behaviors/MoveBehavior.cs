@@ -24,6 +24,17 @@ namespace Komodo.Behaviors
 
         #region Public Members
         public int PlayerIndex { get; set; }
+        public KomodoVector3 Position
+        {
+            get
+            {
+                return Parent.Position;
+            }
+            set
+            {
+                Parent.Position = value;
+            }
+        }
         public float SprintFactor { get; set; }
         public float Velocity { get; set; }
         #endregion Public Members
@@ -75,8 +86,8 @@ namespace Komodo.Behaviors
                 direction = KomodoVector2.Multiply(direction, SprintFactor);
             }
 
-            Parent.Position = KomodoVector3.Add(
-                Parent.Position,                
+            Position = KomodoVector3.Add(
+                Position,
                 KomodoVector3.Multiply(
                     new KomodoVector3(direction.X, direction.Y),
                     Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds

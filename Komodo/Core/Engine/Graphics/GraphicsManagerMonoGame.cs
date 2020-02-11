@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Graphics.Sprites;
 using Komodo.Core.Engine.Scenes;
 
@@ -15,7 +16,7 @@ namespace Komodo.Core.Engine.Graphics
         public GraphicsManagerMonoGame(KomodoMonoGame komodoMonoGame)
         {
             _komodoMonoGame = komodoMonoGame;
-            _graphicsDeviceManager = new GraphicsDeviceManager(_komodoMonoGame);
+            GraphicsDeviceManager = new GraphicsDeviceManager(_komodoMonoGame);
         }
         #endregion Constructors
 
@@ -41,7 +42,7 @@ namespace Komodo.Core.Engine.Graphics
             get
             {
                 var resolutions = new List<Resolution>();
-                var modes = _graphicsDeviceManager?.GraphicsDevice?.Adapter?.SupportedDisplayModes.ToList();
+                var modes = GraphicsDeviceManager?.GraphicsDevice?.Adapter?.SupportedDisplayModes.ToList();
                 if (modes != null)
                 {
                     foreach (var mode in modes)
@@ -52,8 +53,9 @@ namespace Komodo.Core.Engine.Graphics
                 return resolutions;
             }
         }
-        public GraphicsDeviceManager _graphicsDeviceManager;
-        public SpriteManagerMonoGame _spriteManagerMonoGame;
+        public GraphicsDeviceManager GraphicsDeviceManager { get; set; }
+        public SpriteManagerMonoGame SpriteManagerMonoGame { get; set; }
+        public Viewport ViewPort { get; set; }
         #endregion Public Members
         
         #region Protected Members
@@ -70,7 +72,7 @@ namespace Komodo.Core.Engine.Graphics
         #region Public Member Methods
         public void Clear(Color clearColor)
         {
-            _graphicsDeviceManager.GraphicsDevice.Clear(clearColor);
+            GraphicsDeviceManager.GraphicsDevice.Clear(clearColor);
         }
 
         public KomodoTexture CreateTexture(Color[] data, int width, int height)
@@ -86,19 +88,20 @@ namespace Komodo.Core.Engine.Graphics
 
         public void DrawScene(IScene scene)
         {
-            _spriteManagerMonoGame.BeginDraw();
+            SpriteManagerMonoGame.BeginDraw(CameraComponent.Transform);
             foreach (var entity in scene.Entities)
             {
-                _spriteManagerMonoGame.Draw(entity);
+                SpriteManagerMonoGame.Draw(entity);
             }
-            _spriteManagerMonoGame.EndDraw();
+            SpriteManagerMonoGame.EndDraw();
         }
 
         // Initialize is called after all framework resources have been initialized and allocated
         public void Initialize()
         {
             // Sprite manager requires framework graphics resources to be initialized
-            _spriteManagerMonoGame = new SpriteManagerMonoGame(this);
+            SpriteManagerMonoGame = new SpriteManagerMonoGame(this);
+            ViewPort = GraphicsDeviceManager.GraphicsDevice.Viewport;
 
             var resolution = Resolutions.First();
             SetResolution(resolution);
@@ -107,25 +110,25 @@ namespace Komodo.Core.Engine.Graphics
 
         public void SetFullscreen(bool isFullscreen, bool shouldApplyChanges = true)
         {
-            _graphicsDeviceManager.IsFullScreen = isFullscreen;
+            GraphicsDeviceManager.IsFullScreen = isFullscreen;
             if (shouldApplyChanges)
             {                
-                _graphicsDeviceManager.ApplyChanges();
+                GraphicsDeviceManager.ApplyChanges();
             }
         }
 
         public void SetResolution(Resolution resolution, bool shouldApplyChanges = true)
         {
-            var modes = _graphicsDeviceManager.GraphicsDevice.Adapter.SupportedDisplayModes;
+            var modes = GraphicsDeviceManager.GraphicsDevice.Adapter.SupportedDisplayModes;
             foreach (var mode in modes)
             {
                 if (mode.Width == resolution.Width && mode.Height == resolution.Height)
                 {
-                    _graphicsDeviceManager.PreferredBackBufferWidth = resolution.Width;
-                    _graphicsDeviceManager.PreferredBackBufferHeight = resolution.Height;
+                    GraphicsDeviceManager.PreferredBackBufferWidth = resolution.Width;
+                    GraphicsDeviceManager.PreferredBackBufferHeight = resolution.Height;
                     if (shouldApplyChanges)
                     {                
-                        _graphicsDeviceManager.ApplyChanges();
+                        GraphicsDeviceManager.ApplyChanges();
                     }
                     return;
                 }
@@ -136,10 +139,10 @@ namespace Komodo.Core.Engine.Graphics
 
         public void ToggleFullscreen(bool shouldApplyChanges = true)
         {
-            _graphicsDeviceManager.ToggleFullScreen();
+            GraphicsDeviceManager.ToggleFullScreen();
             if (shouldApplyChanges)
             {                
-                _graphicsDeviceManager.ApplyChanges();
+                GraphicsDeviceManager.ApplyChanges();
             }
         }
         #endregion Public Member Methods

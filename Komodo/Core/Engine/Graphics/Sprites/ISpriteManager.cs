@@ -1,6 +1,5 @@
-using System.Collections.Generic;
 using Komodo.Core.Engine.Entities;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace Komodo.Core.Engine.Graphics.Sprites
 {
@@ -16,7 +15,7 @@ namespace Komodo.Core.Engine.Graphics.Sprites
         #region Member Methods
         
         #region Public Member Methods
-        void BeginDraw();
+        void BeginDraw(Matrix transformMatrix);
         void Draw(IEntity entity);
         // void DrawText(Texture2D texture);
         void EndDraw();
