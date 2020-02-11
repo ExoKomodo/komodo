@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 using Komodo.Core.Engine.Scenes;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Graphics
 {
@@ -13,6 +14,7 @@ namespace Komodo.Core.Engine.Graphics
         #region Public Members
         bool IsMouseVisible { get; set; }
         List<Resolution> Resolutions { get; }
+        Viewport ViewPort { get; }
         #endregion Public Members
 
         #endregion Members

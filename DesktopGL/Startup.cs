@@ -1,6 +1,7 @@
 ﻿using System;
 using Komodo.Behaviors;
 using Komodo.Core;
+using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Entities;
 using Komodo.Core.Engine.Input;
 
@@ -17,6 +18,9 @@ namespace Komodo
 
                 var player1Entity = new Entity();
                 player1Entity.AddComponent(new RootStartupBehavior(0));
+                var camera = new CameraComponent();
+                player1Entity.AddComponent(camera);
+                player1Entity.AddComponent(new CameraBehavior(camera, 0));
                 Game.ActiveScene.AddEntity(player1Entity);
 
                 var player2Entity = new Entity();
@@ -36,12 +40,10 @@ namespace Komodo
             InputManager.AddInputMapping("sprint", KomodoInputs.KeyRightShift, 0);
             InputManager.AddInputMapping("quit", KomodoInputs.KeyEscape, 0);
 
-            InputManager.AddInputMapping("left", KomodoInputs.KeyA, 1);
-            InputManager.AddInputMapping("right", KomodoInputs.KeyD, 1);
-            InputManager.AddInputMapping("up", KomodoInputs.KeyW, 1);
-            InputManager.AddInputMapping("down", KomodoInputs.KeyS, 1);
-            InputManager.AddInputMapping("sprint", KomodoInputs.KeyLeftShift, 1);
-            InputManager.AddInputMapping("quit", KomodoInputs.KeyEscape, 1);
+            InputManager.AddInputMapping("camera_left", KomodoInputs.KeyA, 0);
+            InputManager.AddInputMapping("camera_right", KomodoInputs.KeyD, 0);
+            InputManager.AddInputMapping("camera_up", KomodoInputs.KeyW, 0);
+            InputManager.AddInputMapping("camera_down", KomodoInputs.KeyS, 0);
         }
     }
 }
