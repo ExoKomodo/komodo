@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using System.Collections.Generic;
 using Komodo.Core.Engine.Input;
+using Microsoft.Xna.Framework.Graphics;
+using Komodo.Core.Engine.Entities;
 
 namespace Komodo.Core
 {
@@ -27,7 +29,7 @@ namespace Komodo.Core
         #region Members
 
         #region Public Members
-        public IScene ActiveScene {
+        public Scene ActiveScene {
             get
             {
                 return _activeScene;
@@ -38,6 +40,14 @@ namespace Komodo.Core
                 _activeScene.Game = this;
             }
         }
+        
+        public KomodoGame(BasicEffect defaultShader) 
+        {
+            this.DefaultShader = defaultShader;
+               
+        }
+                public BasicEffect DefaultShader { get; set; }
+
         public IGraphicsManager GraphicsManager {
             get
             {
@@ -47,7 +57,8 @@ namespace Komodo.Core
         #endregion Public Members
         
         #region Protected Members
-        protected IScene _activeScene;
+        protected Scene _activeScene;
+        protected List<Entity> _startupEntities;
         #endregion Protected Members
         
         #region Private Members
@@ -80,6 +91,14 @@ namespace Komodo.Core
         public void Initialize()
         {
             _graphicsManagerMonoGame.Initialize();
+            DefaultShader = new BasicEffect(_graphicsManagerMonoGame.GraphicsDeviceManager.GraphicsDevice);
+            if (_startupEntities != null)
+            {
+                foreach (var entity in _startupEntities)
+                {
+                    ActiveScene.AddEntity(entity);
+                }
+            }
         }
 
         public void ResetElapsedTime()
@@ -87,8 +106,9 @@ namespace Komodo.Core
             _komodoMonoGame.ResetElapsedTime();
         }
 
-        public void Run()
+        public void Run(List<Entity> startupEntities = null)
         {
+            _startupEntities = startupEntities;
             _komodoMonoGame.Run();
         }
 

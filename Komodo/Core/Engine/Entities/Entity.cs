@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Scenes;
 using Microsoft.Xna.Framework;
@@ -8,14 +7,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Entities
 {
-    public class Entity : IEntity
+    public class Entity
     {
         #region Constructors
-        public Entity()
+        public Entity(Scene parentScene)
         {
             Components = new List<IComponent>();
             IsEnabled = true;
-            ParentScene = null;
+            ParentScene = parentScene;
             Position = KomodoVector3.Zero;
             Rotation = 0.0f;
             Scale = KomodoVector2.One;
@@ -37,13 +36,13 @@ namespace Komodo.Core.Engine.Entities
             }
         }
         public bool IsEnabled { get; set; }
-        public IScene ParentScene
+        public Scene ParentScene
         {
             get
             {
                 return _parentScene;
             }
-            set
+            internal set
             {
                 _parentScene = value;
             }
@@ -54,9 +53,8 @@ namespace Komodo.Core.Engine.Entities
         #endregion Public Members
 
         #region Protected Members
-        protected List<IEntity> _children;
         protected List<IComponent> _components;
-        protected IScene _parentScene;
+        protected Scene _parentScene;
         #endregion Protected Members
 
         #region Private Members
@@ -79,13 +77,31 @@ namespace Komodo.Core.Engine.Entities
             }
             Components.Add(componentToAdd);
             componentToAdd.Parent = this;
+            if (ParentScene != null)
+            {
+                ParentScene.AddComponent(componentToAdd);
+            }
+        }
+
+        public bool ChangeScene(Scene sceneToChangeTo)
+        {
+            if (sceneToChangeTo == null)
+            {
+                return false;
+            }
+            if (ParentScene != null)
+            {
+                ParentScene.RemoveEntity(this);
+            }
+            return sceneToChangeTo.AddEntity(this);
         }
 
         public void ClearComponents()
         {
-            foreach (var component in Components)
+            var componentsToRemove = Components.ToArray();
+            foreach (var component in componentsToRemove)
             {
-                component.Parent = null;
+                RemoveComponent(component);
             }
             Components.Clear();
         }
@@ -155,25 +171,18 @@ namespace Komodo.Core.Engine.Entities
                 throw new Exception("Not correct type");
             }
         }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            if (Components != null)
-            {
-                foreach (var component in Components)
-                {
-                    if (component.IsEnabled)
-                    {
-                        component.Draw(spriteBatch);
-                    }
-                }
-            }
-        }
         
         public bool RemoveComponent(IComponent componentToRemove)
         {
             if (Components != null)
             {
+                if (ParentScene != null)
+                {
+                    if (!ParentScene.RemoveComponent(componentToRemove))
+                    {
+                        return false;
+                    }
+                }
                 componentToRemove.Parent = null;
                 return Components.Remove(componentToRemove);
             }
@@ -202,23 +211,6 @@ namespace Komodo.Core.Engine.Entities
             serializedObject.Properties["Scale.Y"] = Scale.X;
 
             return serializedObject;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            if (Components != null)
-            {
-                for (int i = 0; i < Components.Count; i++) {
-                    if (Components.Count > i)
-                    {
-                        var component = Components[i];
-                        if (component.IsEnabled)
-                        {
-                            component.Update(gameTime);
-                        }
-                    }
-                }
-            }
         }
 
         #endregion Public Member Methods

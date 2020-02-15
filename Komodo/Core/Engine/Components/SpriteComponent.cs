@@ -1,4 +1,3 @@
-using Komodo.Core;
 using System.Text.Json.Serialization;
 using Komodo.Core.Engine.Entities;
 using Komodo.Core.Engine.Graphics;
@@ -10,11 +9,13 @@ namespace Komodo.Core.Engine.Components
     public class SpriteComponent : IComponent
     {
         #region Constructors
-        public SpriteComponent(KomodoTexture texture)
+        public SpriteComponent(KomodoTexture texture, Effect shader = null)
         {
             IsEnabled = true;
             Parent = null;
             Texture = texture;
+
+            Shader = shader;
         }
         #endregion Constructors
 
@@ -23,7 +24,7 @@ namespace Komodo.Core.Engine.Components
         #region Public Members
         public bool IsEnabled { get; set; }
         [JsonIgnore]
-        public IEntity Parent {
+        public Entity Parent {
             get
             {
                 return _parent;
@@ -33,11 +34,27 @@ namespace Komodo.Core.Engine.Components
                 _parent = value;
             }
         }
+        public Effect Shader
+        {
+            get
+            {
+                if (_shader == null)
+                {
+                    return Parent.ParentScene.Game.DefaultShader;
+                }
+                return _shader;
+            }
+            set
+            {
+                _shader = value;
+            }
+        }
         public KomodoTexture Texture { get; set; }
         #endregion Public Members
 
         #region Protected Members
-        protected IEntity _parent { get; set; }
+        protected Entity _parent { get; set; }
+        protected Effect _shader { get; set; }
         #endregion Protected Members
 
         #region Private Members

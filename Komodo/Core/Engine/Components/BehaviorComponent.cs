@@ -27,7 +27,7 @@ namespace Komodo.Core.Engine.Components
             }
         }
         [JsonIgnore]
-        public IEntity Parent
+        public Entity Parent
         {
             get
             {
@@ -41,7 +41,7 @@ namespace Komodo.Core.Engine.Components
         #endregion Public Members
 
         #region Protected Members
-        protected IEntity _parent { get; set; }
+        protected Entity _parent { get; set; }
         #endregion Protected Members
 
         #region Private Members

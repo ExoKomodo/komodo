@@ -12,7 +12,7 @@ namespace Komodo.Core.Engine.Components
         #region Public Members
         bool IsEnabled { get; set; }
         [JsonIgnore]
-        IEntity Parent { get; set; }
+        Entity Parent { get; set; }
         #endregion Public Members
 
         #endregion Members

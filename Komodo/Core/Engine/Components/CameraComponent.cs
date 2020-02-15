@@ -39,7 +39,7 @@ namespace Komodo.Core.Engine.Components
         public Rectangle VisibleArea { get; protected set; }
         public float Zoom { get; set; }
         [JsonIgnore]
-        public IEntity Parent
+        public Entity Parent
         {
             get
             {
@@ -56,7 +56,7 @@ namespace Komodo.Core.Engine.Components
         #endregion Private Members
 
         #region Protected Members
-        protected IEntity _parent { get; set; }
+        protected Entity _parent { get; set; }
         #endregion Protected Members
 
         #endregion Members

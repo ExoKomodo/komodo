@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Komodo.Core.Engine.Components;
 using Komodo.Core.Engine.Entities;
+using Komodo.Core.Engine.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -26,19 +27,10 @@ namespace Komodo.Core.Engine.Graphics.Sprites
         #region Member Methods
         
         #region Public Member Methods
-        public void BeginDraw(Matrix transformMatrix)
-        {
-            _spriteBatchMonoGame.Begin(transformMatrix: transformMatrix);
-        }
 
-        public void Draw(IEntity entity)
+        public void Draw(Scene scene, Matrix transformMatrix)
         {
-            entity.Draw(_spriteBatchMonoGame);
-        }
-
-        public void EndDraw()
-        {
-            _spriteBatchMonoGame.End();
+            scene.Draw(_spriteBatchMonoGame, transformMatrix);
         }
         #endregion Public Member Methods
         

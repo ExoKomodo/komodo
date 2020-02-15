@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using Komodo.Core.Engine.Entities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core
 {
@@ -8,6 +11,7 @@ namespace Komodo.Core
         #region Members
 
         #region Public Members
+        BasicEffect DefaultShader { get; set; }
         #endregion Public Members
         
         #region Protected Members
@@ -26,7 +30,7 @@ namespace Komodo.Core
         void Exit();
         void Initialize();
         void ResetElapsedTime();
-        void Run();
+        void Run(List<Entity> startupEntities = null);
         void RunOneFrame();
         void Update(GameTime gameTime);
         #endregion Public Member Methods

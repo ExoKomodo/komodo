@@ -25,7 +25,7 @@ namespace Komodo.Core.Engine.Graphics
         void Clear(Color clearColor);
         KomodoTexture CreateTexture(Color[] data, int width, int height);
         KomodoTexture CreateTexture(Color[,] data);
-        void DrawScene(IScene scene);
+        void DrawScene(Scene scene);
         void Initialize();
         void SetFullscreen(bool isFullscreen, bool shouldApplyChanges = true);
         void SetResolution(Resolution resolution, bool shouldApplyChanges = true);

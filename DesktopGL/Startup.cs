@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Komodo.Behaviors;
 using Komodo.Core;
 using Komodo.Core.Engine.Components;
@@ -16,18 +17,24 @@ namespace Komodo
             using (Game = new KomodoGame()) {
                 SetupInputs();
 
-                var player1Entity = new Entity();
+                var player1Entity = new Entity(Game.ActiveScene);
                 player1Entity.AddComponent(new RootStartupBehavior(0));
                 var camera = new CameraComponent();
                 player1Entity.AddComponent(camera);
                 player1Entity.AddComponent(new CameraBehavior(camera, 0));
-                Game.ActiveScene.AddEntity(player1Entity);
 
-                var player2Entity = new Entity();
+                var player2Entity = new Entity(Game.ActiveScene);
                 player2Entity.AddComponent(new RootStartupBehavior(1));
-                Game.ActiveScene.AddEntity(player2Entity);
 
-                Game.Run();
+                var startupEntities = new List<Entity>
+                {
+                    player1Entity,
+                    player2Entity
+                };
+
+                // Startup entities will be attached to the active scene once the monogame initialization has occurred.
+                // This allows the default shader to be created only after the graphics device has been initialized.
+                Game.Run(startupEntities);
             }
         }
 
