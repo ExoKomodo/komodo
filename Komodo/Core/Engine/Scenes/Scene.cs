@@ -4,22 +4,28 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Komodo.Core.Engine.Entities;
 using System.Text.Json.Serialization;
+using Komodo.Core.Engine.Components;
+using System.Collections;
 
 namespace Komodo.Core.Engine.Scenes
 {
-    public class Scene : IScene
+    public class Scene
     {
         #region Constructors
         public Scene()
         {
-            Entities = new List<IEntity>();
+            Entities = new List<Entity>();
+            _drawable2DComponents = new Dictionary<Effect, List<IComponent>>();
+            _drawable3DComponents = new List<IComponent>();
+            _physicsComponents = new List<IComponent>();
+            _updatableComponents = new List<IComponent>();
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public List<IEntity> Entities
+        public List<Entity> Entities
         {
             get
             {
@@ -31,7 +37,7 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
         [JsonIgnore]
-        public IScene Parent
+        public Scene Parent
         {
             get
             {
@@ -46,8 +52,12 @@ namespace Komodo.Core.Engine.Scenes
         #endregion Public Members
 
         #region Protected Members
-        protected List<IEntity> _entities;
-        protected IScene _parent;
+        protected List<Entity> _entities;
+        protected Scene _parent;
+        protected Dictionary<Effect, List<IComponent>> _drawable2DComponents { get; }
+        protected List<IComponent> _drawable3DComponents { get; }
+        protected List<IComponent> _physicsComponents { get; }
+        protected List<IComponent> _updatableComponents { get; }
         #endregion Protected Members
 
         #region Private Members
@@ -57,28 +67,75 @@ namespace Komodo.Core.Engine.Scenes
 
         #region Member Methods
 
-        #region Public Member Methods
-        public void AddEntity(IEntity entityToAdd)
+        #region Internal Member Methods
+        public bool AddComponent(IComponent componentToAdd)
         {
-            if (Entities == null)
+            switch (componentToAdd)
             {
-                Entities = new List<IEntity>();
+                case SpriteComponent component:
+                    return AddSpriteComponent(component);
+                case CameraComponent component:
+                    return AddUpdatableComponent(component);
+                case BehaviorComponent component:
+                    return AddUpdatableComponent(component);
+                case null:
+                default:
+                    return false;
             }
-            if (entityToAdd.ParentScene != null)
+        }
+
+        public bool RemoveComponent(IComponent componentToRemove)
+        {
+            switch (componentToRemove)
             {
-                entityToAdd.ParentScene.RemoveEntity(entityToAdd);
+                case SpriteComponent component:
+                    return RemoveSpriteComponent(component);
+                case CameraComponent component:
+                    return RemoveUpdatableComponent(component);
+                case BehaviorComponent component:
+                    return RemoveUpdatableComponent(component);
+                case null:
+                default:
+                    return false;
             }
-            Entities.Add(entityToAdd);
-            entityToAdd.ParentScene = this;
+        }
+        #endregion Internal Member Methods
+
+        #region Public Member Methods
+        public bool AddEntity(Entity entityToAdd)
+        {
+            try
+            {
+                if (Entities == null)
+                {
+                    Entities = new List<Entity>();
+                }
+                if (entityToAdd.ParentScene != null)
+                {
+                    entityToAdd.ParentScene.RemoveEntity(entityToAdd);
+                }
+                Entities.Add(entityToAdd);
+                entityToAdd.ParentScene = this;
+                foreach (var component in entityToAdd.Components)
+                {
+                    AddComponent(component);
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public void ClearEntities()
         {
             if (Entities != null)
             {
-                foreach (var entity in Entities)
+                var entitiesToRemove = Entities.ToArray();
+                foreach (var entity in entitiesToRemove)
                 {
-                    entity.ParentScene = null;
+                    RemoveEntity(entity);
                 }
                 Entities.Clear();
             }
@@ -89,15 +146,15 @@ namespace Komodo.Core.Engine.Scenes
             var type = Type.GetType(serializedObject.Type);
             if (type == this.GetType())
             {
-                Entities = new List<IEntity>();
+                Entities = new List<Entity>();
                 Parent = null;
 
                 if (serializedObject.Properties.ContainsKey("Entities"))
                 {
                     var obj = serializedObject.Properties["Entities"];
-                    if (obj is List<IEntity>)
+                    if (obj is List<Entity>)
                     {
-                        var entities = obj as List<IEntity>;
+                        var entities = obj as List<Entity>;
                         foreach (var entity in entities)
                         {
                             entity.ParentScene = this;
@@ -107,7 +164,7 @@ namespace Komodo.Core.Engine.Scenes
                 }
                 if (serializedObject.Properties.ContainsKey("Parent"))
                 {
-                    Parent = serializedObject.Properties["Parent"] as IScene;
+                    Parent = serializedObject.Properties["Parent"] as Scene;
                 }
             }
             else
@@ -117,24 +174,52 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Matrix transformMatrix)
         {
-            if (Entities != null)
+            if (_drawable2DComponents != null)
             {
-                foreach (var entity in Entities)
+                foreach (KeyValuePair<Effect, List<IComponent>> pair in _drawable2DComponents)
                 {
-                    if (entity.IsEnabled)
+                    var shader = pair.Key;
+                    if (shader == Game.DefaultShader)
                     {
-                        entity.Draw(spriteBatch);
+                        shader = null;
+                    }
+                    spriteBatch.Begin(transformMatrix: transformMatrix, effect: shader);
+                    try
+                    {
+                        var components = pair.Value;
+                        int i = 0;
+                        while (components.Count > i)
+                        {
+                            var component = components[i];
+                            if (component.Parent.IsEnabled && component.IsEnabled)
+                            {
+                                component.Draw(spriteBatch);
+                            }
+                            i++;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    
+                    }
+                    finally
+                    {
+                        spriteBatch.End();
                     }
                 }
             }
         }
 
-        public bool RemoveEntity(IEntity entityToRemove)
+        public bool RemoveEntity(Entity entityToRemove)
         {
             if (Entities != null)
             {
+                foreach (var component in entityToRemove.Components)
+                {
+                    RemoveComponent(component);
+                }
                 entityToRemove.ParentScene = null;
                 return Entities.Remove(entityToRemove);
             }
@@ -162,23 +247,132 @@ namespace Komodo.Core.Engine.Scenes
 
         public void Update(GameTime gameTime)
         {
-            if (Entities != null)
+            if (_updatableComponents != null)
             {
-                for (int i = 0; i < Entities.Count; i++) {
-                    if (Entities.Count > i)
+                int i = 0;
+                while (_updatableComponents.Count > i)
+                {
+                    var component = _updatableComponents[i];
+                    if (component.Parent.IsEnabled && component.IsEnabled)
                     {
-                        var entity = Entities[i];
-                        if (entity.IsEnabled)
-                        {
-                            entity.Update(gameTime);
-                        }
+                        component.Update(gameTime);
                     }
+                    i++;
                 }
             }
         }
         #endregion Public Member Methods
 
         #region Protected Member Methods
+        protected bool AddSpriteComponent(SpriteComponent componentToAdd)
+        {
+            try
+            {
+                var shader = componentToAdd.Shader;
+                if (!_drawable2DComponents.ContainsKey(shader))
+                {
+                    _drawable2DComponents[shader] = new List<IComponent>();
+                }
+                _drawable2DComponents[shader].Add(componentToAdd);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool AddDrawable3DComponent(IComponent componentToAdd)
+        {
+            try
+            {
+                _drawable3DComponents.Add(componentToAdd);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool AddUpdatableComponent(IComponent componentToAdd)
+        {
+            try
+            {
+                _updatableComponents.Add(componentToAdd);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool AddPhysicsComponent(IComponent componentToAdd)
+        {
+            try
+            {
+                _physicsComponents.Add(componentToAdd);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool RemoveSpriteComponent(SpriteComponent componentToRemove)
+        {
+            try
+            {
+                var shader = componentToRemove.Shader;
+                if (!_drawable2DComponents.ContainsKey(shader))
+                {
+                    return false;
+                }
+                return _drawable2DComponents[shader].Remove(componentToRemove);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool RemoveDrawable3DComponent(IComponent componentToRemove)
+        {
+            try
+            {
+                return _drawable3DComponents.Remove(componentToRemove);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool RemoveUpdatableComponent(IComponent componentToRemove)
+        {
+            try
+            {
+                return _updatableComponents.Remove(componentToRemove);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool RemovePhysicsComponent(IComponent componentToRemove)
+        {
+            try
+            {
+                return _updatableComponents.Remove(componentToRemove);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         #endregion Protected Member Methods
 
         #region Private Member Methods

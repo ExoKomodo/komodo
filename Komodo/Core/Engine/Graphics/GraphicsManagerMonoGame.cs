@@ -86,14 +86,9 @@ namespace Komodo.Core.Engine.Graphics
             return texture;
         }
 
-        public void DrawScene(IScene scene)
+        public void DrawScene(Scene scene)
         {
-            SpriteManagerMonoGame.BeginDraw(CameraComponent.Transform);
-            foreach (var entity in scene.Entities)
-            {
-                SpriteManagerMonoGame.Draw(entity);
-            }
-            SpriteManagerMonoGame.EndDraw();
+            SpriteManagerMonoGame.Draw(scene, CameraComponent.Transform);
         }
 
         // Initialize is called after all framework resources have been initialized and allocated
