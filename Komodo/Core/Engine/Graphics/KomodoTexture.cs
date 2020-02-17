@@ -7,6 +7,14 @@ namespace Komodo.Core.Engine.Graphics
     public struct KomodoTexture : IKomodoTexture
     {
         #region Constructors
+        public KomodoTexture(Texture2D monoGameTexture)
+        {
+            Data = null;
+            MonoGameTexture = monoGameTexture;
+            _height = 0;
+            _width = 0;
+        }
+
         public KomodoTexture(
             IGraphicsManager graphicsManager,
             Color[] data,
@@ -15,9 +23,9 @@ namespace Komodo.Core.Engine.Graphics
         )
         {
             Data = null;
-            Width = 0;
-            Height = 0;
             MonoGameTexture = null;
+            _height = height;
+            _width = width;
 
             Initialize(data, width, height);
             CreateMonoGameTexture(graphicsManager);
@@ -29,9 +37,9 @@ namespace Komodo.Core.Engine.Graphics
         )
         {
             Data = null;
-            Width = 0;
-            Height = 0;
             MonoGameTexture = null;
+            _height = 0;
+            _width = 0;
 
             Initialize(data);
             CreateMonoGameTexture(graphicsManager);
@@ -43,19 +51,40 @@ namespace Komodo.Core.Engine.Graphics
         #region Public Members
         public Color[] Data { get; private set; }
 
-        public int Height { get; private set; }
+        public int Height
+        {
+            get
+            {
+                return MonoGameTexture == null ? 0 : MonoGameTexture.Height;
+            }
+        }
 
-        public int Width { get; private set; }
+        public int Width
+        {
+            get
+            {
+                return MonoGameTexture == null ? 0 : MonoGameTexture.Width;
+            }
+        }
         public Texture2D MonoGameTexture { get; private set; }
         #endregion Public Members
 
         #region Private Members
+        private int _height { get; set; }
+        private int _width { get; set; }
+        #endregion Private Members
+
+        #endregion Members
+
+        #region Member Methods
+        
+        #region Private Member Methods
         private void CreateMonoGameTexture(IGraphicsManager graphicsManager)
         {
             if (graphicsManager is GraphicsManagerMonoGame)
             {
                 var graphicsDevice = ((GraphicsManagerMonoGame)graphicsManager).GraphicsDeviceManager.GraphicsDevice;
-                MonoGameTexture = new Texture2D(graphicsDevice, Width, Height);
+                MonoGameTexture = new Texture2D(graphicsDevice, _width, _height);
                 MonoGameTexture.SetData(Data);
             }
         }
@@ -77,8 +106,6 @@ namespace Komodo.Core.Engine.Graphics
                 throw new Exception("Data was the wrong size");
             }
             Data = data;
-            Height = height;
-            Width = width;
         }
 
         private void Initialize(Color[,] data)
@@ -91,14 +118,12 @@ namespace Komodo.Core.Engine.Graphics
             if (data.Length == 0)
             {
                 Data = null;
-                Height = 0;
-                Width = 0;
             }
             else
             {
-                Height = data.Rank;
-                Width = data.GetLength(0);
-                Data = new Color[Width * Height];
+                _height = data.Rank;
+                _width = data.GetLength(0);
+                Data = new Color[_width * _height];
                 int i = 0;
                 foreach (Color color in data)
                 {
@@ -107,8 +132,9 @@ namespace Komodo.Core.Engine.Graphics
                 }
             }
         }
-        #endregion Private Members
 
-        #endregion Members
+        #endregion Private Member Methods
+
+        #endregion Member Methods
     }
 }

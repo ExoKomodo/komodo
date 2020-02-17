@@ -24,7 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-  <ProjectReference Include="..\Komodo\Komodo.csproj" />
+    <ProjectReference Include="..\Komodo\Komodo.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Content\bin\MonoGame\**" CopyToOutputDirectory="PreserveNewest" LinkBase="Content\MonoGame" />
   </ItemGroup>
 
   <ItemGroup>

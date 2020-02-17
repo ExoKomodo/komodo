@@ -13,7 +13,7 @@ namespace Komodo.Core
         #endregion Protected Members
 
         #region Private Members
-        private IKomodoGame _komodoGame;
+        private KomodoGame _komodoGame;
         #endregion Private Members
 
         #endregion Members
@@ -57,7 +57,7 @@ namespace Komodo.Core
         #endregion Member Methods
 
         #region Constructors
-        public KomodoMonoGame(IKomodoGame komodoGame)
+        public KomodoMonoGame(KomodoGame komodoGame)
         {
             _komodoGame = komodoGame;
             Content.RootDirectory = "Content/MonoGame";
