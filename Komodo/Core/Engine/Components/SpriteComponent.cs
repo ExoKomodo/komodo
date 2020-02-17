@@ -14,6 +14,17 @@ namespace Komodo.Core.Engine.Components
             IsEnabled = true;
             Parent = null;
             Texture = texture;
+            TexturePath = null;
+
+            Shader = shader;
+        }
+        public SpriteComponent(string texturePath, Effect shader = null)
+        {
+            IsEnabled = true;
+            Parent = null;
+            var loadedTexture = KomodoGame.Content.Load<Texture2D>(texturePath);
+            Texture = new KomodoTexture(loadedTexture);
+            TexturePath = texturePath;
 
             Shader = shader;
         }
@@ -22,6 +33,13 @@ namespace Komodo.Core.Engine.Components
         #region Members
 
         #region Public Members
+        public float Height
+        {
+            get
+            {
+                return Texture.Height * Parent.Scale.Y;
+            }
+        }
         public bool IsEnabled { get; set; }
         [JsonIgnore]
         public Entity Parent {
@@ -50,6 +68,14 @@ namespace Komodo.Core.Engine.Components
             }
         }
         public KomodoTexture Texture { get; set; }
+        public string TexturePath { get; set; }
+        public float Width
+        {
+            get
+            {
+                return Texture.Width * Parent.Scale.X;
+            }
+        }
         #endregion Public Members
 
         #region Protected Members

@@ -10,10 +10,12 @@ using System.Collections.Generic;
 using Komodo.Core.Engine.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Komodo.Core.Engine.Entities;
+using Microsoft.Xna.Framework.Content;
+using System;
 
 namespace Komodo.Core
 {
-    public class KomodoGame : IKomodoGame
+    public class KomodoGame : IDisposable
     {
         #region Constructors
         public KomodoGame()
@@ -21,6 +23,8 @@ namespace Komodo.Core
             _komodoMonoGame = new KomodoMonoGame(this);
             _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame);
             _graphicsManagerMonoGame.IsMouseVisible = true;
+
+            Content = _komodoMonoGame.Content;
 
             ActiveScene = new Scene();
         }
@@ -40,14 +44,8 @@ namespace Komodo.Core
                 _activeScene.Game = this;
             }
         }
-        
-        public KomodoGame(BasicEffect defaultShader) 
-        {
-            this.DefaultShader = defaultShader;
-               
-        }
-                public BasicEffect DefaultShader { get; set; }
-
+        public static ContentManager Content { get; private set; }
+        public BasicEffect DefaultShader { get; set; }
         public IGraphicsManager GraphicsManager {
             get
             {

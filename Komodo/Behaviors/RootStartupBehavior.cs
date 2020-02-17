@@ -45,16 +45,7 @@ namespace Komodo.Behaviors
             {
                 _isInitialized = true;
                 IsEnabled = false;
-                int width = 100;
-                int height = 100;
-                Color[] data = new Color[width * height];
-                for (int pixel = 0; pixel < width * height; pixel++)
-                {
-                    //the function applies the color according to the specified pixel
-                    data[pixel] = Color.Blue;
-                }
-                var texture = this.Parent.ParentScene.Game.GraphicsManager.CreateTexture(data, width, height);
-                this.Parent.AddComponent(new SpriteComponent(texture));
+                this.Parent.AddComponent(new SpriteComponent("player/idle/player_idle_01"));
                 this.Parent.AddComponent(new MoveBehavior(PlayerIndex));
             }
         }
