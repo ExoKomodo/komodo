@@ -3,7 +3,7 @@
 
 /outputDir:bin
 /intermediateDir:obj
-/platform:Windows
+/platform:DesktopGL
 /config:
 /profile:Reach
 /compress:False
@@ -12,6 +12,12 @@
 
 
 #---------------------------------- Content ---------------------------------#
+
+#begin MonoGame/audio/sample.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:MonoGame/audio/sample.ogg
 
 #begin MonoGame/player/idle/player_idle_01.png
 /importer:TextureImporter

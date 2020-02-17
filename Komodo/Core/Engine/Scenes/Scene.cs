@@ -78,6 +78,8 @@ namespace Komodo.Core.Engine.Scenes
                     return AddUpdatableComponent(component);
                 case BehaviorComponent component:
                     return AddUpdatableComponent(component);
+                case SoundComponent component:
+                    return AddUpdatableComponent(component);
                 case null:
                 default:
                     return false;
@@ -93,6 +95,8 @@ namespace Komodo.Core.Engine.Scenes
                 case CameraComponent component:
                     return RemoveUpdatableComponent(component);
                 case BehaviorComponent component:
+                    return RemoveUpdatableComponent(component);
+                case SoundComponent component:
                     return RemoveUpdatableComponent(component);
                 case null:
                 default:
