@@ -6,13 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Components
 {
-    public class SpriteComponent : IComponent
+    public class SpriteComponent : Component
     {
         #region Constructors
-        public SpriteComponent(KomodoTexture texture, Effect shader = null)
+        public SpriteComponent(KomodoTexture texture, Effect shader = null) : base(true, null)
         {
-            IsEnabled = true;
-            Parent = null;
             Texture = texture;
             TexturePath = null;
 
@@ -38,18 +36,6 @@ namespace Komodo.Core.Engine.Components
             get
             {
                 return Texture.Height * Parent.Scale.Y;
-            }
-        }
-        public bool IsEnabled { get; set; }
-        [JsonIgnore]
-        public Entity Parent {
-            get
-            {
-                return _parent;
-            }
-            set
-            {
-                _parent = value;
             }
         }
         public Effect Shader
@@ -79,7 +65,6 @@ namespace Komodo.Core.Engine.Components
         #endregion Public Members
 
         #region Protected Members
-        protected Entity _parent { get; set; }
         protected Effect _shader { get; set; }
         #endregion Protected Members
 
@@ -91,12 +76,12 @@ namespace Komodo.Core.Engine.Components
         #region Member Methods
 
         #region Public Member Methods
-        public void Deserialize(SerializedObject serializedObject)
+        public override void Deserialize(SerializedObject serializedObject)
         {
             
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
                 Texture.MonoGameTexture,
@@ -111,7 +96,7 @@ namespace Komodo.Core.Engine.Components
             );
         }
 
-        public SerializedObject Serialize()
+        public override SerializedObject Serialize()
         {
             var serializedObject = new SerializedObject();
             serializedObject.Type = this.GetType().ToString();
@@ -121,7 +106,7 @@ namespace Komodo.Core.Engine.Components
             return serializedObject;
         }
 
-        public void Update(GameTime gameTime)
+        sealed public override void Update(GameTime gameTime)
         {
         }
         #endregion Public Member Methods
