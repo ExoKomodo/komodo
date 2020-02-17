@@ -15,10 +15,10 @@ namespace Komodo.Core.Engine.Scenes
         public Scene()
         {
             Entities = new List<Entity>();
-            _drawable2DComponents = new Dictionary<Effect, List<IComponent>>();
-            _drawable3DComponents = new List<IComponent>();
-            _physicsComponents = new List<IComponent>();
-            _updatableComponents = new List<IComponent>();
+            _drawable2DComponents = new Dictionary<Effect, List<Component>>();
+            _drawable3DComponents = new List<Component>();
+            _physicsComponents = new List<Component>();
+            _updatableComponents = new List<Component>();
         }
         #endregion Constructors
 
@@ -54,10 +54,10 @@ namespace Komodo.Core.Engine.Scenes
         #region Protected Members
         protected List<Entity> _entities;
         protected Scene _parent;
-        protected Dictionary<Effect, List<IComponent>> _drawable2DComponents { get; }
-        protected List<IComponent> _drawable3DComponents { get; }
-        protected List<IComponent> _physicsComponents { get; }
-        protected List<IComponent> _updatableComponents { get; }
+        protected Dictionary<Effect, List<Component>> _drawable2DComponents { get; }
+        protected List<Component> _drawable3DComponents { get; }
+        protected List<Component> _physicsComponents { get; }
+        protected List<Component> _updatableComponents { get; }
         #endregion Protected Members
 
         #region Private Members
@@ -68,7 +68,7 @@ namespace Komodo.Core.Engine.Scenes
         #region Member Methods
 
         #region Internal Member Methods
-        public bool AddComponent(IComponent componentToAdd)
+        public bool AddComponent(Component componentToAdd)
         {
             switch (componentToAdd)
             {
@@ -84,7 +84,7 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        public bool RemoveComponent(IComponent componentToRemove)
+        public bool RemoveComponent(Component componentToRemove)
         {
             switch (componentToRemove)
             {
@@ -178,7 +178,7 @@ namespace Komodo.Core.Engine.Scenes
         {
             if (_drawable2DComponents != null)
             {
-                foreach (KeyValuePair<Effect, List<IComponent>> pair in _drawable2DComponents)
+                foreach (KeyValuePair<Effect, List<Component>> pair in _drawable2DComponents)
                 {
                     var shader = pair.Key;
                     if (shader == Game.DefaultShader)
@@ -271,7 +271,7 @@ namespace Komodo.Core.Engine.Scenes
                 var shader = componentToAdd.Shader;
                 if (!_drawable2DComponents.ContainsKey(shader))
                 {
-                    _drawable2DComponents[shader] = new List<IComponent>();
+                    _drawable2DComponents[shader] = new List<Component>();
                 }
                 _drawable2DComponents[shader].Add(componentToAdd);
                 return true;
@@ -282,7 +282,7 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        protected bool AddDrawable3DComponent(IComponent componentToAdd)
+        protected bool AddDrawable3DComponent(Component componentToAdd)
         {
             try
             {
@@ -295,7 +295,7 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        protected bool AddUpdatableComponent(IComponent componentToAdd)
+        protected bool AddUpdatableComponent(Component componentToAdd)
         {
             try
             {
@@ -308,7 +308,7 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        protected bool AddPhysicsComponent(IComponent componentToAdd)
+        protected bool AddPhysicsComponent(Component componentToAdd)
         {
             try
             {
@@ -338,7 +338,7 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        protected bool RemoveDrawable3DComponent(IComponent componentToRemove)
+        protected bool RemoveDrawable3DComponent(Component componentToRemove)
         {
             try
             {
@@ -350,7 +350,7 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        protected bool RemoveUpdatableComponent(IComponent componentToRemove)
+        protected bool RemoveUpdatableComponent(Component componentToRemove)
         {
             try
             {
@@ -362,7 +362,7 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        protected bool RemovePhysicsComponent(IComponent componentToRemove)
+        protected bool RemovePhysicsComponent(Component componentToRemove)
         {
             try
             {

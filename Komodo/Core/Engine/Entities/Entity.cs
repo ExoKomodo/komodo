@@ -12,7 +12,7 @@ namespace Komodo.Core.Engine.Entities
         #region Constructors
         public Entity(Scene parentScene)
         {
-            Components = new List<IComponent>();
+            Components = new List<Component>();
             IsEnabled = true;
             ParentScene = parentScene;
             Position = KomodoVector3.Zero;
@@ -24,7 +24,7 @@ namespace Komodo.Core.Engine.Entities
         #region Members
 
         #region Public Members
-        public List<IComponent> Components
+        public List<Component> Components
         {
             get
             {
@@ -53,7 +53,7 @@ namespace Komodo.Core.Engine.Entities
         #endregion Public Members
 
         #region Protected Members
-        protected List<IComponent> _components;
+        protected List<Component> _components;
         protected Scene _parentScene;
         #endregion Protected Members
 
@@ -65,11 +65,11 @@ namespace Komodo.Core.Engine.Entities
         #region Member Methods
 
         #region Public Member Methods
-        public void AddComponent(IComponent componentToAdd)
+        public void AddComponent(Component componentToAdd)
         {
             if (Components == null)
             {
-                Components = new List<IComponent>();
+                Components = new List<Component>();
             }
             if (componentToAdd.Parent != null)
             {
@@ -112,7 +112,7 @@ namespace Komodo.Core.Engine.Entities
             if (type == this.GetType())
             {
                 ParentScene = null;
-                Components = new List<IComponent>();
+                Components = new List<Component>();
                 Position = new KomodoVector3();
                 Rotation = 0.0f;
                 Scale = new KomodoVector2();
@@ -120,9 +120,9 @@ namespace Komodo.Core.Engine.Entities
                 if (serializedObject.Properties.ContainsKey("Components"))
                 {
                     var obj = serializedObject.Properties["Components"];
-                    if (obj is List<IComponent>)
+                    if (obj is List<Component>)
                     {
-                        var components = obj as List<IComponent>;
+                        var components = obj as List<Component>;
                         foreach (var component in components)
                         {
                             component.Parent = this;
@@ -172,7 +172,7 @@ namespace Komodo.Core.Engine.Entities
             }
         }
         
-        public bool RemoveComponent(IComponent componentToRemove)
+        public bool RemoveComponent(Component componentToRemove)
         {
             if (Components != null)
             {

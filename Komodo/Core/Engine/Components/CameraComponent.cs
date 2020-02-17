@@ -7,12 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Components
 {
-    public class CameraComponent : IComponent, ISerializable<CameraComponent>
+    public class CameraComponent : Component, ISerializable<CameraComponent>
     {
         #region Constructors
-        public CameraComponent(float maxZoom = 1f, float minZoom = 0f)
+        public CameraComponent(float maxZoom = 1f, float minZoom = 0f) : base(true, null)
         {
-            IsEnabled = true;
             MaxZoom = maxZoom;
             MinZoom = minZoom;
             Position = KomodoVector3.Zero;
@@ -30,7 +29,6 @@ namespace Komodo.Core.Engine.Components
                 return Viewport.Bounds;
             }
         }
-        public bool IsEnabled { get; set; }
         public bool IsInitialized { get; set; }
         public float MaxZoom { get; set; }
         public float MinZoom { get; set; }
@@ -38,25 +36,12 @@ namespace Komodo.Core.Engine.Components
         public Viewport Viewport { get; protected set; }
         public Rectangle VisibleArea { get; protected set; }
         public float Zoom { get; set; }
-        [JsonIgnore]
-        public Entity Parent
-        {
-            get
-            {
-                return _parent;
-            }
-            set
-            {
-                _parent = value;
-            }
-        }
         #endregion Public Members
 
         #region Private Members
         #endregion Private Members
 
         #region Protected Members
-        protected Entity _parent { get; set; }
         #endregion Protected Members
 
         #endregion Members
@@ -77,12 +62,12 @@ namespace Komodo.Core.Engine.Components
             }
         }
 
-        public void Deserialize(SerializedObject serializedObject)
+        public override void Deserialize(SerializedObject serializedObject)
         {
             throw new System.NotImplementedException();
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
         }
 
@@ -91,12 +76,12 @@ namespace Komodo.Core.Engine.Components
             Position = KomodoVector3.Add(Position, translation);
         }
 
-        public SerializedObject Serialize()
+        public override SerializedObject Serialize()
         {
             throw new System.NotImplementedException();
         }
 
-        public void Update(GameTime gametime)
+        public override void Update(GameTime gametime)
         {
             if (!IsInitialized)
             {
