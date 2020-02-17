@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Komodo.Core.Engine.Entities;
 using Microsoft.Xna.Framework.Content;
 using System;
+using Microsoft.Xna.Framework.Media;
 
 namespace Komodo.Core
 {
@@ -44,12 +45,25 @@ namespace Komodo.Core
                 _activeScene.Game = this;
             }
         }
-        public static ContentManager Content { get; private set; }
         public BasicEffect DefaultShader { get; set; }
         public IGraphicsManager GraphicsManager {
             get
             {
                 return this._graphicsManagerMonoGame;
+            }
+        }
+        public string Title
+        {
+            get
+            {
+                return _komodoMonoGame?.Window?.Title;
+            }
+            set
+            {
+                if (_komodoMonoGame?.Window != null)
+                {
+                    _komodoMonoGame.Window.Title = value;
+                }
             }
         }
         #endregion Public Members
@@ -66,8 +80,16 @@ namespace Komodo.Core
 
         #endregion Members
 
+        #region Static Members
+
+        #region Public Static Members
+        public static ContentManager Content { get; private set; }
+        #endregion Public Static Members
+
+        #endregion Static Members
+
         #region Member Methods
-        
+
         #region Public Member Methods
         public void Draw(GameTime gameTime)
         {
