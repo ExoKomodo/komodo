@@ -25,6 +25,7 @@ namespace Komodo.Core.Engine.Scenes
         #region Members
 
         #region Public Members
+        public CameraComponent ActiveCamera { get; set; }
         public List<Entity> Entities
         {
             get
@@ -74,9 +75,11 @@ namespace Komodo.Core.Engine.Scenes
             {
                 case SpriteComponent component:
                     return AddSpriteComponent(component);
-                case CameraComponent component:
-                    return AddUpdatableComponent(component);
+                case TextComponent component:
+                    return AddTextComponent(component);
                 case BehaviorComponent component:
+                    return AddUpdatableComponent(component);
+                case CameraComponent component:
                     return AddUpdatableComponent(component);
                 case SoundComponent component:
                     return AddUpdatableComponent(component);
@@ -92,9 +95,11 @@ namespace Komodo.Core.Engine.Scenes
             {
                 case SpriteComponent component:
                     return RemoveSpriteComponent(component);
-                case CameraComponent component:
-                    return RemoveUpdatableComponent(component);
+                case TextComponent component:
+                    return RemoveTextComponent(component);
                 case BehaviorComponent component:
+                    return RemoveUpdatableComponent(component);
+                case CameraComponent component:
                     return RemoveUpdatableComponent(component);
                 case SoundComponent component:
                     return RemoveUpdatableComponent(component);
@@ -268,7 +273,38 @@ namespace Komodo.Core.Engine.Scenes
         #endregion Public Member Methods
 
         #region Protected Member Methods
+        protected bool AddPhysicsComponent(Component componentToAdd)
+        {
+            try
+            {
+                _physicsComponents.Add(componentToAdd);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         protected bool AddSpriteComponent(SpriteComponent componentToAdd)
+        {
+            try
+            {
+                var shader = componentToAdd.Shader;
+                if (!_drawable2DComponents.ContainsKey(shader))
+                {
+                    _drawable2DComponents[shader] = new List<Component>();
+                }
+                _drawable2DComponents[shader].Add(componentToAdd);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool AddTextComponent(TextComponent componentToAdd)
         {
             try
             {
@@ -312,12 +348,23 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        protected bool AddPhysicsComponent(Component componentToAdd)
+        protected bool RemoveDrawable3DComponent(Component componentToRemove)
         {
             try
             {
-                _physicsComponents.Add(componentToAdd);
-                return true;
+                return _drawable3DComponents.Remove(componentToRemove);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool RemovePhysicsComponent(Component componentToRemove)
+        {
+            try
+            {
+                return _updatableComponents.Remove(componentToRemove);
             }
             catch (Exception)
             {
@@ -342,11 +389,16 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
-        protected bool RemoveDrawable3DComponent(Component componentToRemove)
+        protected bool RemoveTextComponent(TextComponent componentToRemove)
         {
             try
             {
-                return _drawable3DComponents.Remove(componentToRemove);
+                var shader = componentToRemove.Shader;
+                if (!_drawable2DComponents.ContainsKey(shader))
+                {
+                    return false;
+                }
+                return _drawable2DComponents[shader].Remove(componentToRemove);
             }
             catch (Exception)
             {
@@ -355,18 +407,6 @@ namespace Komodo.Core.Engine.Scenes
         }
 
         protected bool RemoveUpdatableComponent(Component componentToRemove)
-        {
-            try
-            {
-                return _updatableComponents.Remove(componentToRemove);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        protected bool RemovePhysicsComponent(Component componentToRemove)
         {
             try
             {

@@ -15,9 +15,16 @@
 
 #begin MonoGame/audio/sample.ogg
 /importer:OggImporter
-/processor:SoundEffectProcessor
+/processor:SongProcessor
 /processorParam:Quality=Best
 /build:MonoGame/audio/sample.ogg
+
+#begin MonoGame/fonts/font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:MonoGame/fonts/font.spritefont
 
 #begin MonoGame/player/idle/player_idle_01.png
 /importer:TextureImporter

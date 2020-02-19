@@ -32,7 +32,7 @@ namespace Komodo.Core.Engine.Components
         public bool IsInitialized { get; set; }
         public float MaxZoom { get; set; }
         public float MinZoom { get; set; }
-        public KomodoVector3 Position { get; set; }
+        public new KomodoVector3 Position { get; set; }
         public Viewport Viewport { get; protected set; }
         public Rectangle VisibleArea { get; protected set; }
         public float Zoom { get; set; }
@@ -67,7 +67,7 @@ namespace Komodo.Core.Engine.Components
             throw new System.NotImplementedException();
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        sealed public override void Draw(SpriteBatch spriteBatch)
         {
         }
 
@@ -79,6 +79,11 @@ namespace Komodo.Core.Engine.Components
         public override SerializedObject Serialize()
         {
             throw new System.NotImplementedException();
+        }
+
+        public void SetActive()
+        {
+            Parent.ParentScene.ActiveCamera = this;
         }
 
         public override void Update(GameTime gametime)

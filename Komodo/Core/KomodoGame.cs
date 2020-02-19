@@ -46,6 +46,11 @@ namespace Komodo.Core
             }
         }
         public BasicEffect DefaultShader { get; set; }
+        public float FramesPerSecond
+        {
+            get;
+            protected set;
+        }
         public IGraphicsManager GraphicsManager {
             get
             {
@@ -139,6 +144,7 @@ namespace Komodo.Core
 
         public void Update(GameTime gameTime)
         {
+            FramesPerSecond = (float)(1 / gameTime.ElapsedGameTime.TotalSeconds);
             InputManager.Update();
 
             ActiveScene.Update(gameTime);

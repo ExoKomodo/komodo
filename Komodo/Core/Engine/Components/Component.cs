@@ -21,6 +21,28 @@ namespace Komodo.Core.Engine.Components
         public bool IsEnabled { get; set; }
         [JsonIgnore]
         public Entity Parent { get; set; }
+        public KomodoVector3 Position { get; set; }
+        public KomodoVector3 WorldPosition
+        {
+            get
+            {
+                return Parent?.Position != null ? KomodoVector3.Add(Parent.Position, Position) : Position;
+            }
+        }
+        public float Rotation
+        {
+            get
+            {
+                return Parent?.Rotation != null ? Parent.Rotation : 0f;
+            }
+        }
+        public KomodoVector3 Scale
+        {
+            get
+            {
+                return Parent?.Scale != null ? Parent.Scale : KomodoVector3.Zero;
+            }
+        }
         #endregion Public Members
 
         #endregion Members
@@ -31,7 +53,6 @@ namespace Komodo.Core.Engine.Components
         public abstract void Deserialize(SerializedObject serializedObject);
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-
         }
         public abstract SerializedObject Serialize();
         public virtual void Update(GameTime gameTime)
