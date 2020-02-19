@@ -17,7 +17,7 @@ namespace Komodo.Core.Engine.Entities
             ParentScene = parentScene;
             Position = KomodoVector3.Zero;
             Rotation = 0.0f;
-            Scale = KomodoVector2.One;
+            Scale = KomodoVector3.One;
         }
         #endregion Constructors
 
@@ -49,7 +49,7 @@ namespace Komodo.Core.Engine.Entities
         }
         public KomodoVector3 Position { get; set; }
         public float Rotation { get; set; }
-        public KomodoVector2 Scale { get; set; }
+        public KomodoVector3 Scale { get; set; }
         #endregion Public Members
 
         #region Protected Members
@@ -115,7 +115,7 @@ namespace Komodo.Core.Engine.Entities
                 Components = new List<Component>();
                 Position = new KomodoVector3();
                 Rotation = 0.0f;
-                Scale = new KomodoVector2();
+                Scale = new KomodoVector3();
 
                 if (serializedObject.Properties.ContainsKey("Components"))
                 {
@@ -155,13 +155,15 @@ namespace Komodo.Core.Engine.Entities
                 if (
                     serializedObject.Properties.ContainsKey("ScaleX")
                     && serializedObject.Properties.ContainsKey("ScaleY")
+                    && serializedObject.Properties.ContainsKey("ScaleZ")
                 )
                 {
                     var x = serializedObject.Properties["ScaleX"];
                     var y = serializedObject.Properties["ScaleY"];
+                    var z = serializedObject.Properties["ScaleZ"];
                     if (x is float && y is float)
                     {
-                        Scale = new KomodoVector2((float)x, (float)y);
+                        Scale = new KomodoVector3((float)x, (float)y, (float)z);
                     }
                 }
             }

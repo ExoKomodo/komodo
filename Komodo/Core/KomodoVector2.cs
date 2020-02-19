@@ -7,9 +7,12 @@ namespace Komodo.Core
     public readonly struct KomodoVector2 : IEquatable<KomodoVector2>
     {
         #region Constructors
+        public KomodoVector2(Vector2 vector) : this(vector.X, vector.Y)
+        {
+        }
+
         public KomodoVector2(KomodoVector2 vector) : this(vector.X, vector.Y)
         {
-            MonoGameVector = Vector2.Zero;
         }
 
         public KomodoVector2(float x = 0f, float y = 0f)

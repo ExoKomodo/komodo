@@ -369,3 +369,4 @@ CTestTestfile.cmake
 _deps
 
 .vscode/
+.DS_STORE

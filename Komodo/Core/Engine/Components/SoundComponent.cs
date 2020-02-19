@@ -41,6 +41,10 @@ namespace Komodo.Core.Engine.Components
         {
         }
 
+        sealed public override void Draw(SpriteBatch spriteBatch)
+        {
+        }
+
         public override SerializedObject Serialize()
         {
             var serializedObject = new SerializedObject();

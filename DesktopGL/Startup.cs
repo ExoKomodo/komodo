@@ -22,9 +22,11 @@ namespace Komodo
                 var camera = new CameraComponent();
                 player1Entity.AddComponent(camera);
                 player1Entity.AddComponent(new CameraBehavior(camera, 0));
+                camera.SetActive();
 
                 var player2Entity = new Entity(Game.ActiveScene);
                 player2Entity.AddComponent(new RootStartupBehavior(1));
+                player1Entity.AddComponent(new FPSCounterStartupBehavior());
 
                 var startupEntities = new List<Entity>
                 {

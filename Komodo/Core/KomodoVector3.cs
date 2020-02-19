@@ -7,9 +7,12 @@ namespace Komodo.Core
     public readonly struct KomodoVector3 : IEquatable<KomodoVector3>
     {
         #region Constructors
+        public KomodoVector3(Vector3 vector) : this(vector.X, vector.Y, vector.Z)
+        {
+        }
+
         public KomodoVector3(KomodoVector3 vector) : this(vector.X, vector.Y, vector.Z)
         {
-            MonoGameVector = Vector3.Zero;
         }
 
         public KomodoVector3(float x = 0f, float y = 0f, float z = 0f)
@@ -172,6 +175,12 @@ namespace Komodo.Core
         {
             vectorToNormalize.MonoGameVector.Normalize();
             return new KomodoVector3(vectorToNormalize.X, vectorToNormalize.Y, vectorToNormalize.Z);
+        }
+
+        public static KomodoVector3 Subtract(KomodoVector3 left, KomodoVector3 right)
+        {
+            var subtractedVector = Vector3.Subtract(left.MonoGameVector, right.MonoGameVector);
+            return new KomodoVector3(subtractedVector.X, subtractedVector.Y, subtractedVector.Z);
         }
         #endregion Public Static Methods
 

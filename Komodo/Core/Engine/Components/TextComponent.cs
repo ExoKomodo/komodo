@@ -6,21 +6,24 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Components
 {
-    public class SpriteComponent : Component
+    public class TextComponent : Component
     {
         #region Constructors
-        public SpriteComponent(KomodoTexture texture, Effect shader = null) : base(true, null)
+        public TextComponent(SpriteFont font, Color color, string text = null, Effect shader = null) : base(true, null)
         {
-            Texture = texture;
-            TexturePath = null;
+            Color = color;
+            Font = font;
+            FontPath = null;
+            Text = text;
 
             Shader = shader;
         }
-        public SpriteComponent(string texturePath, Effect shader = null)
+        public TextComponent(string fontPath, Color color, string text = null, Effect shader = null)
         {
-            var loadedTexture = KomodoGame.Content.Load<Texture2D>(texturePath);
-            Texture = new KomodoTexture(loadedTexture);
-            TexturePath = texturePath;
+            Color = color;
+            Font = KomodoGame.Content.Load<SpriteFont>(fontPath);
+            FontPath = fontPath;
+            Text = text;
 
             Shader = shader;
         }
@@ -29,11 +32,20 @@ namespace Komodo.Core.Engine.Components
         #region Members
 
         #region Public Members
+        public Color Color { get; set; }
+        public bool Fixed { get; set; }
+        public SpriteFont Font { get; set; }
+        public string FontPath { get; set; }
         public float Height
         {
             get
             {
-                return Texture.Height * Parent.Scale.Y;
+                if (Font == null)
+                {
+                    return 0f;
+                }
+                var size = new KomodoVector2(Font.MeasureString(Text));
+                return size.Y * Scale.Y;
             }
         }
         public Effect Shader
@@ -51,13 +63,17 @@ namespace Komodo.Core.Engine.Components
                 _shader = value;
             }
         }
-        public KomodoTexture Texture { get; set; }
-        public string TexturePath { get; set; }
+        public string Text { get; set; }
         public float Width
         {
             get
             {
-                return Texture.Width * Parent.Scale.X;
+                if (Font == null)
+                {
+                    return 0f;
+                }
+                var size = new KomodoVector2(Font.MeasureString(Text));
+                return size.X * Scale.X;
             }
         }
         #endregion Public Members
@@ -81,17 +97,26 @@ namespace Komodo.Core.Engine.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
-                Texture.MonoGameTexture,
-                WorldPosition.XY.MonoGameVector,
-                null,
-                Color.White,
-                Rotation,
-                KomodoVector2.Zero.MonoGameVector,
-                Scale.XY.MonoGameVector,
-                SpriteEffects.None,
-                Position.Z
-            );
+            if (Font != null && Text != null)
+            {
+                var position = WorldPosition;
+                var camera = Parent.ParentScene.ActiveCamera;
+                if (Fixed && camera != null)
+                {
+                    position = KomodoVector3.Add(position, camera.Position);
+                }
+                spriteBatch.DrawString(
+                    Font,
+                    Text,
+                    position.XY.MonoGameVector,
+                    Color,
+                    Rotation,
+                    KomodoVector2.Zero.MonoGameVector,
+                    Scale.XY.MonoGameVector,
+                    SpriteEffects.None,
+                    Position.Z
+                );
+            }
         }
 
         public override SerializedObject Serialize()
