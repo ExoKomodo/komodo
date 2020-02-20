@@ -1,9 +1,9 @@
 using Komodo.Core;
-using Komodo.Core.Engine.Components;
+using Komodo.Core.ECS.Components;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace Komodo.Behaviors
+namespace Komodo.Lib.Behaviors
 {
     public class FPSCounterBehavior : BehaviorComponent
     {

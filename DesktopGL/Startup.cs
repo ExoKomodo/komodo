@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Komodo.Behaviors;
+using Komodo.Lib.Behaviors;
 using Komodo.Core;
-using Komodo.Core.Engine.Components;
-using Komodo.Core.Engine.Entities;
+using Komodo.Core.ECS.Components;
+using Komodo.Core.ECS.Entities;
 using Komodo.Core.Engine.Input;
 
 namespace Komodo

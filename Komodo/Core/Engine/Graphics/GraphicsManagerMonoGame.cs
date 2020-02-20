@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Komodo.Core.Engine.Components;
+using Komodo.Core.ECS.Components;
 using Komodo.Core.Engine.Graphics.Sprites;
-using Komodo.Core.Engine.Scenes;
+using Komodo.Core.ECS.Scenes;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

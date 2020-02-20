@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
-using Komodo.Core.Engine.Entities;
+using Komodo.Core.ECS.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Komodo.Core.Engine.Components
+namespace Komodo.Core.ECS.Components
 {
     public abstract class BehaviorComponent : Component, ISerializable<BehaviorComponent>
     {
