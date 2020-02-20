@@ -1,5 +1,5 @@
-using Komodo.Core.Engine.Entities;
-using Komodo.Core.Engine.Scenes;
+using Komodo.Core.ECS.Entities;
+using Komodo.Core.ECS.Scenes;
 using Microsoft.Xna.Framework;
 
 namespace Komodo.Core.Engine.Graphics.Sprites

@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Komodo.Core.Engine.Entities;
+using Komodo.Core.ECS.Entities;
 using System.Text.Json.Serialization;
-using Komodo.Core.Engine.Components;
+using Komodo.Core.ECS.Components;
 using System.Collections;
 
-namespace Komodo.Core.Engine.Scenes
+namespace Komodo.Core.ECS.Scenes
 {
     public class Scene
     {

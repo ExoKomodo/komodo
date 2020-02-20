@@ -1,5 +1,5 @@
 // TODO: Remove dependency on MonoGame: Color
-using Komodo.Core.Engine.Scenes;
+using Komodo.Core.ECS.Scenes;
 using Komodo.Core.Engine.Graphics;
 
 using System.Text.Json;
@@ -9,7 +9,7 @@ using System.IO;
 using System.Collections.Generic;
 using Komodo.Core.Engine.Input;
 using Microsoft.Xna.Framework.Graphics;
-using Komodo.Core.Engine.Entities;
+using Komodo.Core.ECS.Entities;
 using Microsoft.Xna.Framework.Content;
 using System;
 using Microsoft.Xna.Framework.Media;

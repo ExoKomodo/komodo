@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Komodo.Core.Engine.Components;
-using Komodo.Core.Engine.Scenes;
+using Komodo.Core.ECS.Components;
+using Komodo.Core.ECS.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Komodo.Core.Engine.Entities
+namespace Komodo.Core.ECS.Entities
 {
     public class Entity
     {

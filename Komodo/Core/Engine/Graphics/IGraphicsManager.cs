@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-using Komodo.Core.Engine.Scenes;
+using Komodo.Core.ECS.Scenes;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Graphics

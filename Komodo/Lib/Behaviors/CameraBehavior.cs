@@ -1,31 +1,31 @@
 using Komodo.Core;
-using Komodo.Core.Engine.Components;
+using Komodo.Core.ECS.Components;
 using Komodo.Core.Engine.Input;
 using Microsoft.Xna.Framework;
 
-namespace Komodo.Behaviors
+namespace Komodo.Lib.Behaviors
 {
-    public class MoveBehavior : BehaviorComponent
+    public class CameraBehavior : BehaviorComponent
     {
         #region Constructors
-        public MoveBehavior(int playerIndex) : base()
+        public CameraBehavior(CameraComponent camera, int playerIndex) : base()
         {
             if (!InputManager.IsValidPlayerIndex(playerIndex))
             {
                 playerIndex = 0;
             }
             PlayerIndex = playerIndex;
-            SprintFactor = 2f;
-            Velocity = 50f;
+            Camera = camera;
+            PanVelocity = 50f;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
+        public CameraComponent Camera { get; set; }
         public int PlayerIndex { get; set; }
-        public float SprintFactor { get; set; }
-        public float Velocity { get; set; }
+        public float PanVelocity { get; set; }
         #endregion Public Members
 
         #region Protected Members
@@ -41,47 +41,38 @@ namespace Komodo.Behaviors
         #region Public Member Methods
         public override void Update(GameTime gameTime)
         {
-            var left = InputManager.GetInput("left", PlayerIndex);
-            var right = InputManager.GetInput("right", PlayerIndex);
-            var up = InputManager.GetInput("up", PlayerIndex);
-            var down = InputManager.GetInput("down", PlayerIndex);
-            var sprint = InputManager.GetInput("sprint", PlayerIndex);
-
-            var quit = InputManager.GetInput("quit", PlayerIndex);
+            var cameraLeft = InputManager.GetInput("camera_left", PlayerIndex);
+            var cameraRight = InputManager.GetInput("camera_right", PlayerIndex);
+            var cameraUp = InputManager.GetInput("camera_up", PlayerIndex);
+            var cameraDown = InputManager.GetInput("camera_down", PlayerIndex);
 
             var direction = KomodoVector2.Zero;
-            if (quit.State == InputState.Down)
-            {
-                Game.Exit();
-            }
-            if (left.State == InputState.Down)
+            if (cameraLeft.State == InputState.Down)
             {
                 direction += KomodoVector2.Left;
             }
-            if (right.State == InputState.Down)
+            if (cameraRight.State == InputState.Down)
             {
                 direction += KomodoVector2.Right;
             }
-            if (up.State == InputState.Down)
+            if (cameraUp.State == InputState.Down)
             {
                 direction += KomodoVector2.Up;
             }
-            if (down.State == InputState.Down)
+            if (cameraDown.State == InputState.Down)
             {
                 direction += KomodoVector2.Down;
             }
-            if (sprint.State == InputState.Down)
-            {
-                direction *= SprintFactor;
-            }
 
-            Parent.Position = KomodoVector3.Add(
-                Parent.Position,
-                KomodoVector3.Multiply(
-                    new KomodoVector3(direction.X, direction.Y),
-                    Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds
+            var cameraPan = (
+                new KomodoVector3(
+                    direction.X,
+                    direction.Y
                 )
+                * PanVelocity
+                * (float)gameTime.ElapsedGameTime.TotalSeconds
             );
+            Camera.Pan(cameraPan);
         }
         #endregion Public Member Methods
 
