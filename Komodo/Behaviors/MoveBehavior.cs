@@ -56,23 +56,23 @@ namespace Komodo.Behaviors
             }
             if (left.State == InputState.Down)
             {
-                direction = KomodoVector2.Add(direction, KomodoVector2.Left);
+                direction += KomodoVector2.Left;
             }
             if (right.State == InputState.Down)
             {
-                direction = KomodoVector2.Add(direction, KomodoVector2.Right);
+                direction += KomodoVector2.Right;
             }
             if (up.State == InputState.Down)
             {
-                direction = KomodoVector2.Add(direction, KomodoVector2.Up);
+                direction += KomodoVector2.Up;
             }
             if (down.State == InputState.Down)
             {
-                direction = KomodoVector2.Add(direction, KomodoVector2.Down);
+                direction += KomodoVector2.Down;
             }
             if (sprint.State == InputState.Down)
             {
-                direction = KomodoVector2.Multiply(direction, SprintFactor);
+                direction *= SprintFactor;
             }
 
             Parent.Position = KomodoVector3.Add(

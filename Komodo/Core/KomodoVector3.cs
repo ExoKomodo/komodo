@@ -159,28 +159,53 @@ namespace Komodo.Core
         #region Static Methods
 
         #region Public Static Methods
+        public static KomodoVector3 operator +(KomodoVector3 vector) => vector;
+        public static KomodoVector3 operator -(KomodoVector3 vector) => new KomodoVector3(-vector.X, -vector.Y, -vector.Z);
+
         public static KomodoVector3 Add(KomodoVector3 left, KomodoVector3 right)
         {
-            var addedVector = Vector3.Add(left.MonoGameVector, right.MonoGameVector);
-            return new KomodoVector3(addedVector.X, addedVector.Y, addedVector.Z);
+            var result = Vector3.Add(left.MonoGameVector, right.MonoGameVector);
+            return new KomodoVector3(result);
+        }
+        public static KomodoVector3 operator +(KomodoVector3 left, KomodoVector3 right)
+        {
+            return KomodoVector3.Add(left, right);
+        }
+        
+        public static KomodoVector3 Divide(KomodoVector3 vector, float scale)
+        {
+            var result = Vector3.Divide(vector.MonoGameVector, scale);
+            return new KomodoVector3(result);
+        }
+        public static KomodoVector3 operator /(KomodoVector3 left, float scale)
+        {
+            return KomodoVector3.Divide(left, scale);
         }
 
         public static KomodoVector3 Multiply(KomodoVector3 vector, float scale)
         {
-            var addedVector = Vector3.Multiply(vector.MonoGameVector, scale);
-            return new KomodoVector3(addedVector.X, addedVector.Y, addedVector.Z);
+            var result = Vector3.Multiply(vector.MonoGameVector, scale);
+            return new KomodoVector3(result);
+        }
+        public static KomodoVector3 operator *(KomodoVector3 left, float scale)
+        {
+            return KomodoVector3.Multiply(left, scale);
+        }
+
+        public static KomodoVector3 Subtract(KomodoVector3 left, KomodoVector3 right)
+        {
+            var result = Vector3.Subtract(left.MonoGameVector, right.MonoGameVector);
+            return new KomodoVector3(result);
+        }
+        public static KomodoVector3 operator -(KomodoVector3 left, KomodoVector3 right)
+        {
+            return KomodoVector3.Subtract(left, right);
         }
 
         public static KomodoVector3 Normalize(KomodoVector3 vectorToNormalize)
         {
             vectorToNormalize.MonoGameVector.Normalize();
             return new KomodoVector3(vectorToNormalize.X, vectorToNormalize.Y, vectorToNormalize.Z);
-        }
-
-        public static KomodoVector3 Subtract(KomodoVector3 left, KomodoVector3 right)
-        {
-            var subtractedVector = Vector3.Subtract(left.MonoGameVector, right.MonoGameVector);
-            return new KomodoVector3(subtractedVector.X, subtractedVector.Y, subtractedVector.Z);
         }
         #endregion Public Static Methods
 

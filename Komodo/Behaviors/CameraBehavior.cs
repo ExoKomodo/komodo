@@ -49,24 +49,28 @@ namespace Komodo.Behaviors
             var direction = KomodoVector2.Zero;
             if (cameraLeft.State == InputState.Down)
             {
-                direction = KomodoVector2.Add(direction, KomodoVector2.Left);
+                direction += KomodoVector2.Left;
             }
             if (cameraRight.State == InputState.Down)
             {
-                direction = KomodoVector2.Add(direction, KomodoVector2.Right);
+                direction += KomodoVector2.Right;
             }
             if (cameraUp.State == InputState.Down)
             {
-                direction = KomodoVector2.Add(direction, KomodoVector2.Up);
+                direction += KomodoVector2.Up;
             }
             if (cameraDown.State == InputState.Down)
             {
-                direction = KomodoVector2.Add(direction, KomodoVector2.Down);
+                direction += KomodoVector2.Down;
             }
 
-            var cameraPan = KomodoVector3.Multiply(
-                new KomodoVector3(direction.X, direction.Y),
-                PanVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds
+            var cameraPan = (
+                new KomodoVector3(
+                    direction.X,
+                    direction.Y
+                )
+                * PanVelocity
+                * (float)gameTime.ElapsedGameTime.TotalSeconds
             );
             Camera.Pan(cameraPan);
         }
