@@ -147,7 +147,9 @@ namespace Komodo.Core
             FramesPerSecond = (float)(1 / gameTime.ElapsedGameTime.TotalSeconds);
             InputManager.Update();
 
+            ActiveScene.PreUpdate(gameTime);
             ActiveScene.Update(gameTime);
+            ActiveScene.PostUpdate(gameTime);
         }
         #endregion Public Member Methods
         

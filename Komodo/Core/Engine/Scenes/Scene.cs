@@ -37,24 +37,11 @@ namespace Komodo.Core.Engine.Scenes
                 _entities = value;
             }
         }
-        [JsonIgnore]
-        public Scene Parent
-        {
-            get
-            {
-                return _parent;
-            }
-            set
-            {
-                _parent = value;
-            }
-        }
         public KomodoGame Game { get; set; }
         #endregion Public Members
 
         #region Protected Members
         protected List<Entity> _entities;
-        protected Scene _parent;
         protected Dictionary<Effect, List<Component>> _drawable2DComponents { get; }
         protected List<Component> _drawable3DComponents { get; }
         protected List<Component> _physicsComponents { get; }
@@ -156,7 +143,6 @@ namespace Komodo.Core.Engine.Scenes
             if (type == this.GetType())
             {
                 Entities = new List<Entity>();
-                Parent = null;
 
                 if (serializedObject.Properties.ContainsKey("Entities"))
                 {
@@ -170,10 +156,6 @@ namespace Komodo.Core.Engine.Scenes
                             this.AddEntity(entity);
                         }
                     }
-                }
-                if (serializedObject.Properties.ContainsKey("Parent"))
-                {
-                    Parent = serializedObject.Properties["Parent"] as Scene;
                 }
             }
             else
@@ -221,6 +203,13 @@ namespace Komodo.Core.Engine.Scenes
             }
         }
 
+        public void PostUpdate(GameTime gameTime)
+        {
+        }
+        public void PreUpdate(GameTime gameTime)
+        {
+        }
+
         public bool RemoveEntity(Entity entityToRemove)
         {
             if (Entities != null)
@@ -239,11 +228,7 @@ namespace Komodo.Core.Engine.Scenes
         {
             var serializedObject = new SerializedObject();
             serializedObject.Type = this.GetType().ToString();
-            
-            if (Parent != null)
-            {
-                serializedObject.Properties["Parent"] = Parent.Serialize();
-            }
+
             var entities = new List<SerializedObject>();
             foreach (var entity in Entities)
             {
