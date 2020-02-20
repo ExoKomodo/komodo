@@ -85,16 +85,47 @@ namespace Komodo.Core
         #region Static Methods
 
         #region Public Static Methods
+        public static KomodoVector2 operator +(KomodoVector2 vector) => vector;
+        public static KomodoVector2 operator -(KomodoVector2 vector) => new KomodoVector2(-vector.X, -vector.Y);
+
         public static KomodoVector2 Add(KomodoVector2 left, KomodoVector2 right)
         {
-            var addedVector = Vector2.Add(left.MonoGameVector, right.MonoGameVector);
-            return new KomodoVector2(addedVector.X, addedVector.Y);
+            var result = Vector2.Add(left.MonoGameVector, right.MonoGameVector);
+            return new KomodoVector2(result);
+        }
+        public static KomodoVector2 operator +(KomodoVector2 left, KomodoVector2 right)
+        {
+            return KomodoVector2.Add(left, right);
+        }
+        
+        public static KomodoVector2 Divide(KomodoVector2 vector, float scale)
+        {
+            var result = Vector2.Divide(vector.MonoGameVector, scale);
+            return new KomodoVector2(result);
+        }
+        public static KomodoVector2 operator /(KomodoVector2 left, float scale)
+        {
+            return KomodoVector2.Divide(left, scale);
         }
 
         public static KomodoVector2 Multiply(KomodoVector2 vector, float scale)
         {
-            var addedVector = Vector2.Multiply(vector.MonoGameVector, scale);
-            return new KomodoVector2(addedVector.X, addedVector.Y);
+            var result = Vector2.Multiply(vector.MonoGameVector, scale);
+            return new KomodoVector2(result);
+        }
+        public static KomodoVector2 operator *(KomodoVector2 left, float scale)
+        {
+            return KomodoVector2.Multiply(left, scale);
+        }
+
+        public static KomodoVector2 Subtract(KomodoVector2 left, KomodoVector2 right)
+        {
+            var result = Vector2.Subtract(left.MonoGameVector, right.MonoGameVector);
+            return new KomodoVector2(result);
+        }
+        public static KomodoVector2 operator -(KomodoVector2 left, KomodoVector2 right)
+        {
+            return KomodoVector2.Subtract(left, right);
         }
         
         public static KomodoVector2 Normalize(KomodoVector2 vectorToNormalize)
