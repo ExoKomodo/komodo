@@ -25,9 +25,9 @@ namespace Komodo.Core.Engine.Graphics.Sprites
         
         #region Public Member Methods
 
-        public void Draw(Scene scene, Matrix transformMatrix)
+        public void Draw(Scene scene)
         {
-            scene.Draw(_spriteBatchMonoGame, transformMatrix);
+            scene.Draw(_spriteBatchMonoGame);
         }
         #endregion Public Member Methods
         

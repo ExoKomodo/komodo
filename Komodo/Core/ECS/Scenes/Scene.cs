@@ -10,9 +10,11 @@ namespace Komodo.Core.ECS.Scenes
     public class Scene
     {
         #region Constructors
-        public Scene()
+        public Scene(KomodoGame game)
         {
+            Children = new List<Scene>();
             Entities = new List<Entity>();
+            Game = game;
             _drawable2DComponents = new Dictionary<Effect, List<Drawable2DComponent>>();
             _drawable3DComponents = new List<Component>();
             _physicsComponents = new List<Component>();
@@ -24,6 +26,17 @@ namespace Komodo.Core.ECS.Scenes
 
         #region Public Members
         public CameraComponent ActiveCamera { get; set; }
+        public List<Scene> Children
+        {
+            get
+            {
+                return _children;
+            }
+            set
+            {
+                _children = value;
+            }
+        }
         public List<Entity> Entities
         {
             get
@@ -39,6 +52,7 @@ namespace Komodo.Core.ECS.Scenes
         #endregion Public Members
 
         #region Protected Members
+        protected List<Scene> _children;
         protected List<Entity> _entities;
         protected Dictionary<Effect, List<Drawable2DComponent>> _drawable2DComponents { get; }
         protected List<Component> _drawable3DComponents { get; }
@@ -159,32 +173,45 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Matrix transformMatrix)
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (_drawable2DComponents != null)
             {
                 foreach (KeyValuePair<Effect, List<Drawable2DComponent>> pair in _drawable2DComponents)
                 {
                     var shader = pair.Key;
-                    if (shader == Game.DefaultShader)
-                    {
-                        shader = null;
-                    }
                     var components = pair.Value;
-                    var fixedComponents = components.FindAll(x => x.Fixed);
-                    var nonFixedComponents = components.FindAll(x => !x.Fixed);
-
-                    Draw2DComponents(fixedComponents, spriteBatch, shader);
-                    Draw2DComponents(nonFixedComponents, spriteBatch, shader, transformMatrix);
+                    Draw2DComponents(components, spriteBatch, shader);
+                }
+            }
+            if (Children != null)
+            {
+                foreach (var child in Children)
+                {
+                    child.Draw(spriteBatch);
                 }
             }
         }
 
         public void PostUpdate(GameTime gameTime)
         {
+            if (Children != null)
+            {
+                foreach (var child in Children)
+                {
+                    child.PostUpdate(gameTime);
+                }
+            }
         }
         public void PreUpdate(GameTime gameTime)
         {
+            if (Children != null)
+            {
+                foreach (var child in Children)
+                {
+                    child.PreUpdate(gameTime);
+                }
+            }
         }
 
         public bool RemoveEntity(Entity entityToRemove)
@@ -231,6 +258,13 @@ namespace Komodo.Core.ECS.Scenes
                     i++;
                 }
             }
+            if (Children != null)
+            {
+                foreach (var child in Children)
+                {
+                    child.Update(gameTime);
+                }
+            }
         }
         #endregion Public Member Methods
 
@@ -242,8 +276,9 @@ namespace Komodo.Core.ECS.Scenes
                 _physicsComponents.Add(componentToAdd);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.Error.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -260,8 +295,9 @@ namespace Komodo.Core.ECS.Scenes
                 _drawable2DComponents[shader].Add(componentToAdd);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.Error.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -273,8 +309,9 @@ namespace Komodo.Core.ECS.Scenes
                 _drawable3DComponents.Add(componentToAdd);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.Error.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -286,17 +323,62 @@ namespace Komodo.Core.ECS.Scenes
                 _updatableComponents.Add(componentToAdd);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.Error.WriteLine(ex.Message);
                 return false;
             }
         }
 
-        protected void Draw2DComponents(IEnumerable<Drawable2DComponent> components, SpriteBatch spriteBatch, Effect shader = null, Matrix? transformMatrix = null)
+        protected void Draw2DComponents(
+            IEnumerable<Drawable2DComponent> components,
+            SpriteBatch spriteBatch,
+            Effect shader = null
+        )
         {
+            var oldViewMatrix = Matrix.Identity;
+            var oldWorldMatrix = Matrix.Identity;
+            Game.DefaultSpriteShader.Projection = ActiveCamera.Projection;
+            switch (shader)
+            {
+                case BasicEffect effect:
+                    oldViewMatrix = effect.View;
+                    oldWorldMatrix = effect.World;
+                    break;
+                case SpriteEffect _:
+                case null:
+                default:
+                    break;
+            }
             try
             {
-                spriteBatch.Begin(transformMatrix: transformMatrix, effect: shader);
+                switch (shader)
+                {
+                    case BasicEffect effect:
+                        if (ActiveCamera.IsPerspective)
+                        {
+                            effect.World = Matrix.CreateScale(1f, -1f, 1f);
+                        }
+                        else
+                        {
+                            effect.World = Matrix.CreateScale(1f, 1f, 1f);
+                        }
+                        effect.View = Matrix.Identity;
+                        effect.Projection = ActiveCamera.Projection;
+                        break;
+                    case SpriteEffect _:
+                    case null:
+                    default:
+                        break;
+                }
+                spriteBatch.Begin(
+                    SpriteSortMode.FrontToBack,
+                    null,
+                    null,
+                    DepthStencilState.DepthRead,
+                    RasterizerState.CullNone,
+                    shader
+                );
                 foreach (var component in components)
                 {
                     if (component.Parent.IsEnabled && component.IsEnabled)
@@ -305,13 +387,24 @@ namespace Komodo.Core.ECS.Scenes
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.Error.WriteLine(ex.Message);
             }
             finally
             {
-                spriteBatch.End();   
+                spriteBatch.End();
+                switch (shader)
+                {
+                    case BasicEffect effect:
+                        effect.View = oldViewMatrix;
+                        effect.World = oldWorldMatrix;
+                        break;
+                    case SpriteEffect _:
+                    case null:
+                    default:
+                        break;
+                }
             }
         }
 

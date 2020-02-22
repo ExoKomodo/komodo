@@ -1,76 +1,237 @@
-
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.ECS.Components
 {
-    public class CameraComponent : Component, ISerializable<CameraComponent>
+    public class CameraComponent : Component
     {
         #region Constructors
-        public CameraComponent(float maxZoom = 1f, float minZoom = 0f) : base(true, null)
+        public CameraComponent() : base(true, null)
         {
-            MaxZoom = maxZoom;
-            MinZoom = minZoom;
+            Rotation = KomodoVector3.Zero;
+            Zoom = 1;
             Position = KomodoVector3.Zero;
-            Zoom = 1f;
+            IsPerspective = false;
+            NearPlane = 1f;
+            FarPlane = 2f;
+            FieldOfView = 90f;
         }
         #endregion Constructors
-
-        #region Members
         
+        #region Members
+
         #region Public Members
-        public Rectangle Bounds
+        public Rectangle BoundingRectangle
         {
             get
             {
-                return Viewport.Bounds;
+                var frustum = GetBoundingFrustum();
+                var corners = frustum.GetCorners();
+                var topLeft = corners[0];
+                var bottomRight = corners[2];
+                var width = bottomRight.X - topLeft.X;
+                var height = bottomRight.Y - topLeft.Y;
+                return new Rectangle(
+                    (int)topLeft.X,
+                    (int)topLeft.Y,
+                    (int)width,
+                    (int)height
+                );
             }
         }
-        public bool IsInitialized { get; set; }
-        public float MaxZoom { get; set; }
-        public float MinZoom { get; set; }
+        public KomodoVector3 Center => WorldPosition + Origin;
+        public float FarPlane
+        {
+            get
+            {
+                return _farPlane;
+            }
+            set
+            {
+                if (value >= 1f)
+                {
+                    _farPlane = value;
+                }
+            }
+        }
+        public float FieldOfView
+        {
+            get
+            {
+                return _fieldOfView;
+            }
+            set
+            {
+                if (value > 0 && value <=360)
+                {
+                    _fieldOfView = value;
+                }
+            }
+        }
+        public bool IsPerspective { get; set; }
+        public float MaximumZoom
+        {
+            get
+            {
+                return _maximumZoom;
+            }
+            set
+            {
+                if (value >= 0)
+                {
+                    if (Zoom > value)
+                    {
+                        Zoom = value;
+                    }
+                    _maximumZoom = value;
+                }
+
+            }
+        }
+        public float MinimumZoom
+        {
+            get
+            {
+                return _minimumZoom;
+            }
+            set
+            {
+                if (value >= 0)
+                {
+                    if (Zoom < value)
+                    {
+                        Zoom = MinimumZoom;
+                    }
+                    _minimumZoom = value;
+                }
+
+            }
+        }
+        public float NearPlane
+        {
+            get
+            {
+                return _nearPlane;
+            }
+            set
+            {
+                if (value >= 1f)
+                {
+                    _nearPlane = value;
+                }
+            }
+        }
+        public KomodoVector3 Origin { get; set; }
+        public Matrix Projection
+        {
+            get
+            {
+                var graphicsManager = Parent.ParentScene.Game.GraphicsManager;
+                if (IsPerspective)
+                {
+                    return Matrix.CreatePerspectiveFieldOfView(
+                        MathHelper.ToRadians(FieldOfView),
+                        graphicsManager.ViewPort.Width / graphicsManager.ViewPort.Height,
+                        NearPlane,
+                        FarPlane
+                    );
+                }
+                else
+                {
+                    return Matrix.CreateTranslation(
+                        -0.5f,
+                        -0.5f,
+                        0
+                    ) * Matrix.CreateOrthographicOffCenter(
+                        0,
+                        graphicsManager.ViewPort.Width,
+                        graphicsManager.ViewPort.Height,
+                        0,
+                        NearPlane,
+                        FarPlane
+                    );
+                }
+            }
+        }
         public new KomodoVector3 Rotation { get; set; }
+        public Matrix ViewMatrix { get; protected set; }
         public Viewport Viewport { get; protected set; }
-        public Rectangle VisibleArea { get; protected set; }
-        public float Zoom { get; set; }
+        public float Zoom
+        {
+            get
+            {
+                return _zoom;
+            }
+            set
+            {
+                if ((value >= MinimumZoom) && (value < +MaximumZoom))
+                {
+                    _zoom = value;
+                }
+            }
+        }
         #endregion Public Members
 
-        #region Private Members
-        #endregion Private Members
-
         #region Protected Members
+        protected float _farPlane { get; set; }
+        protected float _fieldOfView { get; set; }
+        protected float _maximumZoom = float.MaxValue;
+        protected float _minimumZoom { get; set; }
+        protected float _nearPlane { get; set; }
+        protected float _zoom { get; set; }
         #endregion Protected Members
 
         #endregion Members
-
+        
         #region Member Methods
 
         #region Public Member Methods
-        public void AdjustZoom(float zoomAmount)
+        public ContainmentType Contains(Point point)
         {
-            Zoom += zoomAmount;
-            if (Zoom < MinZoom)
-            {
-                Zoom = MinZoom;
-            }
-            if (Zoom > MaxZoom)
-            {
-                Zoom = MaxZoom;
-            }
+            return Contains(new KomodoVector2(point.ToVector2()));
+        }
+
+        public ContainmentType Contains(KomodoVector2 vector)
+        {
+            return GetBoundingFrustum().Contains(new KomodoVector3(vector.X, vector.Y, 0).MonoGameVector);
+        }
+
+        public ContainmentType Contains(Rectangle rectangle)
+        {
+            var max = new Vector3(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height, 0.5f);
+            var min = new Vector3(rectangle.X, rectangle.Y, 0.5f);
+            var boundingBox = new BoundingBox(min, max);
+            return GetBoundingFrustum().Contains(boundingBox);
         }
 
         public override void Deserialize(SerializedObject serializedObject)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        sealed public override void Draw(SpriteBatch spriteBatch)
+        public BoundingFrustum GetBoundingFrustum()
         {
+            return new BoundingFrustum(Projection);
         }
 
-        public void Pan(KomodoVector3 translation)
+        public void LookAt(KomodoVector3 position)
         {
-            Position += translation;
+            Position = (
+                position
+                - new KomodoVector3(
+                    Viewport.Width / 2f,
+                    Viewport.Height / 2f
+                )
+            );
+        }
+
+        public void Move(KomodoVector3 direction)
+        {
+            Position += KomodoVector3.Transform(
+                direction,
+                Matrix.CreateRotationZ(-Rotation.Z)
+            );
         }
 
         public void RotateX(float radians)
@@ -100,7 +261,7 @@ namespace Komodo.Core.ECS.Components
 
         public override SerializedObject Serialize()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void SetActive()
@@ -108,122 +269,94 @@ namespace Komodo.Core.ECS.Components
             Parent.ParentScene.ActiveCamera = this;
         }
 
+        public KomodoVector3 ScreenToWorld(float x, float y, float z)
+        {
+            return ScreenToWorld(new KomodoVector3(x, y, z));
+        }
+
+        public KomodoVector3 ScreenToWorld(KomodoVector3 screenPosition)
+        {
+            return KomodoVector3.Transform(
+                (
+                    screenPosition
+                    - new KomodoVector3(Viewport.X, Viewport.Y)
+                ),
+                Matrix.Invert(GetViewMatrix())
+            );
+        }
+
         public override void Update(GameTime gametime)
         {
-            if (!IsInitialized)
-            {
-                IsInitialized = true;
-            }
             Viewport = Parent.ParentScene.Game.GraphicsManager.ViewPort;
-            UpdateMatrix();
+            ViewMatrix = GetViewMatrix();
+        }
+
+        public KomodoVector3 WorldToScreen(float x, float y, float z)
+        {
+            return WorldToScreen(new KomodoVector3(x, y, z));
+        }
+
+        public KomodoVector3 WorldToScreen(KomodoVector3 worldPosition)
+        {
+            return KomodoVector3.Transform(
+                worldPosition + new KomodoVector3(Viewport.X, Viewport.Y, 0f),
+                GetViewMatrix()
+            );
+        }
+
+        public void ZoomIn(float deltaZoom)
+        {
+            ClampZoom(Zoom + deltaZoom);
+        }
+
+        public void ZoomOut(float deltaZoom)
+        {
+            ClampZoom(Zoom - deltaZoom);
         }
         #endregion Public Member Methods
 
         #region Protected Member Methods
-        protected void UpdateMatrix()
+        protected void ClampZoom(float value)
         {
-            Transform = Matrix.CreateScale(Zoom)
-                * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z)
-                * Matrix.CreateTranslation(-WorldPosition.MonoGameVector)
-                * Matrix.CreateTranslation(
-                    new Vector3(
-                        Bounds.Width * 0.5f,
-                        Bounds.Height * 0.5f,
-                        0
-                    )
-                );
-            UpdateVisibleArea();
+            if (value < MinimumZoom)
+            {
+                Zoom = MinimumZoom;
+            }
+            else
+            {
+                Zoom = value > MaximumZoom ? MaximumZoom : value;
+            }
         }
-        protected void UpdateVisibleArea()
-        {
-            var inverseViewMatrix = Matrix.Invert(Transform);
-            var tl = Vector2.Transform(
-                Vector2.Zero,
-                inverseViewMatrix
-            );
-            var tr = Vector2.Transform(
-                new Vector2(
-                    Bounds.X,
-                    0
-                ),
-                inverseViewMatrix
-            );
-            var bl = Vector2.Transform(
-                new Vector2(
-                    0,
-                    Bounds.Y
-                ),
-                inverseViewMatrix
-            );
-            var br = Vector2.Transform(
-                new Vector2(
-                    Bounds.Width,
-                    Bounds.Height
-                ),
-                inverseViewMatrix
-            );
 
-            var min = new Vector2(
-                MathHelper.Min(
-                    tl.X,
-                    MathHelper.Min(
-                        tr.X,
-                        MathHelper.Min(
-                            bl.X,
-                            br.X
-                        )
-                    )
-                ),
-                MathHelper.Min(
-                    tl.Y,
-                    MathHelper.Min(
-                        tr.Y,
-                        MathHelper.Min(
-                            bl.Y,
-                            br.Y
-                        )
-                    )
-                )
-            );
-            var max = new Vector2(
-                MathHelper.Max(
-                    tl.X,
-                    MathHelper.Max(
-                        tr.X,
-                        MathHelper.Max(
-                            bl.X,
-                            br.X
-                        )
-                    )
-                ),
-                MathHelper.Max(
-                    tl.Y,
-                    MathHelper.Max(
-                        tr.Y,
-                        MathHelper.Max(
-                            bl.Y,
-                            br.Y
-                        )
-                    )
-                )
-            );
-            VisibleArea = new Rectangle(
-                (int) min.X,
-                (int) min.Y,
-                (int)(max.X - min.X),
-                (int)(max.Y - min.Y)
+        protected Matrix GetInverseViewMatrix()
+        {
+            return Matrix.Invert(GetViewMatrix());
+        }
+        
+        protected Matrix GetViewMatrix()
+        {
+            return GetVirtualViewMatrix();
+        }
+
+        protected Matrix GetVirtualViewMatrix()
+        {
+            return (
+                Matrix.CreateTranslation(-WorldPosition.MonoGameVector)
+                * Matrix.CreateTranslation(-Origin.MonoGameVector)
+                * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z)
+                * Matrix.CreateScale(Zoom, Zoom, 1)
+                * Matrix.CreateTranslation(Origin.MonoGameVector)
             );
         }
         #endregion Protected Member Methods
-        
+
         #endregion Member Methods
 
-        #region Static Methods
+        #region Static Members
 
-        #region Public Static Methods
-        public static Matrix Transform { get; protected set; }
-        #endregion Public Static Methods
+        #region Public Static Members
+        #endregion Public Static Members
 
-        #endregion Static Methods
+        #endregion Static Members
     }
 }

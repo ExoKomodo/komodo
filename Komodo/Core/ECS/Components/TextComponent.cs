@@ -6,14 +6,14 @@ namespace Komodo.Core.ECS.Components
     public class TextComponent : Drawable2DComponent
     {
         #region Constructors
-        public TextComponent(SpriteFont font, Color color, string text = null, Effect shader = null) : base(true, null, shader)
+        public TextComponent(SpriteFont font, Color color, Effect shader, string text = null) : base(true, null, shader)
         {
             Color = color;
             Font = font;
             FontPath = null;
             Text = text;
         }
-        public TextComponent(string fontPath, Color color, string text = null, Effect shader = null) : base(true, null, shader)
+        public TextComponent(string fontPath, Color color, Effect shader, string text = null) : base(true, null, shader)
         {
             Color = color;
             Font = KomodoGame.Content.Load<SpriteFont>(fontPath);
@@ -76,17 +76,29 @@ namespace Komodo.Core.ECS.Components
             if (Font != null && Text != null)
             {
                 var position = WorldPosition;
+                var rotation = Rotation;
+                var scale = Scale;
                 var camera = Parent.ParentScene.ActiveCamera;
+                if (camera != null)
+                {
+                    position = KomodoVector3.Transform(
+                        position,
+                        camera.ViewMatrix * Matrix.CreateScale(1f, -1f, 1f)
+                    );
+                    rotation += camera.Rotation;
+                    scale *= camera.Zoom;
+                }
+
                 spriteBatch.DrawString(
                     Font,
                     Text,
                     position.XY.MonoGameVector,
                     Color,
-                    Rotation.Z,
+                    rotation.Z,
                     KomodoVector2.Zero.MonoGameVector,
-                    Scale.XY.MonoGameVector,
+                    scale.XY.MonoGameVector,
                     SpriteEffects.None,
-                    Position.Z
+                    -position.Z
                 );
             }
         }

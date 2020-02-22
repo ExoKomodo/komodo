@@ -75,15 +75,11 @@ namespace Common.Behaviors
                 direction *= SprintFactor;
             }
 
-            Parent.Position = KomodoVector3.Add(
-                Parent.Position,
-                KomodoVector3.Multiply(
-                    new KomodoVector3(direction.X, direction.Y),
-                    Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds
-                )
+            Parent.Position += (
+                new KomodoVector3(direction.X, direction.Y)
+                * Velocity
+                * (float)gameTime.ElapsedGameTime.TotalSeconds
             );
-
-            Parent.Rotation += new KomodoVector3(0f, 0f, 1f * (float)gameTime.ElapsedGameTime.TotalSeconds);
         }
         #endregion Public Member Methods
 
