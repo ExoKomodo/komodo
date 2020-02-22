@@ -1,9 +1,8 @@
 using Komodo.Core;
 using Komodo.Core.ECS.Components;
-using Komodo.Core.Engine.Input;
 using Microsoft.Xna.Framework;
 
-namespace Komodo.Lib.Behaviors
+namespace Common.Behaviors
 {
     public class RootStartupBehavior : BehaviorComponent
     {

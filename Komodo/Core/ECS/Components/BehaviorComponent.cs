@@ -1,6 +1,3 @@
-using System.Text.Json.Serialization;
-using Komodo.Core.ECS.Entities;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.ECS.Components

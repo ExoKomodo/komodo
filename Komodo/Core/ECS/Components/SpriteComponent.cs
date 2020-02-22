@@ -1,28 +1,22 @@
-using System.Text.Json.Serialization;
-using Komodo.Core.ECS.Entities;
 using Komodo.Core.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.ECS.Components
 {
-    public class SpriteComponent : Component
+    public class SpriteComponent : Drawable2DComponent
     {
         #region Constructors
-        public SpriteComponent(KomodoTexture texture, Effect shader = null) : base(true, null)
+        public SpriteComponent(KomodoTexture texture, Effect shader = null) : base(true, null, shader)
         {
             Texture = texture;
             TexturePath = null;
-
-            Shader = shader;
         }
-        public SpriteComponent(string texturePath, Effect shader = null)
+        public SpriteComponent(string texturePath, Effect shader = null) : base(true, null, shader)
         {
             var loadedTexture = KomodoGame.Content.Load<Texture2D>(texturePath);
             Texture = new KomodoTexture(loadedTexture);
             TexturePath = texturePath;
-
-            Shader = shader;
         }
         #endregion Constructors
 
@@ -34,21 +28,6 @@ namespace Komodo.Core.ECS.Components
             get
             {
                 return Texture.Height * Parent.Scale.Y;
-            }
-        }
-        public Effect Shader
-        {
-            get
-            {
-                if (_shader == null)
-                {
-                    return Parent.ParentScene.Game.DefaultShader;
-                }
-                return _shader;
-            }
-            set
-            {
-                _shader = value;
             }
         }
         public KomodoTexture Texture { get; set; }
@@ -63,7 +42,6 @@ namespace Komodo.Core.ECS.Components
         #endregion Public Members
 
         #region Protected Members
-        protected Effect _shader { get; set; }
         #endregion Protected Members
 
         #region Private Members
@@ -86,11 +64,11 @@ namespace Komodo.Core.ECS.Components
                 WorldPosition.XY.MonoGameVector,
                 null,
                 Color.White,
-                Rotation,
+                Rotation.Z,
                 KomodoVector2.Zero.MonoGameVector,
                 Scale.XY.MonoGameVector,
                 SpriteEffects.None,
-                Position.Z
+                WorldPosition.Z
             );
         }
 

@@ -1,28 +1,27 @@
-using Komodo.Core;
 using Komodo.Core.ECS.Components;
 using Microsoft.Xna.Framework;
-using System;
 
-namespace Komodo.Lib.Behaviors
+namespace Common.Behaviors
 {
-    public class FPSCounterBehavior : BehaviorComponent
+    public class FPSCounterStartupBehavior : BehaviorComponent
     {
         #region Constructors
-        public FPSCounterBehavior(TextComponent textComponent) : base()
+        public FPSCounterStartupBehavior() : base()
         {
-            _counterText = textComponent;
-            _counterText.Position = new KomodoVector3(0f, 0f);
-            textComponent.Fixed = true;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
+        public bool IsInitialized
+        {
+            get;
+            private set;
+        }
         #endregion Public Members
 
         #region Protected Members
-        public TextComponent _counterText { get; }
         #endregion Protected Members
 
         #region Private Members
@@ -35,11 +34,13 @@ namespace Komodo.Lib.Behaviors
         #region Public Member Methods
         public override void Update(GameTime gameTime)
         {
-            _counterText.Position = new KomodoVector3(
-                -Parent.Position.X - Game.GraphicsManager.ViewPort.Width / 2,
-                -Parent.Position.Y - Game.GraphicsManager.ViewPort.Height / 2
-            );
-            _counterText.Text = $"{Math.Round(Game.FramesPerSecond)} FPS";
+            if (!IsInitialized)
+            {
+                IsInitialized = true;
+                var textComponent = new TextComponent("fonts/font", Color.Black, "");
+                Parent.AddComponent(textComponent);
+                Parent.AddComponent(new FPSCounterBehavior(textComponent));
+            }
         }
         #endregion Public Member Methods
 

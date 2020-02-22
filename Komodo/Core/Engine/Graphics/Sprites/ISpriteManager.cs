@@ -1,4 +1,3 @@
-using Komodo.Core.ECS.Entities;
 using Komodo.Core.ECS.Scenes;
 using Microsoft.Xna.Framework;
 
