@@ -182,14 +182,24 @@ namespace Komodo.Core
             return KomodoVector3.Divide(left, scale);
         }
 
-        public static KomodoVector3 Multiply(KomodoVector3 vector, float scale)
+        public static KomodoVector3 Multiply(KomodoVector3 left, float scale)
         {
-            var result = Vector3.Multiply(vector.MonoGameVector, scale);
+            var result = Vector3.Multiply(left.MonoGameVector, scale);
             return new KomodoVector3(result);
         }
         public static KomodoVector3 operator *(KomodoVector3 left, float scale)
         {
             return KomodoVector3.Multiply(left, scale);
+        }
+
+        public static KomodoVector3 Multiply(KomodoVector3 left, KomodoVector3 right)
+        {
+            var result = Vector3.Multiply(left.MonoGameVector, right.MonoGameVector);
+            return new KomodoVector3(result);
+        }
+        public static KomodoVector3 operator *(KomodoVector3 left, KomodoVector3 right)
+        {
+            return KomodoVector3.Multiply(left, right);
         }
 
         public static KomodoVector3 Subtract(KomodoVector3 left, KomodoVector3 right)
@@ -206,6 +216,23 @@ namespace Komodo.Core
         {
             vectorToNormalize.MonoGameVector.Normalize();
             return new KomodoVector3(vectorToNormalize.X, vectorToNormalize.Y, vectorToNormalize.Z);
+        }
+
+        public static KomodoVector3 Transform(KomodoVector3 vector, Matrix transform)
+        {
+            return new KomodoVector3(
+                Vector3.Transform(vector.MonoGameVector, transform)
+            );
+        }
+
+        public static float Distance(KomodoVector3 a, KomodoVector3 b)
+        {
+            return Vector3.Distance(a.MonoGameVector, b.MonoGameVector);
+        }
+
+        public static float DistanceSquared(KomodoVector3 a, KomodoVector3 b)
+        {
+            return Vector3.DistanceSquared(a.MonoGameVector, b.MonoGameVector);
         }
         #endregion Public Static Methods
 

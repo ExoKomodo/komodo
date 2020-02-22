@@ -62,10 +62,10 @@ namespace Komodo.Core
         
         #region Public Static Members
         public static KomodoVector2 One => new KomodoVector2(1f, 1f);
-        public static KomodoVector2 Down => new KomodoVector2(0f, 1f);
+        public static KomodoVector2 Down => new KomodoVector2(0f, -1f);
         public static KomodoVector2 Left => new KomodoVector2(-1f, 0f);
         public static KomodoVector2 Right => new KomodoVector2(1f, 0f);
-        public static KomodoVector2 Up => new KomodoVector2(0f, -1f);
+        public static KomodoVector2 Up => new KomodoVector2(0f, 1f);
         public static KomodoVector2 Zero => new KomodoVector2();
         #endregion Public Static Members
         

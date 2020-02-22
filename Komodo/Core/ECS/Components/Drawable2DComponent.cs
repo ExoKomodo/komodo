@@ -9,7 +9,6 @@ namespace Komodo.Core.ECS.Components
         #region Constructors
         public Drawable2DComponent(bool isEnabled = true, Entity parent = null, Effect shader = null) : base(isEnabled, parent)
         {
-            Fixed = false;
             Shader = shader;
         }
         #endregion
@@ -17,15 +16,10 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
-        public bool Fixed { get; set; }
         public Effect Shader
         {
             get
             {
-                if (_shader == null)
-                {
-                    return Parent.ParentScene.Game.DefaultShader;
-                }
                 return _shader;
             }
             set

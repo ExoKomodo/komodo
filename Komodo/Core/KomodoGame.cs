@@ -26,7 +26,7 @@ namespace Komodo.Core
 
             Content = _komodoMonoGame.Content;
 
-            ActiveScene = new Scene();
+            ActiveScene = new Scene(this);
         }
         #endregion Constructors
 
@@ -44,7 +44,9 @@ namespace Komodo.Core
                 _activeScene.Game = this;
             }
         }
-        public BasicEffect DefaultShader { get; set; }
+        // public SpriteEffect DefaultSpriteShader { get; set; }
+        public BasicEffect DefaultSpriteShader { get; set; }
+
         public float FramesPerSecond
         {
             get;
@@ -115,12 +117,17 @@ namespace Komodo.Core
         public void Initialize()
         {
             _graphicsManagerMonoGame.Initialize();
-            DefaultShader = new BasicEffect(_graphicsManagerMonoGame.GraphicsDeviceManager.GraphicsDevice);
+            // DefaultSpriteShader = new SpriteEffect(_graphicsManagerMonoGame.GraphicsDeviceManager.GraphicsDevice);
+            DefaultSpriteShader = new BasicEffect(_graphicsManagerMonoGame.GraphicsDeviceManager.GraphicsDevice)
+            {
+                TextureEnabled = true,
+                VertexColorEnabled = true,
+            };
             if (_startupEntities != null)
             {
                 foreach (var entity in _startupEntities)
                 {
-                    ActiveScene.AddEntity(entity);
+                    entity.ParentScene.AddEntity(entity);
                 }
             }
             _graphicsManagerMonoGame.VSync = false;

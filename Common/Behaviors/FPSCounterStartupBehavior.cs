@@ -37,7 +37,7 @@ namespace Common.Behaviors
             if (!IsInitialized)
             {
                 IsInitialized = true;
-                var textComponent = new TextComponent("fonts/font", Color.Black, "");
+                var textComponent = new TextComponent("fonts/font", Color.Black, Game.DefaultSpriteShader, "");
                 Parent.AddComponent(textComponent);
                 Parent.AddComponent(new FPSCounterBehavior(textComponent));
             }

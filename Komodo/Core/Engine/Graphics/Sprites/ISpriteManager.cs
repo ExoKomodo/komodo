@@ -15,7 +15,7 @@ namespace Komodo.Core.Engine.Graphics.Sprites
         #region Member Methods
         
         #region Public Member Methods
-        void Draw(Scene scene, Matrix transformMatrix);
+        void Draw(Scene scene);
         #endregion Public Member Methods
         
         #endregion Member Methods
