@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Komodo.Core.ECS.Components;
-using Komodo.Core.ECS.Entities;
 using Komodo.Core.ECS.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

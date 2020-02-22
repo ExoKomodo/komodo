@@ -1,31 +1,24 @@
-using System.Text.Json.Serialization;
-using Komodo.Core.ECS.Entities;
-using Komodo.Core.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.ECS.Components
 {
-    public class TextComponent : Component
+    public class TextComponent : Drawable2DComponent
     {
         #region Constructors
-        public TextComponent(SpriteFont font, Color color, string text = null, Effect shader = null) : base(true, null)
+        public TextComponent(SpriteFont font, Color color, string text = null, Effect shader = null) : base(true, null, shader)
         {
             Color = color;
             Font = font;
             FontPath = null;
             Text = text;
-
-            Shader = shader;
         }
-        public TextComponent(string fontPath, Color color, string text = null, Effect shader = null)
+        public TextComponent(string fontPath, Color color, string text = null, Effect shader = null) : base(true, null, shader)
         {
             Color = color;
             Font = KomodoGame.Content.Load<SpriteFont>(fontPath);
             FontPath = fontPath;
             Text = text;
-
-            Shader = shader;
         }
         #endregion Constructors
 
@@ -33,7 +26,6 @@ namespace Komodo.Core.ECS.Components
 
         #region Public Members
         public Color Color { get; set; }
-        public bool Fixed { get; set; }
         public SpriteFont Font { get; set; }
         public string FontPath { get; set; }
         public float Height
@@ -46,21 +38,6 @@ namespace Komodo.Core.ECS.Components
                 }
                 var size = new KomodoVector2(Font.MeasureString(Text));
                 return size.Y * Scale.Y;
-            }
-        }
-        public Effect Shader
-        {
-            get
-            {
-                if (_shader == null)
-                {
-                    return Parent.ParentScene.Game.DefaultShader;
-                }
-                return _shader;
-            }
-            set
-            {
-                _shader = value;
             }
         }
         public string Text { get; set; }
@@ -79,7 +56,6 @@ namespace Komodo.Core.ECS.Components
         #endregion Public Members
 
         #region Protected Members
-        protected Effect _shader { get; set; }
         #endregion Protected Members
 
         #region Private Members
@@ -101,16 +77,12 @@ namespace Komodo.Core.ECS.Components
             {
                 var position = WorldPosition;
                 var camera = Parent.ParentScene.ActiveCamera;
-                if (Fixed && camera != null)
-                {
-                    position = KomodoVector3.Add(position, camera.Position);
-                }
                 spriteBatch.DrawString(
                     Font,
                     Text,
                     position.XY.MonoGameVector,
                     Color,
-                    Rotation,
+                    Rotation.Z,
                     KomodoVector2.Zero.MonoGameVector,
                     Scale.XY.MonoGameVector,
                     SpriteEffects.None,

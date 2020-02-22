@@ -29,11 +29,11 @@ namespace Komodo.Core.ECS.Components
                 return Parent?.Position != null ? KomodoVector3.Add(Parent.Position, Position) : Position;
             }
         }
-        public float Rotation
+        public KomodoVector3 Rotation
         {
             get
             {
-                return Parent?.Rotation != null ? Parent.Rotation : 0f;
+                return Parent.Rotation;
             }
         }
         public KomodoVector3 Scale

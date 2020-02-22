@@ -1,7 +1,4 @@
 
-using System;
-using System.Text.Json.Serialization;
-using Komodo.Core.ECS.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -32,7 +29,7 @@ namespace Komodo.Core.ECS.Components
         public bool IsInitialized { get; set; }
         public float MaxZoom { get; set; }
         public float MinZoom { get; set; }
-        public new KomodoVector3 Position { get; set; }
+        public new KomodoVector3 Rotation { get; set; }
         public Viewport Viewport { get; protected set; }
         public Rectangle VisibleArea { get; protected set; }
         public float Zoom { get; set; }
@@ -73,7 +70,32 @@ namespace Komodo.Core.ECS.Components
 
         public void Pan(KomodoVector3 translation)
         {
-            Position = KomodoVector3.Add(Position, translation);
+            Position += translation;
+        }
+
+        public void RotateX(float radians)
+        {
+            Rotate(radians, 0f, 0f);
+        }
+        
+        public void RotateY(float radians)
+        {
+            Rotate(0f, radians, 0f);
+        }
+
+        public void RotateZ(float radians)
+        {
+            Rotate(0f, 0f, radians);
+        }
+        
+        public void Rotate(float radiansX, float radiansY, float radiansZ)
+        {
+            Rotate(new KomodoVector3(radiansX, radiansY, radiansZ));
+        }
+
+        public void Rotate(KomodoVector3 rotation)
+        {
+            Rotation += rotation;
         }
 
         public override SerializedObject Serialize()
@@ -91,8 +113,8 @@ namespace Komodo.Core.ECS.Components
             if (!IsInitialized)
             {
                 IsInitialized = true;
-                Viewport = Parent.ParentScene.Game.GraphicsManager.ViewPort;
             }
+            Viewport = Parent.ParentScene.Game.GraphicsManager.ViewPort;
             UpdateMatrix();
         }
         #endregion Public Member Methods
@@ -100,27 +122,21 @@ namespace Komodo.Core.ECS.Components
         #region Protected Member Methods
         protected void UpdateMatrix()
         {
-            Transform = Matrix.CreateTranslation(
-                new Vector3(
-                    -Position.X,
-                    -Position.Y,
-                    0
-                )
-            )
-            * Matrix.CreateScale(Zoom)
-            * Matrix.CreateTranslation(
-                new Vector3(
-                    Bounds.Width * 0.5f,
-                    Bounds.Height * 0.5f,
-                    0
-                )
-            );
+            Transform = Matrix.CreateScale(Zoom)
+                * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z)
+                * Matrix.CreateTranslation(-WorldPosition.MonoGameVector)
+                * Matrix.CreateTranslation(
+                    new Vector3(
+                        Bounds.Width * 0.5f,
+                        Bounds.Height * 0.5f,
+                        0
+                    )
+                );
             UpdateVisibleArea();
         }
         protected void UpdateVisibleArea()
         {
             var inverseViewMatrix = Matrix.Invert(Transform);
-
             var tl = Vector2.Transform(
                 Vector2.Zero,
                 inverseViewMatrix
@@ -192,8 +208,8 @@ namespace Komodo.Core.ECS.Components
                 )
             );
             VisibleArea = new Rectangle(
-                (int)min.X,
-                (int)min.Y,
+                (int) min.X,
+                (int) min.Y,
                 (int)(max.X - min.X),
                 (int)(max.Y - min.Y)
             );

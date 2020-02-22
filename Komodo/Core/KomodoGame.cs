@@ -12,7 +12,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Komodo.Core.ECS.Entities;
 using Microsoft.Xna.Framework.Content;
 using System;
-using Microsoft.Xna.Framework.Media;
 
 namespace Komodo.Core
 {
@@ -124,6 +123,7 @@ namespace Komodo.Core
                     ActiveScene.AddEntity(entity);
                 }
             }
+            _graphicsManagerMonoGame.VSync = false;
         }
 
         public void ResetElapsedTime()

@@ -56,11 +56,27 @@ namespace Komodo.Core.Engine.Graphics
         public GraphicsDeviceManager GraphicsDeviceManager { get; set; }
         public SpriteManagerMonoGame SpriteManagerMonoGame { get; set; }
         public Viewport ViewPort { get; set; }
+        public bool VSync
+        {
+            get
+            {
+                return GraphicsDeviceManager.SynchronizeWithVerticalRetrace && _komodoMonoGame.IsFixedTimeStep;
+            }
+            set
+            {
+                if (value != VSync)
+                {
+                    GraphicsDeviceManager.SynchronizeWithVerticalRetrace = value;
+                    _komodoMonoGame.IsFixedTimeStep = value;
+                    GraphicsDeviceManager.ApplyChanges();
+                }
+            }
+        }
         #endregion Public Members
-        
+
         #region Protected Members
         #endregion Protected Members
-        
+
         #region Private Members
         private KomodoMonoGame _komodoMonoGame;
         #endregion Private Members

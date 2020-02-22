@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Komodo.Core.ECS.Entities;
-using System.Text.Json.Serialization;
 using Komodo.Core.ECS.Components;
-using System.Collections;
 
 namespace Komodo.Core.ECS.Scenes
 {
@@ -15,7 +13,7 @@ namespace Komodo.Core.ECS.Scenes
         public Scene()
         {
             Entities = new List<Entity>();
-            _drawable2DComponents = new Dictionary<Effect, List<Component>>();
+            _drawable2DComponents = new Dictionary<Effect, List<Drawable2DComponent>>();
             _drawable3DComponents = new List<Component>();
             _physicsComponents = new List<Component>();
             _updatableComponents = new List<Component>();
@@ -42,7 +40,7 @@ namespace Komodo.Core.ECS.Scenes
 
         #region Protected Members
         protected List<Entity> _entities;
-        protected Dictionary<Effect, List<Component>> _drawable2DComponents { get; }
+        protected Dictionary<Effect, List<Drawable2DComponent>> _drawable2DComponents { get; }
         protected List<Component> _drawable3DComponents { get; }
         protected List<Component> _physicsComponents { get; }
         protected List<Component> _updatableComponents { get; }
@@ -60,10 +58,8 @@ namespace Komodo.Core.ECS.Scenes
         {
             switch (componentToAdd)
             {
-                case SpriteComponent component:
-                    return AddSpriteComponent(component);
-                case TextComponent component:
-                    return AddTextComponent(component);
+                case Drawable2DComponent component:
+                    return AddDrawable2DComponent(component);
                 case BehaviorComponent component:
                     return AddUpdatableComponent(component);
                 case CameraComponent component:
@@ -80,10 +76,8 @@ namespace Komodo.Core.ECS.Scenes
         {
             switch (componentToRemove)
             {
-                case SpriteComponent component:
-                    return RemoveSpriteComponent(component);
-                case TextComponent component:
-                    return RemoveTextComponent(component);
+                case Drawable2DComponent component:
+                    return RemoveDrawable2DComponent(component);
                 case BehaviorComponent component:
                     return RemoveUpdatableComponent(component);
                 case CameraComponent component:
@@ -169,36 +163,19 @@ namespace Komodo.Core.ECS.Scenes
         {
             if (_drawable2DComponents != null)
             {
-                foreach (KeyValuePair<Effect, List<Component>> pair in _drawable2DComponents)
+                foreach (KeyValuePair<Effect, List<Drawable2DComponent>> pair in _drawable2DComponents)
                 {
                     var shader = pair.Key;
                     if (shader == Game.DefaultShader)
                     {
                         shader = null;
                     }
-                    spriteBatch.Begin(transformMatrix: transformMatrix, effect: shader);
-                    try
-                    {
-                        var components = pair.Value;
-                        int i = 0;
-                        while (components.Count > i)
-                        {
-                            var component = components[i];
-                            if (component.Parent.IsEnabled && component.IsEnabled)
-                            {
-                                component.Draw(spriteBatch);
-                            }
-                            i++;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    
-                    }
-                    finally
-                    {
-                        spriteBatch.End();
-                    }
+                    var components = pair.Value;
+                    var fixedComponents = components.FindAll(x => x.Fixed);
+                    var nonFixedComponents = components.FindAll(x => !x.Fixed);
+
+                    Draw2DComponents(fixedComponents, spriteBatch, shader);
+                    Draw2DComponents(nonFixedComponents, spriteBatch, shader, transformMatrix);
                 }
             }
         }
@@ -271,32 +248,14 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
 
-        protected bool AddSpriteComponent(SpriteComponent componentToAdd)
+        protected bool AddDrawable2DComponent(Drawable2DComponent componentToAdd)
         {
             try
             {
                 var shader = componentToAdd.Shader;
                 if (!_drawable2DComponents.ContainsKey(shader))
                 {
-                    _drawable2DComponents[shader] = new List<Component>();
-                }
-                _drawable2DComponents[shader].Add(componentToAdd);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        protected bool AddTextComponent(TextComponent componentToAdd)
-        {
-            try
-            {
-                var shader = componentToAdd.Shader;
-                if (!_drawable2DComponents.ContainsKey(shader))
-                {
-                    _drawable2DComponents[shader] = new List<Component>();
+                    _drawable2DComponents[shader] = new List<Drawable2DComponent>();
                 }
                 _drawable2DComponents[shader].Add(componentToAdd);
                 return true;
@@ -333,6 +292,29 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
 
+        protected void Draw2DComponents(IEnumerable<Drawable2DComponent> components, SpriteBatch spriteBatch, Effect shader = null, Matrix? transformMatrix = null)
+        {
+            try
+            {
+                spriteBatch.Begin(transformMatrix: transformMatrix, effect: shader);
+                foreach (var component in components)
+                {
+                    if (component.Parent.IsEnabled && component.IsEnabled)
+                    {
+                        component.Draw(spriteBatch);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                spriteBatch.End();   
+            }
+        }
+
         protected bool RemoveDrawable3DComponent(Component componentToRemove)
         {
             try
@@ -357,24 +339,7 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
 
-        protected bool RemoveSpriteComponent(SpriteComponent componentToRemove)
-        {
-            try
-            {
-                var shader = componentToRemove.Shader;
-                if (!_drawable2DComponents.ContainsKey(shader))
-                {
-                    return false;
-                }
-                return _drawable2DComponents[shader].Remove(componentToRemove);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        protected bool RemoveTextComponent(TextComponent componentToRemove)
+        protected bool RemoveDrawable2DComponent(Drawable2DComponent componentToRemove)
         {
             try
             {

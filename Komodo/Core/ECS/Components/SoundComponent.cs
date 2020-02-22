@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
-using Komodo.Core.ECS.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 
 namespace Komodo.Core.ECS.Components
 {

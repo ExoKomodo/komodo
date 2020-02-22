@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Komodo.Lib.Behaviors;
+using Common.Behaviors;
 using Komodo.Core;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.ECS.Entities;
@@ -26,12 +26,15 @@ namespace Komodo
 
                 var player2Entity = new Entity(Game.ActiveScene);
                 player2Entity.AddComponent(new RootStartupBehavior(1));
-                player1Entity.AddComponent(new FPSCounterStartupBehavior());
+
+                var counterEntity = new Entity(Game.ActiveScene);
+                counterEntity.AddComponent(new FPSCounterStartupBehavior());
 
                 var startupEntities = new List<Entity>
                 {
                     player1Entity,
-                    player2Entity
+                    player2Entity,
+                    counterEntity
                 };
 
                 // Startup entities will be attached to the active scene once the monogame initialization has occurred.

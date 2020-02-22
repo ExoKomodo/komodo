@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.ECS.Scenes;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.ECS.Entities
 {
@@ -16,7 +14,7 @@ namespace Komodo.Core.ECS.Entities
             IsEnabled = true;
             ParentScene = parentScene;
             Position = KomodoVector3.Zero;
-            Rotation = 0.0f;
+            Rotation = KomodoVector3.Zero;
             Scale = KomodoVector3.One;
         }
         #endregion Constructors
@@ -48,7 +46,7 @@ namespace Komodo.Core.ECS.Entities
             }
         }
         public KomodoVector3 Position { get; set; }
-        public float Rotation { get; set; }
+        public KomodoVector3 Rotation { get; set; }
         public KomodoVector3 Scale { get; set; }
         #endregion Public Members
 
@@ -113,9 +111,9 @@ namespace Komodo.Core.ECS.Entities
             {
                 ParentScene = null;
                 Components = new List<Component>();
-                Position = new KomodoVector3();
-                Rotation = 0.0f;
-                Scale = new KomodoVector3();
+                Position = KomodoVector3.Zero;
+                Rotation = KomodoVector3.Zero;
+                Scale = KomodoVector3.Zero;
 
                 if (serializedObject.Properties.ContainsKey("Components"))
                 {
@@ -144,14 +142,14 @@ namespace Komodo.Core.ECS.Entities
                         Position = new KomodoVector3((float)x, (float)y, (float)z);
                     }
                 }
-                if (serializedObject.Properties.ContainsKey("Rotation"))
+                /*if (serializedObject.Properties.ContainsKey("Rotation"))
                 {
                     var rotation = serializedObject.Properties["Rotation"];
                     if (rotation is float)
                     {
                         Rotation = (float)rotation;
                     }
-                }
+                }*/
                 if (
                     serializedObject.Properties.ContainsKey("ScaleX")
                     && serializedObject.Properties.ContainsKey("ScaleY")

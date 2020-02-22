@@ -15,6 +15,7 @@ namespace Komodo.Core.Engine.Graphics
         bool IsMouseVisible { get; set; }
         List<Resolution> Resolutions { get; }
         Viewport ViewPort { get; }
+        bool VSync { get; set; }
         #endregion Public Members
 
         #endregion Members
