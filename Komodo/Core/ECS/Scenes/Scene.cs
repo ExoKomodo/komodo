@@ -70,38 +70,26 @@ namespace Komodo.Core.ECS.Scenes
         #region Internal Member Methods
         public bool AddComponent(Component componentToAdd)
         {
-            switch (componentToAdd)
+            return componentToAdd switch
             {
-                case Drawable2DComponent component:
-                    return AddDrawable2DComponent(component);
-                case BehaviorComponent component:
-                    return AddUpdatableComponent(component);
-                case CameraComponent component:
-                    return AddUpdatableComponent(component);
-                case SoundComponent component:
-                    return AddUpdatableComponent(component);
-                case null:
-                default:
-                    return false;
-            }
+                Drawable2DComponent component => AddDrawable2DComponent(component),
+                BehaviorComponent component => AddUpdatableComponent(component),
+                CameraComponent component => AddUpdatableComponent(component),
+                SoundComponent component => AddUpdatableComponent(component),
+                _ => false,
+            };
         }
 
         public bool RemoveComponent(Component componentToRemove)
         {
-            switch (componentToRemove)
+            return componentToRemove switch
             {
-                case Drawable2DComponent component:
-                    return RemoveDrawable2DComponent(component);
-                case BehaviorComponent component:
-                    return RemoveUpdatableComponent(component);
-                case CameraComponent component:
-                    return RemoveUpdatableComponent(component);
-                case SoundComponent component:
-                    return RemoveUpdatableComponent(component);
-                case null:
-                default:
-                    return false;
-            }
+                Drawable2DComponent component => RemoveDrawable2DComponent(component),
+                BehaviorComponent component => RemoveUpdatableComponent(component),
+                CameraComponent component => RemoveUpdatableComponent(component),
+                SoundComponent component => RemoveUpdatableComponent(component),
+                _ => false,
+            };
         }
         #endregion Internal Member Methods
 
@@ -230,8 +218,10 @@ namespace Komodo.Core.ECS.Scenes
 
         public SerializedObject Serialize()
         {
-            var serializedObject = new SerializedObject();
-            serializedObject.Type = this.GetType().ToString();
+            var serializedObject = new SerializedObject
+            {
+                Type = this.GetType().ToString()
+            };
 
             var entities = new List<SerializedObject>();
             foreach (var entity in Entities)
@@ -278,7 +268,7 @@ namespace Komodo.Core.ECS.Scenes
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.ToString());
                 return false;
             }
         }
@@ -297,7 +287,7 @@ namespace Komodo.Core.ECS.Scenes
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.ToString());
                 return false;
             }
         }
@@ -311,7 +301,7 @@ namespace Komodo.Core.ECS.Scenes
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.ToString());
                 return false;
             }
         }
@@ -325,7 +315,7 @@ namespace Komodo.Core.ECS.Scenes
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.ToString());
                 return false;
             }
         }
@@ -389,7 +379,7 @@ namespace Komodo.Core.ECS.Scenes
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.ToString());
             }
             finally
             {
