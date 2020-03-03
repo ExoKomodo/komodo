@@ -1,18 +1,19 @@
 using Komodo.Core.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Komodo.Core.ECS.Components
 {
     public class SpriteComponent : Drawable2DComponent
     {
         #region Constructors
-        public SpriteComponent(KomodoTexture texture, Effect shader = null) : base(true, null, shader)
+        public SpriteComponent(KomodoTexture texture, Effect shader) : base(true, null, shader)
         {
             Texture = texture;
             TexturePath = null;
         }
-        public SpriteComponent(string texturePath, Effect shader = null) : base(true, null, shader)
+        public SpriteComponent(string texturePath, Effect shader) : base(true, null, shader)
         {
             var loadedTexture = KomodoGame.Content.Load<Texture2D>(texturePath);
             Texture = new KomodoTexture(loadedTexture);
@@ -59,16 +60,31 @@ namespace Komodo.Core.ECS.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            var position = WorldPosition;
+            var rotation = Rotation;
+            var scale = Scale;
+            var camera = Parent.ParentScene.ActiveCamera;
+            if (camera != null)
+            {
+                position = KomodoVector3.Transform(
+                    position,
+                    camera.ViewMatrix
+                    * Matrix.CreateScale(1f, -1f, 1f)
+                );
+                rotation += camera.Rotation;
+                scale *= camera.Zoom;
+            }
+            
             spriteBatch.Draw(
                 Texture.MonoGameTexture,
-                WorldPosition.XY.MonoGameVector,
+                position.XY.MonoGameVector,
                 null,
                 Color.White,
-                Rotation.Z,
+                rotation.Z,
                 KomodoVector2.Zero.MonoGameVector,
-                Scale.XY.MonoGameVector,
+                scale.XY.MonoGameVector,
                 SpriteEffects.None,
-                WorldPosition.Z
+                -position.Z
             );
         }
 

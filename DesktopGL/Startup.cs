@@ -4,6 +4,7 @@ using Common.Behaviors;
 using Komodo.Core;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.ECS.Entities;
+using Komodo.Core.ECS.Scenes;
 using Komodo.Core.Engine.Input;
 
 namespace Komodo
@@ -17,24 +18,54 @@ namespace Komodo
             using (Game = new KomodoGame()) {
                 SetupInputs();
 
-                var player1Entity = new Entity(Game.ActiveScene);
+                // Perspective scene
+                var player1Entity = new Entity(Game.ActiveScene)
+                {
+                    Position = new KomodoVector3(0f, 0f, 1f),
+                };
                 player1Entity.AddComponent(new RootStartupBehavior(0));
-                var camera = new CameraComponent();
+
+                var player2Entity = new Entity(Game.ActiveScene)
+                {
+                    Position = new KomodoVector3(0f, 0f, 2f),
+                };
+                player2Entity.AddComponent(new RootStartupBehavior(1));
+
+                var camera = new CameraComponent()
+                {
+                    Position = new KomodoVector3(-100f, 100f, -400f),
+                    FarPlane = 1000f,
+                    IsPerspective = true,
+                };
                 player1Entity.AddComponent(camera);
                 player1Entity.AddComponent(new CameraBehavior(camera, 0));
                 camera.SetActive();
 
-                var player2Entity = new Entity(Game.ActiveScene);
-                player2Entity.AddComponent(new RootStartupBehavior(1));
-
-                var counterEntity = new Entity(Game.ActiveScene);
+                // Orthographic scene
+                var orthographicScene = new Scene(Game);
+                Game.ActiveScene.Children.Add(orthographicScene);
+                var counterEntity = new Entity(orthographicScene);
                 counterEntity.AddComponent(new FPSCounterStartupBehavior());
+
+                var cameraEntity = new Entity(orthographicScene)
+                {
+                    Position = new KomodoVector3(0f, 0f, 0f),
+                };
+                camera = new CameraComponent()
+                {
+                    Position = new KomodoVector3(0f, 0f, -1f),
+                    FarPlane = 1000f,
+                    IsPerspective = false,
+                };
+                cameraEntity.AddComponent(camera);
+                camera.SetActive();
 
                 var startupEntities = new List<Entity>
                 {
                     player1Entity,
                     player2Entity,
-                    counterEntity
+                    counterEntity,
+                    cameraEntity,
                 };
 
                 // Startup entities will be attached to the active scene once the monogame initialization has occurred.

@@ -33,7 +33,14 @@ namespace Komodo.Core.ECS.Components
         {
             get
             {
-                return Parent.Rotation;
+                return Parent?.Rotation != null ? Parent.Rotation : KomodoVector3.Zero;
+            }
+            set
+            {
+                if (Parent != null)
+                {
+                    Parent.Rotation = value;
+                }
             }
         }
         public KomodoVector3 Scale
@@ -41,6 +48,13 @@ namespace Komodo.Core.ECS.Components
             get
             {
                 return Parent?.Scale != null ? Parent.Scale : KomodoVector3.Zero;
+            }
+            set
+            {
+                if (Parent != null)
+                {
+                    Parent.Scale = value;
+                }
             }
         }
         #endregion Public Members

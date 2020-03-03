@@ -12,7 +12,6 @@ namespace Common.Behaviors
         {
             _counterText = textComponent;
             _counterText.Position = KomodoVector3.Zero;
-            textComponent.Fixed = true;
         }
         #endregion Constructors
 
@@ -35,10 +34,6 @@ namespace Common.Behaviors
         #region Public Member Methods
         public override void Update(GameTime gameTime)
         {
-            // _counterText.Position = new KomodoVector3(
-            //     -Game.GraphicsManager.ViewPort.Width / 2,
-            //     -Game.GraphicsManager.ViewPort.Height / 2
-            // );
             _counterText.Text = $"{Math.Round(Game.FramesPerSecond)} FPS";
         }
         #endregion Public Member Methods

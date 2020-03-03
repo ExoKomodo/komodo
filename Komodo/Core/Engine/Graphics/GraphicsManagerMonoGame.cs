@@ -104,7 +104,7 @@ namespace Komodo.Core.Engine.Graphics
 
         public void DrawScene(Scene scene)
         {
-            SpriteManagerMonoGame.Draw(scene, CameraComponent.Transform);
+            SpriteManagerMonoGame.Draw(scene);
         }
 
         // Initialize is called after all framework resources have been initialized and allocated
@@ -115,6 +115,10 @@ namespace Komodo.Core.Engine.Graphics
             ViewPort = GraphicsDeviceManager.GraphicsDevice.Viewport;
 
             var resolution = Resolutions.First();
+            if (Resolutions.Count > 3)
+            {
+                resolution = Resolutions[3];
+            }
             SetResolution(resolution);
             SetFullscreen(false);
         }

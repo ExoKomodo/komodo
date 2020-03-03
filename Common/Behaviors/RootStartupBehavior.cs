@@ -44,13 +44,16 @@ namespace Common.Behaviors
             {
                 _isInitialized = true;
                 IsEnabled = false;
-                Parent.AddComponent(new SpriteComponent("player/idle/player_idle_01"));
-                Parent.AddComponent(new MoveBehavior(PlayerIndex));
+                Parent.AddComponent(new SpriteComponent("player/idle/player_idle_01", Game.DefaultSpriteShader));
+                if (PlayerIndex == 0)
+                {
+                    Parent.AddComponent(new MoveBehavior(PlayerIndex));
+                }
 
                 Parent.AddComponent(
-                    new TextComponent("fonts/font", Color.Black, "Test")
+                    new TextComponent("fonts/font", Color.Black, Game.DefaultSpriteShader, $"Test {PlayerIndex}")
                     {
-                        Position = new KomodoVector3(0f, -20f, 0)
+                        Position = new KomodoVector3(0f, 20f, 0)
                     }
                 );
             }

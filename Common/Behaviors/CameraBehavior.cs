@@ -64,7 +64,7 @@ namespace Common.Behaviors
                 direction += KomodoVector2.Down;
             }
 
-            var cameraPan = (
+            var cameraMove = (
                 new KomodoVector3(
                     direction.X,
                     direction.Y
@@ -72,7 +72,8 @@ namespace Common.Behaviors
                 * PanVelocity
                 * (float)gameTime.ElapsedGameTime.TotalSeconds
             );
-            Camera.Pan(cameraPan);
+            Camera.Move(cameraMove);
+            //Camera.RotateZ(0.1f * (float)gameTime.ElapsedGameTime.TotalSeconds);
         }
         #endregion Public Member Methods
 
