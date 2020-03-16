@@ -7,6 +7,7 @@ using Komodo.Core.ECS.Scenes;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Komodo.Core.Engine.Graphics.Models;
 
 namespace Komodo.Core.Engine.Graphics
 {
@@ -55,6 +56,7 @@ namespace Komodo.Core.Engine.Graphics
         }
         public GraphicsDeviceManager GraphicsDeviceManager { get; set; }
         public SpriteManagerMonoGame SpriteManagerMonoGame { get; set; }
+        public ModelManagerMonoGame ModelManagerMonoGame { get; set; }
         public Viewport ViewPort { get; set; }
         public bool VSync
         {
@@ -104,7 +106,8 @@ namespace Komodo.Core.Engine.Graphics
 
         public void DrawScene(Scene scene)
         {
-            SpriteManagerMonoGame.Draw(scene);
+            ModelManagerMonoGame.DrawScene(scene);
+            SpriteManagerMonoGame.DrawScene(scene);
         }
 
         // Initialize is called after all framework resources have been initialized and allocated
@@ -112,6 +115,8 @@ namespace Komodo.Core.Engine.Graphics
         {
             // Sprite manager requires framework graphics resources to be initialized
             SpriteManagerMonoGame = new SpriteManagerMonoGame(this);
+            // Model manager does not require graphics resources
+            ModelManagerMonoGame = new ModelManagerMonoGame(this);
             ViewPort = GraphicsDeviceManager.GraphicsDevice.Viewport;
 
             var resolution = Resolutions.First();

@@ -1,9 +1,9 @@
 using Komodo.Core.ECS.Scenes;
 using Microsoft.Xna.Framework;
 
-namespace Komodo.Core.Engine.Graphics.Sprites
+namespace Komodo.Core.Engine.Graphics.Models
 {
-    public interface ISpriteManager
+    public interface IModelManager
     {
         #region Members
 

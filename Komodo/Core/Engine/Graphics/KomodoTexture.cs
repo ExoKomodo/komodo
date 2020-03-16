@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.Engine.Graphics
 {
-    public struct KomodoTexture : IKomodoTexture
+    public class KomodoTexture : IKomodoTexture
     {
         #region Constructors
         public KomodoTexture(Texture2D monoGameTexture)
         {
-            Data = null;
+            SetData(null);
             MonoGameTexture = monoGameTexture;
             _height = 0;
             _width = 0;
@@ -22,7 +22,7 @@ namespace Komodo.Core.Engine.Graphics
             int height
         )
         {
-            Data = null;
+            SetData(null);
             MonoGameTexture = null;
             _height = height;
             _width = width;
@@ -36,7 +36,7 @@ namespace Komodo.Core.Engine.Graphics
             Color[,] data
         )
         {
-            Data = null;
+            SetData(null);
             MonoGameTexture = null;
             _height = 0;
             _width = 0;
@@ -44,12 +44,16 @@ namespace Komodo.Core.Engine.Graphics
             Initialize(data);
             CreateMonoGameTexture(graphicsManager);
         }
+
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public Color[] Data { get; private set; }
+        private void SetData(Color[] value)
+        {
+            _data = value;
+        }
 
         public int Height
         {
@@ -72,12 +76,20 @@ namespace Komodo.Core.Engine.Graphics
         #region Private Members
         private int _height { get; set; }
         private int _width { get; set; }
+        private Color[] _data;
         #endregion Private Members
 
         #endregion Members
 
         #region Member Methods
-        
+
+        #region Public Member Methods
+        public Color[] GetData()
+        {
+            return _data;
+        }
+        #endregion Public Member Methods
+
         #region Private Member Methods
         private void CreateMonoGameTexture(IGraphicsManager graphicsManager)
         {
@@ -85,7 +97,7 @@ namespace Komodo.Core.Engine.Graphics
             {
                 var graphicsDevice = ((GraphicsManagerMonoGame)graphicsManager).GraphicsDeviceManager.GraphicsDevice;
                 MonoGameTexture = new Texture2D(graphicsDevice, _width, _height);
-                MonoGameTexture.SetData(Data);
+                MonoGameTexture.SetData(GetData());
             }
         }
 
@@ -105,7 +117,7 @@ namespace Komodo.Core.Engine.Graphics
                 // TODO: Create data was the wrong size exception
                 throw new Exception("Data was the wrong size");
             }
-            Data = data;
+            SetData(data);
         }
 
         private void Initialize(Color[,] data)
@@ -117,17 +129,17 @@ namespace Komodo.Core.Engine.Graphics
             }
             if (data.Length == 0)
             {
-                Data = null;
+                SetData(null);
             }
             else
             {
                 _height = data.Rank;
                 _width = data.GetLength(0);
-                Data = new Color[_width * _height];
+                SetData(new Color[_width * _height]);
                 int i = 0;
                 foreach (Color color in data)
                 {
-                    Data[i] = color;
+                    GetData()[i] = color;
                     i++;
                 }
             }

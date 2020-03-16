@@ -69,6 +69,7 @@ namespace Komodo.Core.ECS.Components
                 }
             }
         }
+        public KomodoVector3 Forward => new KomodoVector3(0, 0, -1);
         public bool IsPerspective { get; set; }
         public float MaximumZoom
         {
@@ -155,6 +156,14 @@ namespace Komodo.Core.ECS.Components
             }
         }
         public new KomodoVector3 Rotation { get; set; }
+        public new Matrix RotationMatrix
+        {
+            get
+            {
+                return Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
+            }
+        }
+        public KomodoVector3 Up => new KomodoVector3(0, 1, 0);
         public Matrix ViewMatrix { get; protected set; }
         public Viewport Viewport { get; protected set; }
         public float Zoom
@@ -228,10 +237,7 @@ namespace Komodo.Core.ECS.Components
 
         public void Move(KomodoVector3 direction)
         {
-            Position += KomodoVector3.Transform(
-                direction,
-                Matrix.CreateRotationZ(-Rotation.Z)
-            );
+            Position += direction;
         }
 
         public void RotateX(float radians)

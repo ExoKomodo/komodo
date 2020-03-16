@@ -69,7 +69,7 @@ namespace Komodo.Core.ECS.Components
                 position = KomodoVector3.Transform(
                     position,
                     camera.ViewMatrix
-                    * Matrix.CreateScale(1f, -1f, 1f)
+                    * Matrix.CreateScale(1f, -1f, -1f)
                 );
                 rotation += camera.Rotation;
                 scale *= camera.Zoom;
@@ -84,7 +84,7 @@ namespace Komodo.Core.ECS.Components
                 KomodoVector2.Zero.MonoGameVector,
                 scale.XY.MonoGameVector,
                 SpriteEffects.None,
-                -position.Z
+                position.Z
             );
         }
 
