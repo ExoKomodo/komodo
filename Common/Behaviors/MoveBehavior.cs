@@ -1,6 +1,10 @@
+using System;
+using System.Text;
+using System.Text.Json;
 using Komodo.Core;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.Engine.Input;
+using Komodo.Lib.Network;
 using Microsoft.Xna.Framework;
 
 namespace Common.Behaviors
@@ -17,6 +21,15 @@ namespace Common.Behaviors
             PlayerIndex = playerIndex;
             SprintFactor = 2f;
             Velocity = 50f;
+
+            var client = new Client("127.0.0.1", 5000);
+            // var b = client.SendAsync(
+            //     new
+            //     {
+            //         a = 1
+            //     },
+            //     "a"
+            // );
         }
         #endregion Constructors
 
