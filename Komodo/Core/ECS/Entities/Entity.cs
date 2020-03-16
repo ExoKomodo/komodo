@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.ECS.Scenes;
+using Microsoft.Xna.Framework;
 
 namespace Komodo.Core.ECS.Entities
 {
@@ -47,6 +48,17 @@ namespace Komodo.Core.ECS.Entities
         }
         public KomodoVector3 Position { get; set; }
         public KomodoVector3 Rotation { get; set; }
+        public Matrix RotationMatrix
+        {
+            get
+            {
+                return (
+                    Matrix.CreateRotationX(Rotation.X)
+                    * Matrix.CreateRotationY(Rotation.Y)
+                    * Matrix.CreateRotationZ(Rotation.Z)
+                );
+            }
+        }
         public KomodoVector3 Scale { get; set; }
         #endregion Public Members
 

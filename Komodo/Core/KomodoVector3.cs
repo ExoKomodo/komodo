@@ -141,12 +141,18 @@ namespace Komodo.Core
         #region Public Static Members
         public static KomodoVector3 One => new KomodoVector3(1f, 1f, 1f);
         public static KomodoVector3 Zero => new KomodoVector3();
+        public static KomodoVector3 Up => new KomodoVector3(0f, 1f, 0f);
+        public static KomodoVector3 Down => -Up;
+        public static KomodoVector3 Right => new KomodoVector3(1f, 0f, 0f);
+        public static KomodoVector3 Left => -Right;
+        public static KomodoVector3 Forward => new KomodoVector3(0f, 0f, 1f);
+        public static KomodoVector3 Back => -Forward;
         #endregion Public Static Members
-        
+
         #endregion Static Members
 
         #region Member Methods
-        
+
         #region Public Member Methods
         public bool Equals([AllowNull] KomodoVector3 other)
         {

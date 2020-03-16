@@ -43,6 +43,13 @@ namespace Komodo.Core.ECS.Components
                 }
             }
         }
+        public Matrix RotationMatrix
+        {
+            get
+            {
+                return Parent?.RotationMatrix != null ? Parent.RotationMatrix : Matrix.CreateFromYawPitchRoll(0f, 0f, 0f);
+            }
+        }
         public KomodoVector3 Scale
         {
             get
@@ -66,6 +73,9 @@ namespace Komodo.Core.ECS.Components
         #region Public Member Methods
         public abstract void Deserialize(SerializedObject serializedObject);
         public virtual void Draw(SpriteBatch spriteBatch)
+        {
+        }
+        public virtual void Draw()
         {
         }
         public abstract SerializedObject Serialize();

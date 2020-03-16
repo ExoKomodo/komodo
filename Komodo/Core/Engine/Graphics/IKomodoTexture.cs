@@ -7,7 +7,6 @@ namespace Komodo.Core.Engine.Graphics
         #region Members
 
         #region Public Members
-        Color[] Data { get; }
         int Height { get; }
         int Width { get; }
         #endregion Public Members
@@ -17,6 +16,7 @@ namespace Komodo.Core.Engine.Graphics
         #region Member Methods
         
         #region Public Member Methods        
+        Color[] GetData();
         #endregion Public Member Methods
         
         #endregion Member Methods
