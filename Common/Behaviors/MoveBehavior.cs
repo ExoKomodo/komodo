@@ -22,7 +22,7 @@ namespace Common.Behaviors
             SprintFactor = 2f;
             Velocity = 50f;
 
-            var client = new Client("127.0.0.1", 5000);
+            //var client = new Client("127.0.0.1", 5000);
             // var b = client.SendAsync(
             //     new
             //     {
@@ -62,26 +62,26 @@ namespace Common.Behaviors
 
             var quit = InputManager.GetInput("quit", PlayerIndex);
 
-            var direction = KomodoVector2.Zero;
+            var direction = KomodoVector3.Zero;
             if (quit.State == InputState.Down)
             {
                 Game.Exit();
             }
             if (left.State == InputState.Down)
             {
-                direction += KomodoVector2.Left;
+                direction += KomodoVector3.Left;
             }
             if (right.State == InputState.Down)
             {
-                direction += KomodoVector2.Right;
+                direction += KomodoVector3.Right;
             }
             if (up.State == InputState.Down)
             {
-                direction += KomodoVector2.Up;
+                direction += KomodoVector3.Up;
             }
             if (down.State == InputState.Down)
             {
-                direction += KomodoVector2.Down;
+                direction += KomodoVector3.Down;
             }
             if (sprint.State == InputState.Down)
             {
@@ -89,7 +89,7 @@ namespace Common.Behaviors
             }
 
             Parent.Position += (
-                new KomodoVector3(direction.X, direction.Y)
+                direction
                 * Velocity
                 * (float)gameTime.ElapsedGameTime.TotalSeconds
             );

@@ -2,9 +2,9 @@ using Komodo.Core.ECS.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Komodo.Core.Engine.Graphics.Sprites
+namespace Komodo.Core.Engine.Graphics.Models
 {
-    internal class SpriteManagerMonoGame : ISpriteManager
+    internal class ModelManagerMonoGame : IModelManager
     {
         #region Members
 
@@ -16,7 +16,6 @@ namespace Komodo.Core.Engine.Graphics.Sprites
         
         #region Private Members
         private GraphicsManagerMonoGame _graphicsManagerMonoGame;
-        private SpriteBatch _spriteBatchMonoGame;
         #endregion Private Members
 
         #endregion Members
@@ -27,7 +26,7 @@ namespace Komodo.Core.Engine.Graphics.Sprites
 
         public void DrawScene(Scene scene)
         {
-            scene.Draw2DComponents(_spriteBatchMonoGame);
+            scene.Draw3DComponents();
         }
         #endregion Public Member Methods
         
@@ -40,10 +39,9 @@ namespace Komodo.Core.Engine.Graphics.Sprites
         #endregion Member Methods
 
         #region Constructors
-        public SpriteManagerMonoGame(GraphicsManagerMonoGame graphicsManagerMonoGame)
+        public ModelManagerMonoGame(GraphicsManagerMonoGame graphicsManagerMonoGame)
         {
             _graphicsManagerMonoGame = graphicsManagerMonoGame;
-            _spriteBatchMonoGame = new SpriteBatch(_graphicsManagerMonoGame.GraphicsDeviceManager.GraphicsDevice);
         }
         #endregion Constructors
     }

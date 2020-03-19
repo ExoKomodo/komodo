@@ -73,7 +73,6 @@ namespace Common.Behaviors
                 * (float)gameTime.ElapsedGameTime.TotalSeconds
             );
             Camera.Move(cameraMove);
-            //Camera.RotateZ(0.1f * (float)gameTime.ElapsedGameTime.TotalSeconds);
         }
         #endregion Public Member Methods
 

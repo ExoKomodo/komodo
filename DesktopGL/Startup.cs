@@ -21,21 +21,21 @@ namespace Komodo
                 // Perspective scene
                 var player1Entity = new Entity(Game.ActiveScene)
                 {
-                    Position = new KomodoVector3(0f, 0f, 1f),
+                    Position = new KomodoVector3(0f, 0f, 100f),
                 };
                 player1Entity.AddComponent(new RootStartupBehavior(0));
-
                 var player2Entity = new Entity(Game.ActiveScene)
                 {
-                    Position = new KomodoVector3(0f, 0f, 2f),
+                    Position = new KomodoVector3(0f, 0f, 100f),
                 };
-                player2Entity.AddComponent(new RootStartupBehavior(1));
+                player2Entity.AddComponent(new ModelStartupBehavior());
 
                 var camera = new CameraComponent()
                 {
-                    Position = new KomodoVector3(-100f, 100f, -400f),
-                    FarPlane = 1000f,
+                    Position = new KomodoVector3(0, 0, -100f),
+                    FarPlane = 10000000f,
                     IsPerspective = true,
+                    Zoom = 1f
                 };
                 player1Entity.AddComponent(camera);
                 player1Entity.AddComponent(new CameraBehavior(camera, 0));

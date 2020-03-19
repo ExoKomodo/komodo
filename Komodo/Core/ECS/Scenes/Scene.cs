@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Komodo.Core.ECS.Entities;
 using Komodo.Core.ECS.Components;
+using Komodo.Core.Engine.Graphics;
 
 namespace Komodo.Core.ECS.Scenes
 {
@@ -16,7 +17,7 @@ namespace Komodo.Core.ECS.Scenes
             Entities = new List<Entity>();
             Game = game;
             _drawable2DComponents = new Dictionary<Effect, List<Drawable2DComponent>>();
-            _drawable3DComponents = new List<Component>();
+            _drawable3DComponents = new List<Drawable3DComponent>();
             _physicsComponents = new List<Component>();
             _updatableComponents = new List<Component>();
         }
@@ -55,7 +56,7 @@ namespace Komodo.Core.ECS.Scenes
         protected List<Scene> _children;
         protected List<Entity> _entities;
         protected Dictionary<Effect, List<Drawable2DComponent>> _drawable2DComponents { get; }
-        protected List<Component> _drawable3DComponents { get; }
+        protected List<Drawable3DComponent> _drawable3DComponents { get; }
         protected List<Component> _physicsComponents { get; }
         protected List<Component> _updatableComponents { get; }
         #endregion Protected Members
@@ -73,6 +74,7 @@ namespace Komodo.Core.ECS.Scenes
             return componentToAdd switch
             {
                 Drawable2DComponent component => AddDrawable2DComponent(component),
+                Drawable3DComponent component => AddDrawable3DComponent(component),
                 BehaviorComponent component => AddUpdatableComponent(component),
                 CameraComponent component => AddUpdatableComponent(component),
                 SoundComponent component => AddUpdatableComponent(component),
@@ -85,6 +87,7 @@ namespace Komodo.Core.ECS.Scenes
             return componentToRemove switch
             {
                 Drawable2DComponent component => RemoveDrawable2DComponent(component),
+                Drawable3DComponent component => RemoveDrawable3DComponent(component),
                 BehaviorComponent component => RemoveUpdatableComponent(component),
                 CameraComponent component => RemoveUpdatableComponent(component),
                 SoundComponent component => RemoveUpdatableComponent(component),
@@ -161,7 +164,7 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        internal void Draw2DComponents(SpriteBatch spriteBatch)
         {
             if (_drawable2DComponents != null)
             {
@@ -176,7 +179,22 @@ namespace Komodo.Core.ECS.Scenes
             {
                 foreach (var child in Children)
                 {
-                    child.Draw(spriteBatch);
+                    child.Draw2DComponents(spriteBatch);
+                }
+            }
+        }
+
+        internal void Draw3DComponents()
+        {
+            if (_drawable2DComponents != null)
+            {
+                Draw3DComponents(_drawable3DComponents);
+            }
+            if (Children != null)
+            {
+                foreach (var child in Children)
+                {
+                    child.Draw3DComponents();
                 }
             }
         }
@@ -292,7 +310,7 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
 
-        protected bool AddDrawable3DComponent(Component componentToAdd)
+        protected bool AddDrawable3DComponent(Drawable3DComponent componentToAdd)
         {
             try
             {
@@ -362,7 +380,7 @@ namespace Komodo.Core.ECS.Scenes
                         break;
                 }
                 spriteBatch.Begin(
-                    SpriteSortMode.FrontToBack,
+                    SpriteSortMode.BackToFront,
                     null,
                     null,
                     DepthStencilState.DepthRead,
@@ -398,7 +416,33 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
 
-        protected bool RemoveDrawable3DComponent(Component componentToRemove)
+        protected void Draw3DComponents(IEnumerable<Drawable3DComponent> components)
+        {
+            var oldViewMatrix = Matrix.Identity;
+            var oldWorldMatrix = Matrix.Identity;
+            Game.DefaultSpriteShader.Projection = ActiveCamera.Projection;
+            var graphicsManager = Game.GraphicsManager as GraphicsManagerMonoGame;
+            graphicsManager.GraphicsDeviceManager.GraphicsDevice.BlendState = BlendState.Opaque;
+            graphicsManager.GraphicsDeviceManager.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            graphicsManager.GraphicsDeviceManager.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphicsManager.GraphicsDeviceManager.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            try
+            {
+                foreach (var component in components)
+                {
+                    if (component.Parent.IsEnabled && component.IsEnabled)
+                    {
+                        component.Draw();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+            }
+        }
+
+        protected bool RemoveDrawable3DComponent(Drawable3DComponent componentToRemove)
         {
             try
             {
