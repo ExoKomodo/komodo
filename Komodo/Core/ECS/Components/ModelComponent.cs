@@ -74,16 +74,13 @@ namespace Komodo.Core.ECS.Components
         public override void Draw()
         {
             var position = WorldPosition;
-            var rotationMatrix = RotationMatrix;
+            var rotationQuaternion = RotationQuaternion;
             var scale = Scale;
             var camera = Parent.ParentScene.ActiveCamera;
             if (camera != null)
             {
-                position = KomodoVector3.Transform(
-                    position,
-                    camera.ViewMatrix
-                    * Matrix.CreateScale(1f, 1f, -1f)
-                );
+                rotationQuaternion *= camera.RotationQuaternion;
+                scale *= camera.Zoom;
             }
             var positionMatrix = Matrix.CreateTranslation(position.MonoGameVector);
 
@@ -95,9 +92,10 @@ namespace Komodo.Core.ECS.Components
                     effect.Texture = Texture?.MonoGameTexture;
                     effect.TextureEnabled = Texture?.MonoGameTexture != null;
                     effect.DiffuseColor = DiffuseColor.ToVector3();
-                    effect.World = Matrix.CreateScale(scale.MonoGameVector) * rotationMatrix * positionMatrix;
 
                     effect.Projection = camera.Projection;
+                    effect.View = camera.ViewMatrix;
+                    effect.World = Matrix.CreateScale(scale.MonoGameVector) * Matrix.CreateFromQuaternion(rotationQuaternion) * positionMatrix;
                 }
 
                 mesh.Draw();

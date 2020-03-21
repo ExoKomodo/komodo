@@ -50,7 +50,6 @@ namespace Common.Behaviors
                 }
                 Parent.Scale = new KomodoVector3(20f, 20f, 20f);
             }
-            Parent.Rotation += new KomodoVector3(0f, 0f, 0.001f);
         }
         #endregion Public Member Methods
 

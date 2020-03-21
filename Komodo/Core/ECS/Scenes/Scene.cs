@@ -341,6 +341,8 @@ namespace Komodo.Core.ECS.Scenes
                 switch (shader)
                 {
                     case BasicEffect effect:
+                        effect.Projection = ActiveCamera.Projection;
+                        effect.View = ActiveCamera.ViewMatrix;
                         if (ActiveCamera.IsPerspective)
                         {
                             effect.World = Matrix.CreateScale(1f, -1f, 1f);
@@ -349,8 +351,6 @@ namespace Komodo.Core.ECS.Scenes
                         {
                             effect.World = Matrix.CreateScale(1f, 1f, 1f);
                         }
-                        effect.View = Matrix.Identity;
-                        effect.Projection = ActiveCamera.Projection;
                         break;
                     case SpriteEffect _:
                     case null:

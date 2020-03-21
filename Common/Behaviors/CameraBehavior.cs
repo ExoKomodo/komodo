@@ -45,30 +45,37 @@ namespace Common.Behaviors
             var cameraRight = InputManager.GetInput("camera_right", PlayerIndex);
             var cameraUp = InputManager.GetInput("camera_up", PlayerIndex);
             var cameraDown = InputManager.GetInput("camera_down", PlayerIndex);
+            var cameraForward = InputManager.GetInput("camera_forward", PlayerIndex);
+            var cameraBack = InputManager.GetInput("camera_back", PlayerIndex);
 
-            var direction = KomodoVector2.Zero;
+            var direction = KomodoVector3.Zero;
             if (cameraLeft.State == InputState.Down)
             {
-                direction += KomodoVector2.Left;
+                direction += KomodoVector3.Left;
             }
             if (cameraRight.State == InputState.Down)
             {
-                direction += KomodoVector2.Right;
+                direction += KomodoVector3.Right;
             }
             if (cameraUp.State == InputState.Down)
             {
-                direction += KomodoVector2.Up;
+                direction += KomodoVector3.Up;
             }
             if (cameraDown.State == InputState.Down)
             {
-                direction += KomodoVector2.Down;
+                direction += KomodoVector3.Down;
+            }
+            if (cameraForward.State == InputState.Down)
+            {
+                direction += KomodoVector3.Forward;
+            }
+            if (cameraBack.State == InputState.Down)
+            {
+                direction += KomodoVector3.Back;
             }
 
             var cameraMove = (
-                new KomodoVector3(
-                    direction.X,
-                    direction.Y
-                )
+                direction
                 * PanVelocity
                 * (float)gameTime.ElapsedGameTime.TotalSeconds
             );
