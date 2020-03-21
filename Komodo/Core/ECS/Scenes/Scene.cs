@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Komodo.Core.ECS.Entities;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.Engine.Graphics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Komodo.Core.ECS.Scenes
 {
@@ -19,6 +20,7 @@ namespace Komodo.Core.ECS.Scenes
             _drawable2DComponents = new Dictionary<Effect, List<Drawable2DComponent>>();
             _drawable3DComponents = new List<Drawable3DComponent>();
             _physicsComponents = new List<Component>();
+            _uninitializedComponents = new Queue<Component>();
             _updatableComponents = new List<Component>();
         }
         #endregion Constructors
@@ -50,6 +52,7 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
         public KomodoGame Game { get; set; }
+        public bool IsInitialized { get; private set; }
         #endregion Public Members
 
         #region Protected Members
@@ -58,6 +61,7 @@ namespace Komodo.Core.ECS.Scenes
         protected Dictionary<Effect, List<Drawable2DComponent>> _drawable2DComponents { get; }
         protected List<Drawable3DComponent> _drawable3DComponents { get; }
         protected List<Component> _physicsComponents { get; }
+        protected Queue<Component> _uninitializedComponents { get; }
         protected List<Component> _updatableComponents { get; }
         #endregion Protected Members
 
@@ -68,9 +72,13 @@ namespace Komodo.Core.ECS.Scenes
 
         #region Member Methods
 
-        #region Internal Member Methods
+        #region Public Member Methods
         public bool AddComponent(Component componentToAdd)
         {
+            if (!componentToAdd.IsInitialized)
+            {
+                _uninitializedComponents.Enqueue(componentToAdd);
+            }
             return componentToAdd switch
             {
                 Drawable2DComponent component => AddDrawable2DComponent(component),
@@ -82,45 +90,23 @@ namespace Komodo.Core.ECS.Scenes
             };
         }
 
-        public bool RemoveComponent(Component componentToRemove)
+        public bool AddEntity([NotNull] Entity entityToAdd)
         {
-            return componentToRemove switch
+            if (Entities == null)
             {
-                Drawable2DComponent component => RemoveDrawable2DComponent(component),
-                Drawable3DComponent component => RemoveDrawable3DComponent(component),
-                BehaviorComponent component => RemoveUpdatableComponent(component),
-                CameraComponent component => RemoveUpdatableComponent(component),
-                SoundComponent component => RemoveUpdatableComponent(component),
-                _ => false,
-            };
-        }
-        #endregion Internal Member Methods
-
-        #region Public Member Methods
-        public bool AddEntity(Entity entityToAdd)
-        {
-            try
-            {
-                if (Entities == null)
-                {
-                    Entities = new List<Entity>();
-                }
-                if (entityToAdd.ParentScene != null)
-                {
-                    entityToAdd.ParentScene.RemoveEntity(entityToAdd);
-                }
-                Entities.Add(entityToAdd);
-                entityToAdd.ParentScene = this;
-                foreach (var component in entityToAdd.Components)
-                {
-                    AddComponent(component);
-                }
-                return true;
+                Entities = new List<Entity>();
             }
-            catch (Exception)
+            if (entityToAdd.ParentScene != null)
             {
-                return false;
+                entityToAdd.ParentScene.RemoveEntity(entityToAdd);
             }
+            Entities.Add(entityToAdd);
+            entityToAdd.ParentScene = this;
+            foreach (var component in entityToAdd.Components)
+            {
+                AddComponent(component);
+            }
+            return true;
         }
 
         public void ClearEntities()
@@ -199,8 +185,18 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
 
+        public void Initialize()
+        {
+            if (!IsInitialized)
+            {
+                IsInitialized = true;
+                InitializeComponents();
+            }
+        }
+
         public void PostUpdate(GameTime gameTime)
         {
+            InitializeComponents();
             if (Children != null)
             {
                 foreach (var child in Children)
@@ -211,6 +207,7 @@ namespace Komodo.Core.ECS.Scenes
         }
         public void PreUpdate(GameTime gameTime)
         {
+            InitializeComponents();
             if (Children != null)
             {
                 foreach (var child in Children)
@@ -218,6 +215,19 @@ namespace Komodo.Core.ECS.Scenes
                     child.PreUpdate(gameTime);
                 }
             }
+        }
+
+        public bool RemoveComponent(Component componentToRemove)
+        {
+            return componentToRemove switch
+            {
+                Drawable2DComponent component => RemoveDrawable2DComponent(component),
+                Drawable3DComponent component => RemoveDrawable3DComponent(component),
+                BehaviorComponent component => RemoveUpdatableComponent(component),
+                CameraComponent component => RemoveUpdatableComponent(component),
+                SoundComponent component => RemoveUpdatableComponent(component),
+                _ => false,
+            };
         }
 
         public bool RemoveEntity(Entity entityToRemove)
@@ -277,70 +287,38 @@ namespace Komodo.Core.ECS.Scenes
         #endregion Public Member Methods
 
         #region Protected Member Methods
-        protected bool AddPhysicsComponent(Component componentToAdd)
+        protected bool AddPhysicsComponent([NotNull] Component componentToAdd)
         {
-            try
-            {
-                _physicsComponents.Add(componentToAdd);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(ex.ToString());
-                return false;
-            }
+            _physicsComponents.Add(componentToAdd);
+            return true;
         }
 
-        protected bool AddDrawable2DComponent(Drawable2DComponent componentToAdd)
+        protected bool AddDrawable2DComponent([NotNull] Drawable2DComponent componentToAdd)
         {
-            try
+            var shader = componentToAdd.Shader;
+            if (!_drawable2DComponents.ContainsKey(shader))
             {
-                var shader = componentToAdd.Shader;
-                if (!_drawable2DComponents.ContainsKey(shader))
-                {
-                    _drawable2DComponents[shader] = new List<Drawable2DComponent>();
-                }
-                _drawable2DComponents[shader].Add(componentToAdd);
-                return true;
+                _drawable2DComponents[shader] = new List<Drawable2DComponent>();
             }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(ex.ToString());
-                return false;
-            }
+            _drawable2DComponents[shader].Add(componentToAdd);
+            return true;
         }
 
-        protected bool AddDrawable3DComponent(Drawable3DComponent componentToAdd)
+        protected bool AddDrawable3DComponent([NotNull] Drawable3DComponent componentToAdd)
         {
-            try
-            {
-                _drawable3DComponents.Add(componentToAdd);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(ex.ToString());
-                return false;
-            }
+            _drawable3DComponents.Add(componentToAdd);
+            return true;
         }
 
-        protected bool AddUpdatableComponent(Component componentToAdd)
+        protected bool AddUpdatableComponent([NotNull] Component componentToAdd)
         {
-            try
-            {
-                _updatableComponents.Add(componentToAdd);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(ex.ToString());
-                return false;
-            }
+            _updatableComponents.Add(componentToAdd);
+            return true;
         }
 
         protected void Draw2DComponents(
-            IEnumerable<Drawable2DComponent> components,
-            SpriteBatch spriteBatch,
+            [NotNull] IEnumerable<Drawable2DComponent> components,
+            [NotNull] SpriteBatch spriteBatch,
             Effect shader = null
         )
         {
@@ -418,8 +396,6 @@ namespace Komodo.Core.ECS.Scenes
 
         protected void Draw3DComponents(IEnumerable<Drawable3DComponent> components)
         {
-            var oldViewMatrix = Matrix.Identity;
-            var oldWorldMatrix = Matrix.Identity;
             Game.DefaultSpriteShader.Projection = ActiveCamera.Projection;
             var graphicsManager = Game.GraphicsManager as GraphicsManagerMonoGame;
             graphicsManager.GraphicsDeviceManager.GraphicsDevice.BlendState = BlendState.Opaque;
@@ -442,57 +418,38 @@ namespace Komodo.Core.ECS.Scenes
             }
         }
 
-        protected bool RemoveDrawable3DComponent(Drawable3DComponent componentToRemove)
+        protected void InitializeComponents()
         {
-            try
+            while (_uninitializedComponents.Count > 0)
             {
-                return _drawable3DComponents.Remove(componentToRemove);
-            }
-            catch (Exception)
-            {
-                return false;
+                var component = _uninitializedComponents.Dequeue();
+                component.Initialize();
             }
         }
 
-        protected bool RemovePhysicsComponent(Component componentToRemove)
+        protected bool RemoveDrawable3DComponent([NotNull] Drawable3DComponent componentToRemove)
         {
-            try
-            {
-                return _updatableComponents.Remove(componentToRemove);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return _drawable3DComponents.Remove(componentToRemove);
         }
 
-        protected bool RemoveDrawable2DComponent(Drawable2DComponent componentToRemove)
+        protected bool RemovePhysicsComponent([NotNull] Component componentToRemove)
         {
-            try
-            {
-                var shader = componentToRemove.Shader;
-                if (!_drawable2DComponents.ContainsKey(shader))
-                {
-                    return false;
-                }
-                return _drawable2DComponents[shader].Remove(componentToRemove);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return _updatableComponents.Remove(componentToRemove);
         }
 
-        protected bool RemoveUpdatableComponent(Component componentToRemove)
+        protected bool RemoveDrawable2DComponent([NotNull] Drawable2DComponent componentToRemove)
         {
-            try
-            {
-                return _updatableComponents.Remove(componentToRemove);
-            }
-            catch (Exception)
+            var shader = componentToRemove.Shader;
+            if (shader == null || !_drawable2DComponents.ContainsKey(shader))
             {
                 return false;
             }
+            return _drawable2DComponents[shader].Remove(componentToRemove);
+        }
+
+        protected bool RemoveUpdatableComponent([NotNull] Component componentToRemove)
+        {
+            return _updatableComponents.Remove(componentToRemove);
         }
         #endregion Protected Member Methods
 

@@ -6,24 +6,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Common.Behaviors
 {
-    public class ModelStartupBehavior : BehaviorComponent
+    public class CubeBehavior : BehaviorComponent
     {
         #region Constructors
-        public ModelStartupBehavior() : base()
+        public CubeBehavior(string modelPath) : base()
         {
+            ModelPath = modelPath;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public bool IsInitialized
-        {
-            get
-            {
-                return this._isInitialized;
-            }
-        }
+        public string ModelPath { get; protected set; }
         #endregion Public Members
 
         #region Protected Members
@@ -44,12 +39,15 @@ namespace Common.Behaviors
             {
                 _isInitialized = true;
                 var loadedTexture = KomodoGame.Content.Load<Texture2D>("player/idle/player_idle_01");
-                Parent.AddComponent(
-                    new ModelComponent("models/cube")
-                    {
-                        Texture = new KomodoTexture(loadedTexture)
-                    }
-                );
+                if (ModelPath != null)
+                {
+                    Parent.AddComponent(
+                        new ModelComponent(ModelPath)
+                        {
+                            Texture = new KomodoTexture(loadedTexture)
+                        }
+                    );
+                }
                 Parent.Scale = new KomodoVector3(20f, 20f, 20f);
             }
             Parent.Rotation += new KomodoVector3(0f, 0f, 0.001f);

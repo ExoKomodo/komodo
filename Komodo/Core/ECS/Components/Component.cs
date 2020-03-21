@@ -8,7 +8,7 @@ namespace Komodo.Core.ECS.Components
     public abstract class Component : ISerializable<Component>
     {
         #region Constructors
-        public Component(bool isEnabled = true, Entity parent = null)
+        protected Component(bool isEnabled = true, Entity parent = null)
         {
             IsEnabled = isEnabled;
             Parent = parent;
@@ -19,6 +19,7 @@ namespace Komodo.Core.ECS.Components
 
         #region Public Members
         public bool IsEnabled { get; set; }
+        public bool IsInitialized { get; private set; }
         [JsonIgnore]
         public Entity Parent { get; set; }
         public KomodoVector3 Position { get; set; }
@@ -77,6 +78,13 @@ namespace Komodo.Core.ECS.Components
         }
         public virtual void Draw()
         {
+        }
+        public virtual void Initialize()
+        {
+            if (!IsInitialized)
+            {
+                IsInitialized = true;
+            }
         }
         public abstract SerializedObject Serialize();
         public virtual void Update(GameTime gameTime)

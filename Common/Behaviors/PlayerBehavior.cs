@@ -1,24 +1,22 @@
+using Komodo.Core;
 using Komodo.Core.ECS.Components;
 using Microsoft.Xna.Framework;
 
 namespace Common.Behaviors
 {
-    public class FPSCounterStartupBehavior : BehaviorComponent
+    public class PlayerBehavior : BehaviorComponent
     {
         #region Constructors
-        public FPSCounterStartupBehavior() : base()
+        public PlayerBehavior(int playerIndex) : base()
         {
+            PlayerIndex = playerIndex;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public bool IsInitialized
-        {
-            get;
-            private set;
-        }
+        public int PlayerIndex { get; }
         #endregion Public Members
 
         #region Protected Members
@@ -32,15 +30,25 @@ namespace Common.Behaviors
         #region Member Methods
 
         #region Public Member Methods
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            Parent.AddComponent(new SpriteComponent("player/idle/player_idle_01", Game.DefaultSpriteShader));
+            if (PlayerIndex == 0)
+            {
+                Parent.AddComponent(new MoveBehavior(PlayerIndex));
+            }
+
+            Parent.AddComponent(
+                new TextComponent("fonts/font", Color.Black, Game.DefaultSpriteShader, $"Test {PlayerIndex}")
+                {
+                    Position = new KomodoVector3(0f, 20f, 0)
+                }
+            );
+        }
         public override void Update(GameTime gameTime)
         {
-            if (!IsInitialized)
-            {
-                IsInitialized = true;
-                var textComponent = new TextComponent("fonts/font", Color.Black, Game.DefaultSpriteShader, "");
-                Parent.AddComponent(textComponent);
-                Parent.AddComponent(new FPSCounterBehavior(textComponent));
-            }
         }
         #endregion Public Member Methods
 

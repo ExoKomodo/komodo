@@ -21,8 +21,10 @@ namespace Komodo.Core
         public KomodoGame()
         {
             _komodoMonoGame = new KomodoMonoGame(this);
-            _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame);
-            _graphicsManagerMonoGame.IsMouseVisible = true;
+            _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame)
+            {
+                IsMouseVisible = true
+            };
 
             Content = _komodoMonoGame.Content;
 
@@ -76,12 +78,11 @@ namespace Komodo.Core
         
         #region Protected Members
         protected Scene _activeScene;
-        protected List<Entity> _startupEntities;
         #endregion Protected Members
         
         #region Private Members
-        private GraphicsManagerMonoGame _graphicsManagerMonoGame;
-        private KomodoMonoGame _komodoMonoGame;
+        private readonly GraphicsManagerMonoGame _graphicsManagerMonoGame;
+        private readonly KomodoMonoGame _komodoMonoGame;
         #endregion Private Members
 
         #endregion Members
@@ -102,7 +103,7 @@ namespace Komodo.Core
             Draw(gameTime, Color.Transparent);
         }
 
-        public void Draw(GameTime gameTime, Color clearColor)
+        public void Draw(GameTime _, Color clearColor)
         {
             _graphicsManagerMonoGame.Clear(clearColor);
 
@@ -123,14 +124,9 @@ namespace Komodo.Core
                 TextureEnabled = true,
                 VertexColorEnabled = true,
             };
-            if (_startupEntities != null)
-            {
-                foreach (var entity in _startupEntities)
-                {
-                    entity.ParentScene.AddEntity(entity);
-                }
-            }
             _graphicsManagerMonoGame.VSync = false;
+
+            ActiveScene.Initialize();
         }
 
         public void ResetElapsedTime()
@@ -138,9 +134,8 @@ namespace Komodo.Core
             _komodoMonoGame.ResetElapsedTime();
         }
 
-        public void Run(List<Entity> startupEntities = null)
+        public void Run()
         {
-            _startupEntities = startupEntities;
             _komodoMonoGame.Run();
         }
 
@@ -163,19 +158,19 @@ namespace Komodo.Core
         #region Protected Member Methods
         public void ParseScenes()
         {
-            var thing = new List<int>().GetType().ToString();
-            var type = System.Type.GetType(thing);
+            /*var thing = new List<int>().GetType().ToString();
+            var type = System.Type.GetType(thing);*/
             var serializedScene = ActiveScene.Serialize();
             ActiveScene.Deserialize(serializedScene);
             Directory.CreateDirectory("Config/Scenes");
             File.WriteAllText(
                 "Config/Scenes/ActiveScene.json",
-                JsonSerializer.Serialize<SerializedObject>(serializedScene)
+                JsonSerializer.Serialize(serializedScene)
             );
             
-            // var thing = SerializedObject.Serialize(ActiveScene);
-            // var serializedScene = JsonSerializer.Serialize<SerializedObject>(thing);
-            // File.WriteAllText("Config/Scenes/ActiveScene.json", serializedScene);
+            /*var thing = SerializedObject.Serialize(ActiveScene);
+            var serializedScene = JsonSerializer.Serialize<SerializedObject>(thing);
+            File.WriteAllText("Config/Scenes/ActiveScene.json", serializedScene);*/
             throw new System.Exception();
         }
         #endregion Protected Member Methods

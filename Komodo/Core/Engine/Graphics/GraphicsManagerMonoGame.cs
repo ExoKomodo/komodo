@@ -80,7 +80,7 @@ namespace Komodo.Core.Engine.Graphics
         #endregion Protected Members
 
         #region Private Members
-        private KomodoMonoGame _komodoMonoGame;
+        private readonly KomodoMonoGame _komodoMonoGame;
         #endregion Private Members
 
         #endregion Members
