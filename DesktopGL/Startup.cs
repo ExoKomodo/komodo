@@ -38,7 +38,8 @@ namespace Komodo
                     Position = new KomodoVector3(0, 0, 100f),
                     FarPlane = 10000000f,
                     IsPerspective = true,
-                    Zoom = 1f
+                    Zoom = 1f,
+                    Target = player1Entity
                 };
                 cameraEntity.AddComponent(new CameraBehavior(camera, 0));
                 cameraEntity.AddComponent(camera);

@@ -158,7 +158,8 @@ namespace Komodo.Core.ECS.Scenes
                 {
                     var shader = pair.Key;
                     var components = pair.Value;
-                    Draw2DComponents(components, spriteBatch, shader);
+                    Draw2DComponents(components, spriteBatch, drawBillboards: false, shader: shader);
+                    Draw2DComponents(components, spriteBatch, drawBillboards: true, shader: shader);
                 }
             }
             if (Children != null)
@@ -319,6 +320,7 @@ namespace Komodo.Core.ECS.Scenes
         protected void Draw2DComponents(
             [NotNull] IEnumerable<Drawable2DComponent> components,
             [NotNull] SpriteBatch spriteBatch,
+            bool drawBillboards = false,
             Effect shader = null
         )
         {
@@ -342,7 +344,14 @@ namespace Komodo.Core.ECS.Scenes
                 {
                     case BasicEffect effect:
                         effect.Projection = ActiveCamera.Projection;
-                        effect.View = ActiveCamera.ViewMatrix;
+                        if (drawBillboards)
+                        {
+                            effect.View = Matrix.Identity;
+                        }
+                        else
+                        {
+                            effect.View = ActiveCamera.ViewMatrix;
+                        }
                         if (ActiveCamera.IsPerspective)
                         {
                             effect.World = Matrix.CreateScale(1f, -1f, 1f);
@@ -367,7 +376,7 @@ namespace Komodo.Core.ECS.Scenes
                 );
                 foreach (var component in components)
                 {
-                    if (component.Parent.IsEnabled && component.IsEnabled)
+                    if (component.Parent.IsEnabled && component.IsEnabled && component.IsBillboard == drawBillboards)
                     {
                         component.Draw(spriteBatch);
                     }

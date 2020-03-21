@@ -199,7 +199,7 @@ namespace Komodo.Core.ECS.Components
 
         public ContainmentType Contains(KomodoVector2 vector)
         {
-            return GetBoundingFrustum().Contains(new KomodoVector3(vector.X, vector.Y, 0).MonoGameVector);
+            return BoundingFrustum.Contains(new KomodoVector3(vector.X, vector.Y, 0).MonoGameVector);
         }
 
         public ContainmentType Contains(Rectangle rectangle)
@@ -207,7 +207,7 @@ namespace Komodo.Core.ECS.Components
             var max = new Vector3(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height, 0.5f);
             var min = new Vector3(rectangle.X, rectangle.Y, 0.5f);
             var boundingBox = new BoundingBox(min, max);
-            return GetBoundingFrustum().Contains(boundingBox);
+            return BoundingFrustum.Contains(boundingBox);
         }
 
         public override void Deserialize(SerializedObject serializedObject)
