@@ -8,20 +8,15 @@ namespace Common.Behaviors
     public class FPSCounterBehavior : BehaviorComponent
     {
         #region Constructors
-        public FPSCounterBehavior(TextComponent textComponent) : base()
-        {
-            _counterText = textComponent;
-            _counterText.Position = KomodoVector3.Zero;
-        }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
+        public TextComponent CounterText { get; protected set;  }
         #endregion Public Members
 
         #region Protected Members
-        public TextComponent _counterText { get; }
         #endregion Protected Members
 
         #region Private Members
@@ -32,9 +27,19 @@ namespace Common.Behaviors
         #region Member Methods
 
         #region Public Member Methods
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            CounterText = new TextComponent("fonts/font", Color.Black, Game.DefaultSpriteShader, "")
+            {
+                Position = KomodoVector3.Zero
+            };
+            Parent.AddComponent(CounterText);
+        }
         public override void Update(GameTime gameTime)
         {
-            _counterText.Text = $"{Math.Round(Game.FramesPerSecond)} FPS";
+            CounterText.Text = $"{Math.Round(Game.FramesPerSecond)} FPS";
         }
         #endregion Public Member Methods
 

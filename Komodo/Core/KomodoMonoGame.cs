@@ -13,7 +13,7 @@ namespace Komodo.Core
         #endregion Protected Members
 
         #region Private Members
-        private KomodoGame _komodoGame;
+        private readonly KomodoGame _komodoGame;
         #endregion Private Members
 
         #endregion Members

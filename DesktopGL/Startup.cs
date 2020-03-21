@@ -23,12 +23,12 @@ namespace Komodo
                 {
                     Position = new KomodoVector3(0f, 0f, 100f),
                 };
-                player1Entity.AddComponent(new RootStartupBehavior(0));
+                player1Entity.AddComponent(new PlayerBehavior(0));
                 var player2Entity = new Entity(Game.ActiveScene)
                 {
                     Position = new KomodoVector3(0f, 0f, 100f),
                 };
-                player2Entity.AddComponent(new ModelStartupBehavior());
+                player2Entity.AddComponent(new CubeBehavior("models/cube"));
 
                 var camera = new CameraComponent()
                 {
@@ -45,7 +45,7 @@ namespace Komodo
                 var orthographicScene = new Scene(Game);
                 Game.ActiveScene.Children.Add(orthographicScene);
                 var counterEntity = new Entity(orthographicScene);
-                counterEntity.AddComponent(new FPSCounterStartupBehavior());
+                counterEntity.AddComponent(new FPSCounterBehavior());
 
                 var cameraEntity = new Entity(orthographicScene)
                 {
@@ -60,17 +60,7 @@ namespace Komodo
                 cameraEntity.AddComponent(camera);
                 camera.SetActive();
 
-                var startupEntities = new List<Entity>
-                {
-                    player1Entity,
-                    player2Entity,
-                    counterEntity,
-                    cameraEntity,
-                };
-
-                // Startup entities will be attached to the active scene once the monogame initialization has occurred.
-                // This allows the default shader to be created only after the graphics device has been initialized.
-                Game.Run(startupEntities);
+                Game.Run();
             }
         }
 
