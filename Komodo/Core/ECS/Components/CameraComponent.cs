@@ -1,4 +1,5 @@
 using System;
+using Komodo.Core.ECS.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,17 +17,19 @@ namespace Komodo.Core.ECS.Components
             NearPlane = 1f;
             FarPlane = 2f;
             FieldOfView = 90f;
+            Up = KomodoVector3.Up;
         }
         #endregion Constructors
-        
+
         #region Members
 
         #region Public Members
+        public BoundingFrustum BoundingFrustum => new BoundingFrustum(Projection);
         public Rectangle BoundingRectangle
         {
             get
             {
-                var frustum = GetBoundingFrustum();
+                var frustum = BoundingFrustum;
                 var corners = frustum.GetCorners();
                 var topLeft = corners[0];
                 var bottomRight = corners[2];
@@ -69,7 +72,7 @@ namespace Komodo.Core.ECS.Components
                 }
             }
         }
-        public KomodoVector3 Forward => new KomodoVector3(0, 0, -1);
+        public Matrix InverseViewMatrix => Matrix.Invert(ViewMatrix);
         public bool IsPerspective { get; set; }
         public float MaximumZoom
         {
@@ -155,15 +158,8 @@ namespace Komodo.Core.ECS.Components
                 }
             }
         }
-        public new KomodoVector3 Rotation { get; set; }
-        public new Matrix RotationMatrix
-        {
-            get
-            {
-                return Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
-            }
-        }
-        public KomodoVector3 Up => new KomodoVector3(0, 1, 0);
+        public Entity Target { get; set; }
+        public KomodoVector3 Up { get; set; }
         public Matrix ViewMatrix { get; protected set; }
         public Viewport Viewport { get; protected set; }
         public float Zoom
@@ -174,7 +170,7 @@ namespace Komodo.Core.ECS.Components
             }
             set
             {
-                if ((value >= MinimumZoom) && (value < +MaximumZoom))
+                if ((value >= MinimumZoom) && (value < MaximumZoom))
                 {
                     _zoom = value;
                 }
@@ -182,17 +178,17 @@ namespace Komodo.Core.ECS.Components
         }
         #endregion Public Members
 
-        #region Protected Members
-        protected float _farPlane { get; set; }
-        protected float _fieldOfView { get; set; }
-        protected float _maximumZoom = float.MaxValue;
-        protected float _minimumZoom { get; set; }
-        protected float _nearPlane { get; set; }
-        protected float _zoom { get; set; }
-        #endregion Protected Members
+        #region Private Members
+        private float _farPlane { get; set; }
+        private float _fieldOfView { get; set; }
+        private float _maximumZoom = float.MaxValue;
+        private float _minimumZoom { get; set; }
+        private float _nearPlane { get; set; }
+        private float _zoom { get; set; }
+        #endregion Private Members
 
         #endregion Members
-        
+
         #region Member Methods
 
         #region Public Member Methods
@@ -219,11 +215,6 @@ namespace Komodo.Core.ECS.Components
             throw new NotImplementedException();
         }
 
-        public BoundingFrustum GetBoundingFrustum()
-        {
-            return new BoundingFrustum(Projection);
-        }
-
         public void LookAt(KomodoVector3 position)
         {
             Position = (
@@ -238,31 +229,6 @@ namespace Komodo.Core.ECS.Components
         public void Move(KomodoVector3 direction)
         {
             Position += direction;
-        }
-
-        public void RotateX(float radians)
-        {
-            Rotate(radians, 0f, 0f);
-        }
-        
-        public void RotateY(float radians)
-        {
-            Rotate(0f, radians, 0f);
-        }
-
-        public void RotateZ(float radians)
-        {
-            Rotate(0f, 0f, radians);
-        }
-        
-        public void Rotate(float radiansX, float radiansY, float radiansZ)
-        {
-            Rotate(new KomodoVector3(radiansX, radiansY, radiansZ));
-        }
-
-        public void Rotate(KomodoVector3 rotation)
-        {
-            Rotation += rotation;
         }
 
         public override SerializedObject Serialize()
@@ -287,14 +253,14 @@ namespace Komodo.Core.ECS.Components
                     screenPosition
                     - new KomodoVector3(Viewport.X, Viewport.Y)
                 ),
-                Matrix.Invert(GetViewMatrix())
+                InverseViewMatrix
             );
         }
 
         public override void Update(GameTime gametime)
         {
             Viewport = Parent.ParentScene.Game.GraphicsManager.ViewPort;
-            ViewMatrix = GetViewMatrix();
+            ViewMatrix = CalculateViewMatrix();
         }
 
         public KomodoVector3 WorldToScreen(float x, float y, float z)
@@ -306,7 +272,7 @@ namespace Komodo.Core.ECS.Components
         {
             return KomodoVector3.Transform(
                 worldPosition + new KomodoVector3(Viewport.X, Viewport.Y, 0f),
-                GetViewMatrix()
+                ViewMatrix
             );
         }
 
@@ -321,8 +287,17 @@ namespace Komodo.Core.ECS.Components
         }
         #endregion Public Member Methods
 
-        #region Protected Member Methods
-        protected void ClampZoom(float value)
+        #region Private Member Methods
+        private Matrix CalculateViewMatrix()
+        {
+            return Matrix.CreateLookAt(
+                WorldPosition.MonoGameVector,
+                Target == null ? (WorldPosition + KomodoVector3.Forward).MonoGameVector : Target.Position.MonoGameVector,
+                Up.MonoGameVector
+            );
+        }
+
+        private void ClampZoom(float value)
         {
             if (value < MinimumZoom)
             {
@@ -333,36 +308,8 @@ namespace Komodo.Core.ECS.Components
                 Zoom = value > MaximumZoom ? MaximumZoom : value;
             }
         }
-
-        protected Matrix GetInverseViewMatrix()
-        {
-            return Matrix.Invert(GetViewMatrix());
-        }
-        
-        protected Matrix GetViewMatrix()
-        {
-            return GetVirtualViewMatrix();
-        }
-
-        protected Matrix GetVirtualViewMatrix()
-        {
-            return (
-                Matrix.CreateTranslation(-WorldPosition.MonoGameVector)
-                * Matrix.CreateTranslation(-Origin.MonoGameVector)
-                * Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z)
-                * Matrix.CreateScale(Zoom, Zoom, 1)
-                * Matrix.CreateTranslation(Origin.MonoGameVector)
-            );
-        }
-        #endregion Protected Member Methods
+        #endregion Private Member Methods
 
         #endregion Member Methods
-
-        #region Static Members
-
-        #region Public Static Members
-        #endregion Public Static Members
-
-        #endregion Static Members
     }
 }
