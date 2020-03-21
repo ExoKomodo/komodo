@@ -51,6 +51,13 @@ namespace Komodo.Core.ECS.Components
                 return Parent?.RotationMatrix != null ? Parent.RotationMatrix : Matrix.CreateFromYawPitchRoll(0f, 0f, 0f);
             }
         }
+        public Quaternion RotationQuaternion
+        {
+            get
+            {
+                return Parent?.RotationQuaternion != null ? Parent.RotationQuaternion : Quaternion.CreateFromYawPitchRoll(0f, 0f, 0f);
+            }
+        }
         public KomodoVector3 Scale
         {
             get

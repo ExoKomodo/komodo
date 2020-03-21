@@ -25,6 +25,7 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
+        public KomodoVector2 Center => new KomodoVector2(Width / 2, Height / 2);
         public Color Color { get; set; }
         public SpriteFont Font { get; set; }
         public string FontPath { get; set; }
@@ -40,6 +41,7 @@ namespace Komodo.Core.ECS.Components
                 return size.Y * Scale.Y;
             }
         }
+        public bool IsCentered { get; set; }
         public string Text { get; set; }
         public float Width
         {
@@ -83,7 +85,7 @@ namespace Komodo.Core.ECS.Components
                 {
                     position = KomodoVector3.Transform(
                         position,
-                        camera.ViewMatrix * Matrix.CreateScale(1f, -1f, 1f)
+                        Matrix.CreateScale(1f, -1f, 1f)
                     );
                     rotation += camera.Rotation;
                     scale *= camera.Zoom;
@@ -94,11 +96,11 @@ namespace Komodo.Core.ECS.Components
                     Text,
                     position.XY.MonoGameVector,
                     Color,
-                    rotation.Z,
-                    KomodoVector2.Zero.MonoGameVector,
+                    -rotation.Z,
+                    IsCentered ? Center.MonoGameVector : KomodoVector2.Zero.MonoGameVector,
                     scale.XY.MonoGameVector,
                     SpriteEffects.None,
-                    -position.Z
+                    position.Z
                 );
             }
         }

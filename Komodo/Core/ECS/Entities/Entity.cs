@@ -52,11 +52,14 @@ namespace Komodo.Core.ECS.Entities
         {
             get
             {
-                return (
-                    Matrix.CreateRotationX(Rotation.X)
-                    * Matrix.CreateRotationY(Rotation.Y)
-                    * Matrix.CreateRotationZ(Rotation.Z)
-                );
+                return Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
+            }
+        }
+        public Quaternion RotationQuaternion
+        {
+            get
+            {
+                return Quaternion.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
             }
         }
         public KomodoVector3 Scale { get; set; }

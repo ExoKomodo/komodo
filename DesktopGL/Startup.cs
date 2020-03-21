@@ -21,24 +21,27 @@ namespace Komodo
                 // Perspective scene
                 var player1Entity = new Entity(Game.ActiveScene)
                 {
-                    Position = new KomodoVector3(0f, 0f, 100f),
+                    Position = new KomodoVector3(0f, 0f, 0f),
                 };
                 player1Entity.AddComponent(new PlayerBehavior(0));
                 var player2Entity = new Entity(Game.ActiveScene)
                 {
-                    Position = new KomodoVector3(0f, 0f, 100f),
+                    Position = new KomodoVector3(0f, 0f, 0f),
                 };
                 player2Entity.AddComponent(new CubeBehavior("models/cube"));
-
+                var cameraEntity = new Entity(Game.ActiveScene)
+                {
+                    Position = new KomodoVector3(0f, 0f, 200f)
+                };
                 var camera = new CameraComponent()
                 {
-                    Position = new KomodoVector3(0, 0, -100f),
+                    Position = new KomodoVector3(0, 0, 100f),
                     FarPlane = 10000000f,
                     IsPerspective = true,
                     Zoom = 1f
                 };
-                player1Entity.AddComponent(camera);
-                player1Entity.AddComponent(new CameraBehavior(camera, 0));
+                cameraEntity.AddComponent(new CameraBehavior(camera, 0));
+                cameraEntity.AddComponent(camera);
                 camera.SetActive();
 
                 // Orthographic scene
@@ -47,15 +50,15 @@ namespace Komodo
                 var counterEntity = new Entity(orthographicScene);
                 counterEntity.AddComponent(new FPSCounterBehavior());
 
-                var cameraEntity = new Entity(orthographicScene)
+                cameraEntity = new Entity(orthographicScene)
                 {
                     Position = new KomodoVector3(0f, 0f, 0f),
                 };
                 camera = new CameraComponent()
                 {
-                    Position = new KomodoVector3(0f, 0f, -1f),
+                    Position = new KomodoVector3(0f, 0f, 100f),
                     FarPlane = 1000f,
-                    IsPerspective = false,
+                    IsPerspective = false
                 };
                 cameraEntity.AddComponent(camera);
                 camera.SetActive();
@@ -77,6 +80,8 @@ namespace Komodo
             InputManager.AddInputMapping("camera_right", KomodoInputs.KeyD, 0);
             InputManager.AddInputMapping("camera_up", KomodoInputs.KeyW, 0);
             InputManager.AddInputMapping("camera_down", KomodoInputs.KeyS, 0);
+            InputManager.AddInputMapping("camera_forward", KomodoInputs.KeyE, 0);
+            InputManager.AddInputMapping("camera_back", KomodoInputs.KeyQ, 0);
         }
     }
 }

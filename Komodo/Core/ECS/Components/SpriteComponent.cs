@@ -24,6 +24,7 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
+        public KomodoVector2 Center => Texture != null ? new KomodoVector2(Texture.Width / 2, Texture.Height / 2) : KomodoVector2.Zero;
         public float Height
         {
             get
@@ -68,8 +69,7 @@ namespace Komodo.Core.ECS.Components
             {
                 position = KomodoVector3.Transform(
                     position,
-                    camera.ViewMatrix
-                    * Matrix.CreateScale(1f, -1f, -1f)
+                    Matrix.CreateScale(1f, -1f, 1f)
                 );
                 rotation += camera.Rotation;
                 scale *= camera.Zoom;
@@ -80,8 +80,8 @@ namespace Komodo.Core.ECS.Components
                 position.XY.MonoGameVector,
                 null,
                 Color.White,
-                rotation.Z,
-                KomodoVector2.Zero.MonoGameVector,
+                -rotation.Z,
+                Center.MonoGameVector,
                 scale.XY.MonoGameVector,
                 SpriteEffects.None,
                 position.Z
