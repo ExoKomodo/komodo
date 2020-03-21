@@ -16,6 +16,7 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
+        public bool IsBillboard { get; set; }
         public Effect Shader
         {
             get

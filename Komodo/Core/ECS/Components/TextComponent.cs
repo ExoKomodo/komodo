@@ -83,12 +83,20 @@ namespace Komodo.Core.ECS.Components
                 var camera = Parent.ParentScene.ActiveCamera;
                 if (camera != null)
                 {
-                    position = KomodoVector3.Transform(
-                        position,
-                        Matrix.CreateScale(1f, -1f, 1f)
-                    );
-                    rotation += camera.Rotation;
-                    scale *= camera.Zoom;
+                    if (IsBillboard)
+                    {
+                        position = KomodoVector3.Transform(
+                            position,
+                            camera.ViewMatrix * Matrix.CreateScale(1f, -1f, 1f)
+                        );
+                    }
+                    else
+                    {
+                        position = KomodoVector3.Transform(
+                            position,
+                            Matrix.CreateScale(1f, -1f, 1f)
+                        );
+                    }
                 }
 
                 spriteBatch.DrawString(
