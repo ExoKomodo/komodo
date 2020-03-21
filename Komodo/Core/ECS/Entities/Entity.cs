@@ -203,9 +203,11 @@ namespace Komodo.Core.ECS.Entities
 
         public SerializedObject Serialize()
         {
-            var serializedObject = new SerializedObject();
-            serializedObject.Type = this.GetType().ToString();
-            
+            var serializedObject = new SerializedObject
+            {
+                Type = this.GetType().ToString()
+            };
+
             var components = new List<SerializedObject>();
             foreach (var component in Components)
             {
