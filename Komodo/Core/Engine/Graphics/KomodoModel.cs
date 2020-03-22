@@ -14,7 +14,7 @@ namespace Komodo.Core.Engine.Graphics
         }
 
         public KomodoModel(
-            IGraphicsManager graphicsManager,
+            GraphicsManager graphicsManager,
             float width,
             float height,
             float depth
@@ -29,7 +29,7 @@ namespace Komodo.Core.Engine.Graphics
             // CreateMonoGameTexture(graphicsManager);
         }
         
-        public KomodoModel(IGraphicsManager graphicsManager)
+        public KomodoModel(GraphicsManager graphicsManager)
         {
             MonoGameModel = null;
             _height = 0f;
@@ -81,14 +81,8 @@ namespace Komodo.Core.Engine.Graphics
         #region Member Methods
         
         #region Private Member Methods
-        private void CreateMonoGameModel(IGraphicsManager graphicsManager)
+        private void CreateMonoGameModel(GraphicsManager graphicsManager)
         {
-            if (graphicsManager is GraphicsManagerMonoGame)
-            {
-                // var graphicsDevice = ((GraphicsManagerMonoGame)graphicsManager).GraphicsDeviceManager.GraphicsDevice;
-                // MonoGameTexture = new Texture2D(graphicsDevice, _width, _height);
-                // MonoGameTexture.SetData(Data);
-            }
         }
 
         private void Initialize(

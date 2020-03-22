@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Common.Behaviors;
 using Komodo.Core;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.ECS.Entities;
-using Komodo.Core.ECS.Scenes;
 using Komodo.Core.Engine.Input;
 
 namespace Komodo
@@ -17,21 +15,26 @@ namespace Komodo
         {
             using (Game = new KomodoGame()) {
                 SetupInputs();
+                var render2DSystem = Game.CreateRender2DSystem();
+                var render3DSystem = Game.CreateRender3DSystem();
 
-                // Perspective scene
-                var player1Entity = new Entity(Game.ActiveScene)
+                var player1Entity = new Entity(Game)
                 {
                     Position = new KomodoVector3(0f, 0f, 0f),
+                    Render2DSystem = render2DSystem,
                 };
                 player1Entity.AddComponent(new PlayerBehavior(0));
-                var player2Entity = new Entity(Game.ActiveScene)
+                var player2Entity = new Entity(Game)
                 {
                     Position = new KomodoVector3(0f, 0f, 0f),
+                    Render3DSystem = render3DSystem,
                 };
                 player2Entity.AddComponent(new CubeBehavior("models/cube"));
-                var cameraEntity = new Entity(Game.ActiveScene)
+                var cameraEntity = new Entity(Game)
                 {
-                    Position = new KomodoVector3(0f, 0f, 200f)
+                    Position = new KomodoVector3(0f, 50f, 200f),
+                    Render2DSystem = render2DSystem,
+                    Render3DSystem = render3DSystem,
                 };
                 var camera = new CameraComponent()
                 {
@@ -39,27 +42,28 @@ namespace Komodo
                     FarPlane = 10000000f,
                     IsPerspective = true,
                     Zoom = 1f,
-                    Target = player1Entity
+                    Target = player1Entity,
                 };
-                cameraEntity.AddComponent(new CameraBehavior(camera, 0));
                 cameraEntity.AddComponent(camera);
+                cameraEntity.AddComponent(new CameraBehavior(camera, 0));
                 camera.SetActive();
 
-                // Orthographic scene
-                var orthographicScene = new Scene(Game);
-                Game.ActiveScene.Children.Add(orthographicScene);
-                var counterEntity = new Entity(orthographicScene);
+                render2DSystem = Game.CreateRender2DSystem();
+                var counterEntity = new Entity(Game)
+                {
+                    Render2DSystem = render2DSystem,
+                };
                 counterEntity.AddComponent(new FPSCounterBehavior());
-
-                cameraEntity = new Entity(orthographicScene)
+                cameraEntity = new Entity(Game)
                 {
                     Position = new KomodoVector3(0f, 0f, 0f),
+                    Render2DSystem = render2DSystem,
                 };
                 camera = new CameraComponent()
                 {
+                    FarPlane = 10000000f,
+                    IsPerspective = false,
                     Position = new KomodoVector3(0f, 0f, 100f),
-                    FarPlane = 1000f,
-                    IsPerspective = false
                 };
                 cameraEntity.AddComponent(camera);
                 camera.SetActive();

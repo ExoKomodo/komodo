@@ -1,20 +1,15 @@
-using System;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using Komodo.Core.ECS.Components;
-using Komodo.Core.Engine.Graphics.Sprites;
-using Komodo.Core.ECS.Scenes;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Komodo.Core.Engine.Graphics.Models;
+using System;
 
 namespace Komodo.Core.Engine.Graphics
 {
-    internal class GraphicsManagerMonoGame : IGraphicsManager
+    public class GraphicsManager
     {
         #region Constructors
-        public GraphicsManagerMonoGame(KomodoMonoGame komodoMonoGame)
+        public GraphicsManager(KomodoMonoGame komodoMonoGame)
         {
             _komodoMonoGame = komodoMonoGame;
             GraphicsDeviceManager = new GraphicsDeviceManager(_komodoMonoGame);
@@ -55,9 +50,8 @@ namespace Komodo.Core.Engine.Graphics
             }
         }
         public GraphicsDeviceManager GraphicsDeviceManager { get; set; }
-        public SpriteManagerMonoGame SpriteManagerMonoGame { get; set; }
-        public ModelManagerMonoGame ModelManagerMonoGame { get; set; }
-        public Viewport ViewPort { get; set; }
+        public SpriteBatch SpriteBatch { get; set; }
+        public Viewport ViewPort => GraphicsDeviceManager.GraphicsDevice.Viewport;
         public bool VSync
         {
             get
@@ -104,20 +98,11 @@ namespace Komodo.Core.Engine.Graphics
             return texture;
         }
 
-        public void DrawScene(Scene scene)
-        {
-            ModelManagerMonoGame.DrawScene(scene);
-            SpriteManagerMonoGame.DrawScene(scene);
-        }
-
         // Initialize is called after all framework resources have been initialized and allocated
         public void Initialize()
         {
             // Sprite manager requires framework graphics resources to be initialized
-            SpriteManagerMonoGame = new SpriteManagerMonoGame(this);
-            // Model manager does not require graphics resources
-            ModelManagerMonoGame = new ModelManagerMonoGame(this);
-            ViewPort = GraphicsDeviceManager.GraphicsDevice.Viewport;
+            SpriteBatch = new SpriteBatch(GraphicsDeviceManager.GraphicsDevice);
 
             var resolution = Resolutions.First();
             if (Resolutions.Count > 3)

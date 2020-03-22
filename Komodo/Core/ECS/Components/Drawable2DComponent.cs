@@ -1,5 +1,5 @@
 using Komodo.Core.ECS.Entities;
-using Microsoft.Xna.Framework;
+using Komodo.Core.Engine.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.ECS.Components
@@ -7,15 +7,16 @@ namespace Komodo.Core.ECS.Components
     public abstract class Drawable2DComponent : Component
     {
         #region Constructors
-        public Drawable2DComponent(bool isEnabled = true, Entity parent = null, Effect shader = null) : base(isEnabled, parent)
+        public Drawable2DComponent(bool isEnabled = true, Entity parent = null) : base(isEnabled, parent)
         {
-            Shader = shader;
         }
         #endregion
 
         #region Members
 
         #region Public Members
+        public abstract KomodoVector2 Center { get; }
+        public abstract float Height { get; }
         public bool IsBillboard { get; set; }
         public Effect Shader
         {
@@ -28,23 +29,13 @@ namespace Komodo.Core.ECS.Components
                 _shader = value;
             }
         }
+        public abstract float Width { get; }
         #endregion Public Members
 
-        #region Protected Public Members
-        protected Effect _shader { get; set; }
-        #endregion
+        #region Private Members
+        private Effect _shader { get; set; }
+        #endregion Private members
 
         #endregion Members
-
-        #region Member Methods
-
-        #region Public Member Methods
-        sealed public override void Update(GameTime gameTime)
-        {
-            
-        }
-        #endregion Public Member Methods
-        
-        #endregion Member Methods
     }
 }

@@ -131,12 +131,12 @@ namespace Komodo.Core.ECS.Components
         {
             get
             {
-                var graphicsManager = Parent.ParentScene.Game.GraphicsManager;
+                var viewport = Game.GraphicsManager.ViewPort;
                 if (IsPerspective)
                 {
                     return Matrix.CreatePerspectiveFieldOfView(
                         MathHelper.ToRadians(FieldOfView),
-                        graphicsManager.ViewPort.Width / graphicsManager.ViewPort.Height,
+                        viewport.Width / viewport.Height,
                         NearPlane,
                         FarPlane
                     );
@@ -149,8 +149,8 @@ namespace Komodo.Core.ECS.Components
                         0
                     ) * Matrix.CreateOrthographicOffCenter(
                         0,
-                        graphicsManager.ViewPort.Width,
-                        graphicsManager.ViewPort.Height,
+                        viewport.Width,
+                        viewport.Height,
                         0,
                         NearPlane,
                         FarPlane
@@ -160,8 +160,7 @@ namespace Komodo.Core.ECS.Components
         }
         public Entity Target { get; set; }
         public KomodoVector3 Up { get; set; }
-        public Matrix ViewMatrix { get; protected set; }
-        public Viewport Viewport { get; protected set; }
+        public Matrix ViewMatrix { get; internal set; }
         public float Zoom
         {
             get
@@ -192,6 +191,15 @@ namespace Komodo.Core.ECS.Components
         #region Member Methods
 
         #region Public Member Methods
+        internal Matrix CalculateViewMatrix()
+        {
+            return Matrix.CreateLookAt(
+                WorldPosition.MonoGameVector,
+                Target == null ? (WorldPosition + KomodoVector3.Forward).MonoGameVector : Target.Position.MonoGameVector,
+                Up.MonoGameVector
+            );
+        }
+
         public ContainmentType Contains(Point point)
         {
             return Contains(new KomodoVector2(point.ToVector2()));
@@ -210,18 +218,14 @@ namespace Komodo.Core.ECS.Components
             return BoundingFrustum.Contains(boundingBox);
         }
 
-        public override void Deserialize(SerializedObject serializedObject)
-        {
-            throw new NotImplementedException();
-        }
-
         public void LookAt(KomodoVector3 position)
         {
+            var viewport = Game.GraphicsManager.ViewPort;
             Position = (
                 position
                 - new KomodoVector3(
-                    Viewport.Width / 2f,
-                    Viewport.Height / 2f
+                    viewport.Width / 2f,
+                    viewport.Height / 2f
                 )
             );
         }
@@ -231,14 +235,16 @@ namespace Komodo.Core.ECS.Components
             Position += direction;
         }
 
-        public override SerializedObject Serialize()
-        {
-            throw new NotImplementedException();
-        }
-
         public void SetActive()
         {
-            Parent.ParentScene.ActiveCamera = this;
+            if (Parent?.Render2DSystem != null)
+            {
+                Parent.Render2DSystem.ActiveCamera = this;
+            }
+            if (Parent?.Render3DSystem != null)
+            {
+                Parent.Render3DSystem.ActiveCamera = this;
+            }
         }
 
         public KomodoVector3 ScreenToWorld(float x, float y, float z)
@@ -248,19 +254,14 @@ namespace Komodo.Core.ECS.Components
 
         public KomodoVector3 ScreenToWorld(KomodoVector3 screenPosition)
         {
+            var viewport = Game.GraphicsManager.ViewPort;
             return KomodoVector3.Transform(
                 (
                     screenPosition
-                    - new KomodoVector3(Viewport.X, Viewport.Y)
+                    - new KomodoVector3(viewport.X, viewport.Y)
                 ),
                 InverseViewMatrix
             );
-        }
-
-        public override void Update(GameTime gametime)
-        {
-            Viewport = Parent.ParentScene.Game.GraphicsManager.ViewPort;
-            ViewMatrix = CalculateViewMatrix();
         }
 
         public KomodoVector3 WorldToScreen(float x, float y, float z)
@@ -270,8 +271,9 @@ namespace Komodo.Core.ECS.Components
 
         public KomodoVector3 WorldToScreen(KomodoVector3 worldPosition)
         {
+            var viewport = Game.GraphicsManager.ViewPort;
             return KomodoVector3.Transform(
-                worldPosition + new KomodoVector3(Viewport.X, Viewport.Y, 0f),
+                worldPosition + new KomodoVector3(viewport.X, viewport.Y, 0f),
                 ViewMatrix
             );
         }
@@ -288,15 +290,6 @@ namespace Komodo.Core.ECS.Components
         #endregion Public Member Methods
 
         #region Private Member Methods
-        private Matrix CalculateViewMatrix()
-        {
-            return Matrix.CreateLookAt(
-                WorldPosition.MonoGameVector,
-                Target == null ? (WorldPosition + KomodoVector3.Forward).MonoGameVector : Target.Position.MonoGameVector,
-                Up.MonoGameVector
-            );
-        }
-
         private void ClampZoom(float value)
         {
             if (value < MinimumZoom)

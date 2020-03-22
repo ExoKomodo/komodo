@@ -16,7 +16,7 @@ namespace Komodo.Core.Engine.Graphics
         }
 
         public KomodoTexture(
-            IGraphicsManager graphicsManager,
+            GraphicsManager graphicsManager,
             Color[] data,
             int width,
             int height
@@ -32,7 +32,7 @@ namespace Komodo.Core.Engine.Graphics
         }
         
         public KomodoTexture(
-            IGraphicsManager graphicsManager,
+            GraphicsManager graphicsManager,
             Color[,] data
         )
         {
@@ -91,14 +91,11 @@ namespace Komodo.Core.Engine.Graphics
         #endregion Public Member Methods
 
         #region Private Member Methods
-        private void CreateMonoGameTexture(IGraphicsManager graphicsManager)
+        private void CreateMonoGameTexture(GraphicsManager graphicsManager)
         {
-            if (graphicsManager is GraphicsManagerMonoGame)
-            {
-                var graphicsDevice = ((GraphicsManagerMonoGame)graphicsManager).GraphicsDeviceManager.GraphicsDevice;
-                MonoGameTexture = new Texture2D(graphicsDevice, _width, _height);
-                MonoGameTexture.SetData(GetData());
-            }
+            var graphicsDevice = graphicsManager.GraphicsDeviceManager.GraphicsDevice;
+            MonoGameTexture = new Texture2D(graphicsDevice, _width, _height);
+            MonoGameTexture.SetData(GetData());
         }
 
         private void Initialize(

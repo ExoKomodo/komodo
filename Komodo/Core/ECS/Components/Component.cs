@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.ECS.Components
 {
-    public abstract class Component : ISerializable<Component>
+    public abstract class Component
     {
         #region Constructors
         protected Component(bool isEnabled = true, Entity parent = null)
@@ -18,8 +18,15 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
+        public KomodoGame Game
+        {
+            get
+            {
+                return Parent?.Game;
+            }
+        }
         public bool IsEnabled { get; set; }
-        public bool IsInitialized { get; private set; }
+        public bool IsInitialized { get; internal set; }
         [JsonIgnore]
         public Entity Parent { get; set; }
         public KomodoVector3 Position { get; set; }
@@ -75,31 +82,5 @@ namespace Komodo.Core.ECS.Components
         #endregion Public Members
 
         #endregion Members
-
-        #region Member Methods
-
-        #region Public Member Methods
-        public abstract void Deserialize(SerializedObject serializedObject);
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-        }
-        public virtual void Draw()
-        {
-        }
-        public virtual void Initialize()
-        {
-            if (!IsInitialized)
-            {
-                IsInitialized = true;
-            }
-        }
-        public abstract SerializedObject Serialize();
-        public virtual void Update(GameTime gameTime)
-        {
-            
-        }
-        #endregion Public Member Methods
-        
-        #endregion Member Methods
     }
 }

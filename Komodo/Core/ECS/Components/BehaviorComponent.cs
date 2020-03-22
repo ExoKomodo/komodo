@@ -1,8 +1,8 @@
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace Komodo.Core.ECS.Components
 {
-    public abstract class BehaviorComponent : Component, ISerializable<BehaviorComponent>
+    public abstract class BehaviorComponent : Component
     {
         #region Constructors
         public BehaviorComponent() : base(true, null)
@@ -13,13 +13,6 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
-        public KomodoGame Game
-        {
-            get
-            {
-                return Parent.ParentScene.Game;
-            }
-        }
         #endregion Public Members
 
         #region Protected Members
@@ -33,20 +26,17 @@ namespace Komodo.Core.ECS.Components
         #region Member Methods
 
         #region Public Member Methods
-        public override void Deserialize(SerializedObject serializedObject)
+        public virtual void Initialize()
+        {
+            if (!IsInitialized)
+            {
+                IsInitialized = true;
+            }
+        }
+        
+        public virtual void Update(GameTime gameTime)
         {
             
-        }
-
-        sealed public override void Draw(SpriteBatch spriteBatch)
-        {
-        }
-
-        public override SerializedObject Serialize()
-        {
-            var serializedObject = new SerializedObject();
-
-            return serializedObject;
         }
         #endregion Public Member Methods
 
