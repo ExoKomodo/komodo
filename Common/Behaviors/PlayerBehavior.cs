@@ -35,7 +35,7 @@ namespace Common.Behaviors
             base.Initialize();
 
             Parent.AddComponent(
-                new SpriteComponent("player/idle/player_idle_01", Game.DefaultSpriteShader)
+                new SpriteComponent("player/idle/player_idle_01", Game?.DefaultSpriteShader)
                 {
                     IsBillboard = false
                 }
@@ -46,7 +46,7 @@ namespace Common.Behaviors
             }
 
             Parent.AddComponent(
-                new TextComponent("fonts/font", Color.Black, Game.DefaultSpriteShader, $"Test {PlayerIndex}")
+                new TextComponent("fonts/font", Color.Black, Game?.DefaultSpriteShader, $"Test {PlayerIndex}")
                 {
                     IsBillboard = false,
                     Position = new KomodoVector3(0f, 20f, 0)

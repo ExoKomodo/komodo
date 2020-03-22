@@ -42,7 +42,7 @@ namespace Common.Behaviors
                 if (ModelPath != null)
                 {
                     Parent.AddComponent(
-                        new ModelComponent(ModelPath)
+                        new Drawable3DComponent(ModelPath)
                         {
                             Texture = new KomodoTexture(loadedTexture)
                         }

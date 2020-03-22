@@ -1,17 +1,11 @@
-// TODO: Remove dependency on MonoGame: Color
-using Komodo.Core.ECS.Scenes;
 using Komodo.Core.Engine.Graphics;
-
-using System.Text.Json;
-
 using Microsoft.Xna.Framework;
-using System.IO;
 using System.Collections.Generic;
 using Komodo.Core.Engine.Input;
 using Microsoft.Xna.Framework.Graphics;
-using Komodo.Core.ECS.Entities;
 using Microsoft.Xna.Framework.Content;
 using System;
+using Komodo.Core.ECS.Systems;
 
 namespace Komodo.Core
 {
@@ -21,32 +15,27 @@ namespace Komodo.Core
         public KomodoGame()
         {
             _komodoMonoGame = new KomodoMonoGame(this);
-            _graphicsManagerMonoGame = new GraphicsManagerMonoGame(_komodoMonoGame)
+            GraphicsManager = new GraphicsManager(_komodoMonoGame)
             {
                 IsMouseVisible = true
             };
 
             Content = _komodoMonoGame.Content;
 
-            ActiveScene = new Scene(this);
+            BehaviorSystem = new BehaviorSystem(this);
+            CameraSystem = new CameraSystem(this);
+            Render2DSystems = new List<Render2DSystem>();
+            Render3DSystems = new List<Render3DSystem>();
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public Scene ActiveScene {
-            get
-            {
-                return _activeScene;
-            }
-            set
-            {
-                _activeScene = value;
-                _activeScene.Game = this;
-            }
-        }
-        // public SpriteEffect DefaultSpriteShader { get; set; }
+        public BehaviorSystem BehaviorSystem { get; private set; }
+        public CameraSystem CameraSystem { get; private set; }
+        public List<Render2DSystem> Render2DSystems { get; private set; }
+        public List<Render3DSystem> Render3DSystems { get; private set; }
         public BasicEffect DefaultSpriteShader { get; set; }
 
         public float FramesPerSecond
@@ -54,12 +43,7 @@ namespace Komodo.Core
             get;
             protected set;
         }
-        public IGraphicsManager GraphicsManager {
-            get
-            {
-                return this._graphicsManagerMonoGame;
-            }
-        }
+        public GraphicsManager GraphicsManager { get; private set; }
         public string Title
         {
             get
@@ -77,11 +61,9 @@ namespace Komodo.Core
         #endregion Public Members
         
         #region Protected Members
-        protected Scene _activeScene;
         #endregion Protected Members
         
         #region Private Members
-        private readonly GraphicsManagerMonoGame _graphicsManagerMonoGame;
         private readonly KomodoMonoGame _komodoMonoGame;
         #endregion Private Members
 
@@ -97,7 +79,21 @@ namespace Komodo.Core
 
         #region Member Methods
 
-        #region Public Member Methods
+        #region Public Member Methods        
+        public Render2DSystem CreateRender2DSystem()
+        {
+            var system = new Render2DSystem(this);
+            Render2DSystems.Add(system);
+            return system;
+        }
+
+        public Render3DSystem CreateRender3DSystem()
+        {
+            var system = new Render3DSystem(this);
+            Render3DSystems.Add(system);
+            return system;
+        }
+
         public void Draw(GameTime gameTime)
         {
             Draw(gameTime, Color.Transparent);
@@ -105,9 +101,14 @@ namespace Komodo.Core
 
         public void Draw(GameTime _, Color clearColor)
         {
-            _graphicsManagerMonoGame.Clear(clearColor);
+            GraphicsManager.Clear(clearColor);
 
-            _graphicsManagerMonoGame.DrawScene(ActiveScene);
+            var render2DSystems = Render2DSystems.ToArray();
+            var render3DSystems = Render3DSystems.ToArray();
+            // 3D must render before 2D or else the 2D sprites will fail to render in the Z dimension properly
+            Array.ForEach(render3DSystems, system => system.DrawComponents());
+            var spriteBatch = GraphicsManager.SpriteBatch;
+            Array.ForEach(render2DSystems, system => system.DrawComponents(spriteBatch));
         }
 
         public void Exit()
@@ -117,16 +118,18 @@ namespace Komodo.Core
 
         public void Initialize()
         {
-            _graphicsManagerMonoGame.Initialize();
-            // DefaultSpriteShader = new SpriteEffect(_graphicsManagerMonoGame.GraphicsDeviceManager.GraphicsDevice);
-            DefaultSpriteShader = new BasicEffect(_graphicsManagerMonoGame.GraphicsDeviceManager.GraphicsDevice)
+            GraphicsManager.Initialize();
+            DefaultSpriteShader = new BasicEffect(GraphicsManager.GraphicsDeviceManager.GraphicsDevice)
             {
                 TextureEnabled = true,
                 VertexColorEnabled = true,
             };
-            _graphicsManagerMonoGame.VSync = false;
+            GraphicsManager.VSync = false;
 
-            ActiveScene.Initialize();
+            BehaviorSystem.Initialize();
+            CameraSystem.Initialize();
+            Render3DSystems.ForEach(system => system.Initialize());
+            Render2DSystems.ForEach(system => system.Initialize());
         }
 
         public void ResetElapsedTime()
@@ -149,30 +152,24 @@ namespace Komodo.Core
             FramesPerSecond = (float)(1 / gameTime.ElapsedGameTime.TotalSeconds);
             InputManager.Update();
 
-            ActiveScene.PreUpdate(gameTime);
-            ActiveScene.Update(gameTime);
-            ActiveScene.PostUpdate(gameTime);
+            var render2DSystems = Render2DSystems.ToArray();
+            var render3DSystems = Render3DSystems.ToArray();
+            BehaviorSystem.PreUpdate(gameTime);
+            CameraSystem.PreUpdate(gameTime);
+            Array.ForEach(render3DSystems, system => system.PreUpdate(gameTime));
+            Array.ForEach(render2DSystems, system => system.PreUpdate(gameTime));
+
+            BehaviorSystem.UpdateComponents(gameTime);
+            CameraSystem.UpdateComponents();
+
+            BehaviorSystem.PostUpdate(gameTime);
+            CameraSystem.PostUpdate(gameTime);
+            Array.ForEach(render2DSystems, system => system.PostUpdate(gameTime));
+            Array.ForEach(render3DSystems, system => system.PostUpdate(gameTime));
         }
         #endregion Public Member Methods
         
         #region Protected Member Methods
-        public void ParseScenes()
-        {
-            /*var thing = new List<int>().GetType().ToString();
-            var type = System.Type.GetType(thing);*/
-            var serializedScene = ActiveScene.Serialize();
-            ActiveScene.Deserialize(serializedScene);
-            Directory.CreateDirectory("Config/Scenes");
-            File.WriteAllText(
-                "Config/Scenes/ActiveScene.json",
-                JsonSerializer.Serialize(serializedScene)
-            );
-            
-            /*var thing = SerializedObject.Serialize(ActiveScene);
-            var serializedScene = JsonSerializer.Serialize<SerializedObject>(thing);
-            File.WriteAllText("Config/Scenes/ActiveScene.json", serializedScene);*/
-            throw new System.Exception();
-        }
         #endregion Protected Member Methods
         
         #region Private Member Methods

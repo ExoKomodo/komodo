@@ -2,7 +2,7 @@
 
 namespace Komodo.Core
 {
-    internal class KomodoMonoGame : Microsoft.Xna.Framework.Game
+    public class KomodoMonoGame : Microsoft.Xna.Framework.Game
     {
         #region Members
 
@@ -26,7 +26,7 @@ namespace Komodo.Core
         #region Protected Member Methods
         protected override void Draw(GameTime gameTime)
         {
-            _komodoGame.Draw(gameTime, Color.Red);
+            _komodoGame.Draw(gameTime, Color.Green);
 
             base.Draw(gameTime);
         }

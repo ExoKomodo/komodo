@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Komodo.Core.ECS.Components
 {
-    public class SoundComponent : Component, ISerializable<SoundComponent>
+    public class SoundComponent : Component
     {
         #region Constructors
         public SoundComponent(string soundPath) : base(true, null)
@@ -34,21 +34,6 @@ namespace Komodo.Core.ECS.Components
         #region Member Methods
 
         #region Public Member Methods
-        public override void Deserialize(SerializedObject serializedObject)
-        {
-        }
-
-        sealed public override void Draw(SpriteBatch spriteBatch)
-        {
-        }
-
-        public override SerializedObject Serialize()
-        {
-            var serializedObject = new SerializedObject();
-
-            return serializedObject;
-        }
-
         public void ChangeVolume(SoundEffectInstance sound, float volume)
         {
             if (IsValidInstance(sound))
@@ -136,9 +121,9 @@ namespace Komodo.Core.ECS.Components
             }
         }
 
-        sealed public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            // base.Update(gameTime);
 
             var instances = _instances.ToList();
             foreach (var instance in _instances)
