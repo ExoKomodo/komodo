@@ -1,7 +1,13 @@
-using System;
 using Komodo.Core.ECS.Entities;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Komodo.Lib.Math;
+
+using BoundingBox = Microsoft.Xna.Framework.BoundingBox;
+using BoundingFrustum = Microsoft.Xna.Framework.BoundingFrustum;
+using ContainmentType = Microsoft.Xna.Framework.ContainmentType;
+using Matrix = Microsoft.Xna.Framework.Matrix;
+using MathHelper = Microsoft.Xna.Framework.MathHelper;
+using Point = Microsoft.Xna.Framework.Point;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Komodo.Core.ECS.Components
 {
@@ -10,14 +16,14 @@ namespace Komodo.Core.ECS.Components
         #region Constructors
         public CameraComponent() : base(true, null)
         {
-            Rotation = KomodoVector3.Zero;
+            Rotation = Vector3.Zero;
             Zoom = 1;
-            Position = KomodoVector3.Zero;
+            Position = Vector3.Zero;
             IsPerspective = false;
             NearPlane = 1f;
             FarPlane = 2f;
             FieldOfView = 90f;
-            Up = KomodoVector3.Up;
+            Up = Vector3.Up;
         }
         #endregion Constructors
 
@@ -43,7 +49,7 @@ namespace Komodo.Core.ECS.Components
                 );
             }
         }
-        public KomodoVector3 Center => WorldPosition + Origin;
+        public Vector3 Center => WorldPosition + Origin;
         public float FarPlane
         {
             get
@@ -126,7 +132,7 @@ namespace Komodo.Core.ECS.Components
                 }
             }
         }
-        public KomodoVector3 Origin { get; set; }
+        public Vector3 Origin { get; set; }
         public Matrix Projection
         {
             get
@@ -159,7 +165,7 @@ namespace Komodo.Core.ECS.Components
             }
         }
         public Entity Target { get; set; }
-        public KomodoVector3 Up { get; set; }
+        public Vector3 Up { get; set; }
         public Matrix ViewMatrix { get; internal set; }
         public float Zoom
         {
@@ -195,42 +201,42 @@ namespace Komodo.Core.ECS.Components
         {
             return Matrix.CreateLookAt(
                 WorldPosition.MonoGameVector,
-                Target == null ? (WorldPosition + KomodoVector3.Forward).MonoGameVector : Target.Position.MonoGameVector,
+                Target == null ? (WorldPosition + Vector3.Forward).MonoGameVector : Target.Position.MonoGameVector,
                 Up.MonoGameVector
             );
         }
 
         public ContainmentType Contains(Point point)
         {
-            return Contains(new KomodoVector2(point.ToVector2()));
+            return Contains(new Vector2(point.ToVector2()));
         }
 
-        public ContainmentType Contains(KomodoVector2 vector)
+        public ContainmentType Contains(Vector2 vector)
         {
-            return BoundingFrustum.Contains(new KomodoVector3(vector.X, vector.Y, 0).MonoGameVector);
+            return BoundingFrustum.Contains(new Vector3(vector.X, vector.Y, 0).MonoGameVector);
         }
 
         public ContainmentType Contains(Rectangle rectangle)
         {
             var max = new Vector3(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height, 0.5f);
             var min = new Vector3(rectangle.X, rectangle.Y, 0.5f);
-            var boundingBox = new BoundingBox(min, max);
+            var boundingBox = new BoundingBox(min.MonoGameVector, max.MonoGameVector);
             return BoundingFrustum.Contains(boundingBox);
         }
 
-        public void LookAt(KomodoVector3 position)
+        public void LookAt(Vector3 position)
         {
             var viewport = Game.GraphicsManager.ViewPort;
             Position = (
                 position
-                - new KomodoVector3(
+                - new Vector3(
                     viewport.Width / 2f,
                     viewport.Height / 2f
                 )
             );
         }
 
-        public void Move(KomodoVector3 direction)
+        public void Move(Vector3 direction)
         {
             Position += direction;
         }
@@ -247,33 +253,33 @@ namespace Komodo.Core.ECS.Components
             }
         }
 
-        public KomodoVector3 ScreenToWorld(float x, float y, float z)
+        public Vector3 ScreenToWorld(float x, float y, float z)
         {
-            return ScreenToWorld(new KomodoVector3(x, y, z));
+            return ScreenToWorld(new Vector3(x, y, z));
         }
 
-        public KomodoVector3 ScreenToWorld(KomodoVector3 screenPosition)
+        public Vector3 ScreenToWorld(Vector3 screenPosition)
         {
             var viewport = Game.GraphicsManager.ViewPort;
-            return KomodoVector3.Transform(
+            return Vector3.Transform(
                 (
                     screenPosition
-                    - new KomodoVector3(viewport.X, viewport.Y)
+                    - new Vector3(viewport.X, viewport.Y)
                 ),
                 InverseViewMatrix
             );
         }
 
-        public KomodoVector3 WorldToScreen(float x, float y, float z)
+        public Vector3 WorldToScreen(float x, float y, float z)
         {
-            return WorldToScreen(new KomodoVector3(x, y, z));
+            return WorldToScreen(new Vector3(x, y, z));
         }
 
-        public KomodoVector3 WorldToScreen(KomodoVector3 worldPosition)
+        public Vector3 WorldToScreen(Vector3 worldPosition)
         {
             var viewport = Game.GraphicsManager.ViewPort;
-            return KomodoVector3.Transform(
-                worldPosition + new KomodoVector3(viewport.X, viewport.Y, 0f),
+            return Vector3.Transform(
+                worldPosition + new Vector3(viewport.X, viewport.Y, 0f),
                 ViewMatrix
             );
         }

@@ -1,6 +1,15 @@
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+using Komodo.Lib.Math;
+
+using PlayerIndex = Microsoft.Xna.Framework.PlayerIndex;
+
+using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
+using GamePad = Microsoft.Xna.Framework.Input.GamePad;
+using GamePadState = Microsoft.Xna.Framework.Input.GamePadState;
+using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
+using KeyboardState = Microsoft.Xna.Framework.Input.KeyboardState;
+using Mouse = Microsoft.Xna.Framework.Input.Mouse;
+using MouseState = Microsoft.Xna.Framework.Input.MouseState;
 
 namespace Komodo.Core.Engine.Input
 {
@@ -8,10 +17,10 @@ namespace Komodo.Core.Engine.Input
     {
         static InputManager()
         {
-            _inputMaps = new Dictionary<string, List<KomodoInputs>>[4];
+            _inputMaps = new Dictionary<string, List<Inputs>>[4];
             for (int i = 0; i < _inputMaps.Length; i++)
             {
-                _inputMaps[i] = new Dictionary<string, List<KomodoInputs>>();
+                _inputMaps[i] = new Dictionary<string, List<Inputs>>();
             }
             _gamePadStates = new GamePadState[4];
             _previousGamePadStates = new GamePadState[4];
@@ -22,7 +31,7 @@ namespace Komodo.Core.Engine.Input
         
         #region Private Static Members
         private static GamePadState[] _gamePadStates { get; set; }
-        private static Dictionary<string, List<KomodoInputs>>[] _inputMaps { get; }
+        private static Dictionary<string, List<Inputs>>[] _inputMaps { get; }
         private static KeyboardState _keyboardState { get; set; }
         private static MouseState _mouseState { get; set; }
         private static GamePadState[] _previousGamePadStates { get; set; }
@@ -35,7 +44,7 @@ namespace Komodo.Core.Engine.Input
         #region Static Methods
         
         #region Public Static Methods
-        public static void AddInputMapping(string action, KomodoInputs input, int playerIndex = 0)
+        public static void AddInputMapping(string action, Inputs input, int playerIndex = 0)
         {
             if (!IsValidPlayerIndex(playerIndex))
             {
@@ -44,7 +53,7 @@ namespace Komodo.Core.Engine.Input
             var inputMap = _inputMaps[playerIndex];
             if (!inputMap.ContainsKey(action))
             {
-                inputMap[action] = new List<KomodoInputs>();
+                inputMap[action] = new List<Inputs>();
             }
             var inputList = inputMap[action];
             if (!inputList.Contains(input))
@@ -85,11 +94,11 @@ namespace Komodo.Core.Engine.Input
             return result;
         }
 
-        public static KomodoVector2 GetMousePosition()
+        public static Vector2 GetMousePosition()
         {
             var mouseState = Mouse.GetState();
             var position = mouseState.Position;
-            return new KomodoVector2(position.X, position.Y);
+            return new Vector2(position.X, position.Y);
         }
 
         public static bool IsValidPlayerIndex(int playerIndex)
@@ -97,7 +106,7 @@ namespace Komodo.Core.Engine.Input
             return playerIndex >= 0 && playerIndex <= 3;
         }
 
-        public static void RemoveInputMapping(string action, KomodoInputs input, int playerIndex = 0)
+        public static void RemoveInputMapping(string action, Inputs input, int playerIndex = 0)
         {
             if (!IsValidPlayerIndex(playerIndex))
             {
@@ -129,34 +138,32 @@ namespace Komodo.Core.Engine.Input
         #endregion Public Static Methods
         
         #region Private Static Methods
-        private static InputInfo GetInputInfo(KomodoInputs input, int playerIndex = 0)
+        private static InputInfo GetInputInfo(Inputs input, int playerIndex = 0)
         {
             if (!IsValidPlayerIndex(playerIndex))
             {
                 return new InputInfo();
             }
-            var komodoInput = KomodoInputs.Undefined;
             var komodoInputState = InputState.Undefined;
             switch(input)
             {
-                case KomodoInputs.MouseLeftClick:
+                case Inputs.MouseLeftClick:
                     var buttonState = _mouseState.LeftButton;
                     komodoInputState = buttonState == ButtonState.Pressed ? InputState.Down : InputState.Up;
-                    return new InputInfo(komodoInputState, KomodoVector2.Zero, 0f);
-                case KomodoInputs.MouseMiddleClick:
+                    return new InputInfo(komodoInputState, Vector2.Zero, 0f);
+                case Inputs.MouseMiddleClick:
                     buttonState = _mouseState.MiddleButton;
                     komodoInputState = buttonState == ButtonState.Pressed ? InputState.Down : InputState.Up;
-                    return new InputInfo(komodoInputState, KomodoVector2.Zero, 0f);
-                case KomodoInputs.MouseRightClick:
+                    return new InputInfo(komodoInputState, Vector2.Zero, 0f);
+                case Inputs.MouseRightClick:
                     buttonState = _mouseState.RightButton;
                     komodoInputState = buttonState == ButtonState.Pressed ? InputState.Down : InputState.Up;
-                    return new InputInfo(komodoInputState, KomodoVector2.Zero, 0f);
+                    return new InputInfo(komodoInputState, Vector2.Zero, 0f);
                 default:
                     var monogameButtonInput = InputMapper.ToMonoGameButton(input);
                     if (monogameButtonInput.HasValue)
                     {
                         var gamePadState = _gamePadStates[playerIndex];
-                        komodoInput = InputMapper.ToKomodoInput(monogameButtonInput.Value);
                         bool isDown = gamePadState.IsButtonDown(monogameButtonInput.Value);
                         komodoInputState = isDown ? InputState.Down : InputState.Up;
                     }
@@ -168,7 +175,7 @@ namespace Komodo.Core.Engine.Input
                         komodoInputState = isDown ? InputState.Down : InputState.Up;
                     }
                     
-                    return new InputInfo(komodoInputState, KomodoVector2.Zero, 0f);
+                    return new InputInfo(komodoInputState, Vector2.Zero, 0f);
             }
         }
 
@@ -193,19 +200,14 @@ namespace Komodo.Core.Engine.Input
 
         private static PlayerIndex GetPlayerIndex(int playerIndex)
         {
-            switch (playerIndex)
+            return playerIndex switch
             {
-                case 0:
-                    return PlayerIndex.One;
-                case 1:
-                    return PlayerIndex.Two;
-                case 2:
-                    return PlayerIndex.Three;
-                case 3:
-                    return PlayerIndex.Four;
-                default:
-                    return PlayerIndex.One;
-            }
+                0 => PlayerIndex.One,
+                1 => PlayerIndex.Two,
+                2 => PlayerIndex.Three,
+                3 => PlayerIndex.Four,
+                _ => PlayerIndex.One,
+            };
         }
         #endregion Private Static Methods
         

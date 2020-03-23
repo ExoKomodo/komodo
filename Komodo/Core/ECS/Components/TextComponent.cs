@@ -1,5 +1,9 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Komodo.Lib.Math;
+
+using Color = Microsoft.Xna.Framework.Color;
+
+using Effect = Microsoft.Xna.Framework.Graphics.Effect;
+using SpriteFont = Microsoft.Xna.Framework.Graphics.SpriteFont;
 
 namespace Komodo.Core.ECS.Components
 {
@@ -26,7 +30,7 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
-        public override KomodoVector2 Center => new KomodoVector2(Width / 2, Height / 2);
+        public override Vector2 Center => new Vector2(Width / 2, Height / 2);
         public Color Color { get; set; }
         public SpriteFont Font { get; set; }
         public string FontPath { get; set; }
@@ -38,7 +42,7 @@ namespace Komodo.Core.ECS.Components
                 {
                     return 0f;
                 }
-                var size = new KomodoVector2(Font.MeasureString(Text));
+                var size = new Vector2(Font.MeasureString(Text));
                 return size.Y * Scale.Y;
             }
         }
@@ -52,7 +56,7 @@ namespace Komodo.Core.ECS.Components
                 {
                     return 0f;
                 }
-                var size = new KomodoVector2(Font.MeasureString(Text));
+                var size = new Vector2(Font.MeasureString(Text));
                 return size.X * Scale.X;
             }
         }

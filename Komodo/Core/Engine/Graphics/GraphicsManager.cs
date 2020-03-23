@@ -1,15 +1,19 @@
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+
+using Color = Microsoft.Xna.Framework.Color;
+using GraphicsDeviceManager = Microsoft.Xna.Framework.GraphicsDeviceManager;
+
+using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
+using Viewport = Microsoft.Xna.Framework.Graphics.Viewport;
 
 namespace Komodo.Core.Engine.Graphics
 {
     public class GraphicsManager
     {
         #region Constructors
-        public GraphicsManager(KomodoMonoGame komodoMonoGame)
+        public GraphicsManager(MonoGame komodoMonoGame)
         {
             _komodoMonoGame = komodoMonoGame;
             GraphicsDeviceManager = new GraphicsDeviceManager(_komodoMonoGame);
@@ -74,7 +78,7 @@ namespace Komodo.Core.Engine.Graphics
         #endregion Protected Members
 
         #region Private Members
-        private readonly KomodoMonoGame _komodoMonoGame;
+        private readonly MonoGame _komodoMonoGame;
         #endregion Private Members
 
         #endregion Members
@@ -87,14 +91,14 @@ namespace Komodo.Core.Engine.Graphics
             GraphicsDeviceManager.GraphicsDevice.Clear(clearColor);
         }
 
-        public KomodoTexture CreateTexture(Color[] data, int width, int height)
+        public Texture CreateTexture(Color[] data, int width, int height)
         {
-            var texture = new KomodoTexture(this, data, width, height);
+            var texture = new Texture(this, data, width, height);
             return texture;
         }
-        public KomodoTexture CreateTexture(Color[,] data)
+        public Texture CreateTexture(Color[,] data)
         {
-            var texture = new KomodoTexture(this, data);
+            var texture = new Texture(this, data);
             return texture;
         }
 

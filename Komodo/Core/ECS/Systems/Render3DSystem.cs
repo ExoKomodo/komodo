@@ -1,18 +1,26 @@
 using Komodo.Core.ECS.Components;
 using Komodo.Core.ECS.Entities;
 using Komodo.Core.Engine.Graphics;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System;
+
+using GameTime = Microsoft.Xna.Framework.GameTime;
+using Matrix = Microsoft.Xna.Framework.Matrix;
+
+using BasicEffect = Microsoft.Xna.Framework.Graphics.BasicEffect;
+using BlendState = Microsoft.Xna.Framework.Graphics.BlendState;
+using DepthStencilState = Microsoft.Xna.Framework.Graphics.DepthStencilState;
+using Model = Microsoft.Xna.Framework.Graphics.Model;
+using RasterizerState = Microsoft.Xna.Framework.Graphics.RasterizerState;
+using SamplerState = Microsoft.Xna.Framework.Graphics.SamplerState;
 
 namespace Komodo.Core.ECS.Systems
 {
     public class Render3DSystem
     {
         #region Constructors
-        public Render3DSystem(KomodoGame game)
+        public Render3DSystem(Game game)
         {
             Components = new List<Drawable3DComponent>();
             Entities = new Dictionary<Guid, Entity>();
@@ -27,7 +35,7 @@ namespace Komodo.Core.ECS.Systems
         public CameraComponent ActiveCamera { get; set; }
         public List<Drawable3DComponent> Components { get; private set; }
         public Dictionary<Guid, Entity> Entities { get; set; }
-        public KomodoGame Game { get; set; }
+        public Game Game { get; set; }
         public bool IsInitialized { get; private set; }
         #endregion Public Members
 
@@ -121,11 +129,11 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        public void PostUpdate(GameTime gameTime)
+        public void PostUpdate(GameTime _)
         {
             InitializeComponents();
         }
-        public void PreUpdate(GameTime gameTime)
+        public void PreUpdate(GameTime _)
         {
             InitializeComponents();
         }
@@ -211,8 +219,8 @@ namespace Komodo.Core.ECS.Systems
                 if (!component.IsInitialized)
                 {
                     component.IsInitialized = true;
-                    var loadedModel = KomodoGame.Content.Load<Model>(component.ModelPath);
-                    component.ModelData = new KomodoModel(loadedModel);
+                    var loadedModel = Game.Content.Load<Model>(component.ModelPath);
+                    component.ModelData = new Engine.Graphics.Model((Model)loadedModel);
                 }
             }
         }

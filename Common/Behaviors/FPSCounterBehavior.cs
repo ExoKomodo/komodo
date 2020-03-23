@@ -1,7 +1,8 @@
-using Komodo.Core;
 using Komodo.Core.ECS.Components;
-using Microsoft.Xna.Framework;
 using System;
+
+using Color = Microsoft.Xna.Framework.Color;
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Common.Behaviors
 {
@@ -33,7 +34,7 @@ namespace Common.Behaviors
 
             CounterText = new TextComponent("fonts/font", Color.Black, Game.DefaultSpriteShader, "")
             {
-                Position = KomodoVector3.Zero
+                Position = Komodo.Lib.Math.Vector3.Zero
             };
             Parent.AddComponent(CounterText);
         }

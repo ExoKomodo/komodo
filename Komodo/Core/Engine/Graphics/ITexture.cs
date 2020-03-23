@@ -1,13 +1,14 @@
+using Color = Microsoft.Xna.Framework.Color;
+
 namespace Komodo.Core.Engine.Graphics
 {
-    public interface IKomodoModel
+    public interface ITexture
     {
         #region Members
 
         #region Public Members
-        float Height { get; }
-        float Width { get; }
-        float Depth { get; }
+        int Height { get; }
+        int Width { get; }
         #endregion Public Members
 
         #endregion Members
@@ -15,6 +16,7 @@ namespace Komodo.Core.Engine.Graphics
         #region Member Methods
         
         #region Public Member Methods        
+        Color[] GetData();
         #endregion Public Member Methods
         
         #endregion Member Methods

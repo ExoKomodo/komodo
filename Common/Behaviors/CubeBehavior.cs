@@ -1,8 +1,8 @@
-using Komodo.Core;
 using Komodo.Core.ECS.Components;
-using Komodo.Core.Engine.Graphics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using GameTime = Microsoft.Xna.Framework.GameTime;
+
+using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 
 namespace Common.Behaviors
 {
@@ -38,17 +38,17 @@ namespace Common.Behaviors
             if (!_isInitialized)
             {
                 _isInitialized = true;
-                var loadedTexture = KomodoGame.Content.Load<Texture2D>("player/idle/player_idle_01");
+                var loadedTexture = Komodo.Core.Game.Content.Load<Texture2D>("player/idle/player_idle_01");
                 if (ModelPath != null)
                 {
                     Parent.AddComponent(
                         new Drawable3DComponent(ModelPath)
                         {
-                            Texture = new KomodoTexture(loadedTexture)
+                            Texture = new Komodo.Core.Engine.Graphics.Texture(loadedTexture)
                         }
                     );
                 }
-                Parent.Scale = new KomodoVector3(20f, 20f, 20f);
+                Parent.Scale = new Komodo.Lib.Math.Vector3(20f, 20f, 20f);
             }
         }
         #endregion Public Member Methods

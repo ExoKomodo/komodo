@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
 using Komodo.Core.ECS.Entities;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Komodo.Lib.Math;
+
+using Matrix = Microsoft.Xna.Framework.Matrix;
+using Quaternion = Microsoft.Xna.Framework.Quaternion;
 
 namespace Komodo.Core.ECS.Components
 {
@@ -18,7 +20,7 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
-        public KomodoGame Game
+        public Game Game
         {
             get
             {
@@ -29,19 +31,19 @@ namespace Komodo.Core.ECS.Components
         public bool IsInitialized { get; internal set; }
         [JsonIgnore]
         public Entity Parent { get; set; }
-        public KomodoVector3 Position { get; set; }
-        public KomodoVector3 WorldPosition
+        public Vector3 Position { get; set; }
+        public Vector3 WorldPosition
         {
             get
             {
-                return Parent?.Position != null ? KomodoVector3.Add(Parent.Position, Position) : Position;
+                return Parent?.Position != null ? Vector3.Add(Parent.Position, Position) : Position;
             }
         }
-        public KomodoVector3 Rotation
+        public Vector3 Rotation
         {
             get
             {
-                return Parent?.Rotation != null ? Parent.Rotation : KomodoVector3.Zero;
+                return Parent?.Rotation != null ? Parent.Rotation : Vector3.Zero;
             }
             set
             {
@@ -65,11 +67,11 @@ namespace Komodo.Core.ECS.Components
                 return Parent?.RotationQuaternion != null ? Parent.RotationQuaternion : Quaternion.CreateFromYawPitchRoll(0f, 0f, 0f);
             }
         }
-        public KomodoVector3 Scale
+        public Vector3 Scale
         {
             get
             {
-                return Parent?.Scale != null ? Parent.Scale : KomodoVector3.Zero;
+                return Parent?.Scale != null ? Parent.Scale : Vector3.Zero;
             }
             set
             {

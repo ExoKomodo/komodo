@@ -1,14 +1,13 @@
 using Komodo.Core.Engine.Graphics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace Komodo.Core.ECS.Components
 {
     public class Drawable3DComponent : Component
     {
         #region Constructors
-        public Drawable3DComponent(KomodoModel model, Effect shader) : base(true, null)
+        public Drawable3DComponent(Model model) : base(true, null)
         {
             ModelData = model;
             ModelPath = null;
@@ -41,9 +40,9 @@ namespace Komodo.Core.ECS.Components
                 return ModelData.Height * Parent.Scale.Y;
             }
         }
-        public KomodoModel ModelData { get; set; }
+        public Model ModelData { get; set; }
         public string ModelPath { get; set; }
-        public KomodoTexture Texture { get; set; }
+        public Engine.Graphics.Texture Texture { get; set; }
         public float Width
         {
             get

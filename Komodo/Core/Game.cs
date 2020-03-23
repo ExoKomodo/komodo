@@ -1,26 +1,30 @@
 using Komodo.Core.Engine.Graphics;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Komodo.Core.Engine.Input;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 using System;
 using Komodo.Core.ECS.Systems;
 
+using Color = Microsoft.Xna.Framework.Color;
+using GameTime = Microsoft.Xna.Framework.GameTime;
+
+using ContentManager = Microsoft.Xna.Framework.Content.ContentManager;
+
+using BasicEffect = Microsoft.Xna.Framework.Graphics.BasicEffect;
+
 namespace Komodo.Core
 {
-    public class KomodoGame : IDisposable
+    public class Game : IDisposable
     {
         #region Constructors
-        public KomodoGame()
+        public Game()
         {
-            _komodoMonoGame = new KomodoMonoGame(this);
-            GraphicsManager = new GraphicsManager(_komodoMonoGame)
+            _monoGame = new MonoGame(this);
+            GraphicsManager = new GraphicsManager(_monoGame)
             {
                 IsMouseVisible = true
             };
 
-            Content = _komodoMonoGame.Content;
+            Content = _monoGame.Content;
 
             BehaviorSystem = new BehaviorSystem(this);
             CameraSystem = new CameraSystem(this);
@@ -48,13 +52,13 @@ namespace Komodo.Core
         {
             get
             {
-                return _komodoMonoGame?.Window?.Title;
+                return _monoGame?.Window?.Title;
             }
             set
             {
-                if (_komodoMonoGame?.Window != null)
+                if (_monoGame?.Window != null)
                 {
-                    _komodoMonoGame.Window.Title = value;
+                    _monoGame.Window.Title = value;
                 }
             }
         }
@@ -64,7 +68,7 @@ namespace Komodo.Core
         #endregion Protected Members
         
         #region Private Members
-        private readonly KomodoMonoGame _komodoMonoGame;
+        private readonly MonoGame _monoGame;
         #endregion Private Members
 
         #endregion Members
@@ -113,7 +117,7 @@ namespace Komodo.Core
 
         public void Exit()
         {
-            _komodoMonoGame.Exit();
+            _monoGame.Exit();
         }
 
         public void Initialize()
@@ -134,17 +138,17 @@ namespace Komodo.Core
 
         public void ResetElapsedTime()
         {
-            _komodoMonoGame.ResetElapsedTime();
+            _monoGame.ResetElapsedTime();
         }
 
         public void Run()
         {
-            _komodoMonoGame.Run();
+            _monoGame.Run();
         }
 
         public void RunOneFrame()
         {
-            _komodoMonoGame.RunOneFrame();
+            _monoGame.RunOneFrame();
         }
 
         public void Update(GameTime gameTime)
@@ -187,7 +191,7 @@ namespace Komodo.Core
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    _komodoMonoGame.Dispose();
+                    _monoGame.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -215,3 +219,4 @@ namespace Komodo.Core
         #endregion
     }
 }
+

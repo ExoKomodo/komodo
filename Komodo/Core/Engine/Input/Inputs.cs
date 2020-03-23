@@ -1,6 +1,6 @@
 namespace Komodo.Core.Engine.Input
 {
-    public enum KomodoInputs
+    public enum Inputs
     {
         Undefined,
         // Buttons

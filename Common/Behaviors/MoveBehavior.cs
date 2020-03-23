@@ -1,11 +1,8 @@
-using System;
-using System.Text;
-using System.Text.Json;
-using Komodo.Core;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.Engine.Input;
-using Komodo.Lib.Network;
-using Microsoft.Xna.Framework;
+using Komodo.Lib.Math;
+
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Common.Behaviors
 {
@@ -62,26 +59,26 @@ namespace Common.Behaviors
 
             var quit = InputManager.GetInput("quit", PlayerIndex);
 
-            var direction = KomodoVector3.Zero;
+            var direction = Vector3.Zero;
             if (quit.State == InputState.Down)
             {
                 Game.Exit();
             }
             if (left.State == InputState.Down)
             {
-                direction += KomodoVector3.Left;
+                direction += Vector3.Left;
             }
             if (right.State == InputState.Down)
             {
-                direction += KomodoVector3.Right;
+                direction += Vector3.Right;
             }
             if (up.State == InputState.Down)
             {
-                direction += KomodoVector3.Up;
+                direction += Vector3.Up;
             }
             if (down.State == InputState.Down)
             {
-                direction += KomodoVector3.Down;
+                direction += Vector3.Down;
             }
             if (sprint.State == InputState.Down)
             {
