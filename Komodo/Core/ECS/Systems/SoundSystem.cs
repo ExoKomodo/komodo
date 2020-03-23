@@ -6,31 +6,35 @@ using System;
 
 using GameTime = Microsoft.Xna.Framework.GameTime;
 
+using SoundEffect = Microsoft.Xna.Framework.Audio.SoundEffect;
+using SoundEffectInstance = Microsoft.Xna.Framework.Audio.SoundEffectInstance;
+using SoundState = Microsoft.Xna.Framework.Audio.SoundState;
+
 namespace Komodo.Core.ECS.Systems
 {
-    public class BehaviorSystem
+    public class SoundSystem
     {
         #region Constructors
-        public BehaviorSystem(Game game)
+        public SoundSystem(Game game)
         {
-            Components = new List<BehaviorComponent>();
+            Components = new List<SoundComponent>();
             Entities = new Dictionary<Guid, Entity>();
             Game = game;
-            _uninitializedComponents = new Queue<BehaviorComponent>();
+            _uninitializedComponents = new Queue<SoundComponent>();
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public List<BehaviorComponent> Components { get; private set; }
+        public List<SoundComponent> Components { get; private set; }
         public Dictionary<Guid, Entity> Entities { get; set; }
         public Game Game { get; set; }
         public bool IsInitialized { get; private set; }
         #endregion Public Members
 
         #region Protected Members
-        protected Queue<BehaviorComponent> _uninitializedComponents { get; }
+        protected Queue<SoundComponent> _uninitializedComponents { get; }
         #endregion Protected Members
 
         #region Private Members
@@ -41,13 +45,13 @@ namespace Komodo.Core.ECS.Systems
         #region Member Methods
 
         #region Public Member Methods
-        public bool AddComponent(BehaviorComponent componentToAdd)
+        public bool AddComponent(SoundComponent componentToAdd)
         {
             if (!componentToAdd.IsInitialized)
             {
                 _uninitializedComponents.Enqueue(componentToAdd);
             }
-            return AddBehaviorComponent(componentToAdd);
+            return AddSoundComponent(componentToAdd);
         }
 
         public bool AddEntity([NotNull] Entity entityToAdd)
@@ -62,7 +66,7 @@ namespace Komodo.Core.ECS.Systems
             {
                 switch (component)
                 {
-                    case BehaviorComponent componentToAdd:
+                    case SoundComponent componentToAdd:
                         AddComponent(componentToAdd);
                         break;
                     default:
@@ -84,18 +88,6 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        internal void UpdateComponents(GameTime gameTime)
-        {
-            if (Components != null)
-            {
-                var componentsToUpdate = Components.ToArray();
-                foreach (var component in componentsToUpdate)
-                {
-                    component.Update(gameTime);
-                }
-            }
-        }
-
         public void Initialize()
         {
             if (!IsInitialized)
@@ -114,9 +106,9 @@ namespace Komodo.Core.ECS.Systems
             InitializeComponents();
         }
 
-        public bool RemoveComponent(BehaviorComponent componentToRemove)
+        public bool RemoveComponent(SoundComponent componentToRemove)
         {
-            return RemoveBehaviorComponent(componentToRemove);
+            return RemoveSoundComponent(componentToRemove);
         }
 
         public bool RemoveEntity(Guid entityID)
@@ -128,7 +120,7 @@ namespace Komodo.Core.ECS.Systems
                 {
                     switch (component)
                     {
-                        case BehaviorComponent componentToRemove:
+                        case SoundComponent componentToRemove:
                             RemoveComponent(componentToRemove);
                             break;
                         default:
@@ -141,8 +133,23 @@ namespace Komodo.Core.ECS.Systems
         }
         #endregion Public Member Methods
 
+
+        #region Internal Member Methods
+        internal void UpdateComponents(GameTime gameTime)
+        {
+            if (Components != null)
+            {
+                var componentsToUpdate = Components.ToArray();
+                foreach (var component in componentsToUpdate)
+                {
+                    UpdateComponent(component, gameTime);
+                }
+            }
+        }
+        #endregion Internal Member Methods
+
         #region Private Member Methods
-        private bool AddBehaviorComponent([NotNull] BehaviorComponent componentToAdd)
+        private bool AddSoundComponent([NotNull] SoundComponent componentToAdd)
         {
             if (Components.Contains(componentToAdd))
             {
@@ -160,18 +167,30 @@ namespace Komodo.Core.ECS.Systems
                 if (!component.IsInitialized)
                 {
                     component.IsInitialized = true;
-                    component.Initialize();
+                    var loadedSound = Game.Content.Load<SoundEffect>(component.SoundPath);
+                    component.Sound = loadedSound;
                 }
             }
         }
 
-        protected bool RemoveBehaviorComponent([NotNull] BehaviorComponent componentToRemove)
+        private bool RemoveSoundComponent([NotNull] SoundComponent componentToRemove)
         {
             return Components.Remove(componentToRemove);
         }
-        #endregion Protected Member Methods
 
-        #region Private Member Methods
+        private void UpdateComponent(SoundComponent component, GameTime _)
+        {
+            var instances = new List<SoundEffectInstance>();
+            foreach (var instance in component.Instances)
+            {
+                if (instance.State != SoundState.Stopped)
+                {
+                    instances.Add(instance);
+                }
+            }
+
+            component.Instances = instances;
+        }
         #endregion Private Member Methods
 
         #endregion Member Methods

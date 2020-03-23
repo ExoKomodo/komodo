@@ -75,8 +75,12 @@ namespace Komodo.Core.ECS.Entities
         #region Member Methods
 
         #region Public Member Methods
-        public void AddComponent(Component component)
+        public bool AddComponent([NotNull] Component component)
         {
+            if (component == null)
+            {
+                return false;
+            }
             if (Components == null)
             {
                 Components = new List<Component>();
@@ -90,8 +94,7 @@ namespace Komodo.Core.ECS.Entities
             switch (component)
             {
                 case BehaviorComponent componentToAdd:
-                    Game.BehaviorSystem.AddComponent(componentToAdd);
-                    break;
+                    return Game.BehaviorSystem.AddComponent(componentToAdd);
                 case CameraComponent componentToAdd:
                     if (Render2DSystem == null)
                     {
@@ -101,24 +104,23 @@ namespace Komodo.Core.ECS.Entities
                     {
                         Render3DSystem = Game.CreateRender3DSystem();
                     }
-                    Game.CameraSystem.AddComponent(componentToAdd);
-                    break;
+                    return Game.CameraSystem.AddComponent(componentToAdd);
                 case Drawable2DComponent componentToAdd:
                     if (Render2DSystem == null)
                     {
                         Render2DSystem = Game.CreateRender2DSystem();
                     }
-                    Render2DSystem.AddComponent(componentToAdd);
-                    break;
+                    return Render2DSystem.AddComponent(componentToAdd);
                 case Drawable3DComponent componentToAdd:
                     if (Render3DSystem == null)
                     {
                         Render3DSystem = Game.CreateRender3DSystem();
                     }
-                    Render3DSystem.AddComponent(componentToAdd);
-                    break;
+                    return Render3DSystem.AddComponent(componentToAdd);
+                case SoundComponent componentToAdd:
+                    return Game.SoundSystem.AddComponent(componentToAdd);
                 default:
-                    break;
+                    return false;
             }
         }
 
@@ -132,8 +134,12 @@ namespace Komodo.Core.ECS.Entities
             Components.Clear();
         }
         
-        public bool RemoveComponent(Component component)
+        public bool RemoveComponent([NotNull] Component component)
         {
+            if (component == null)
+            {
+                return false;
+            }
             if (Components != null)
             {
                 switch (component)
@@ -168,8 +174,14 @@ namespace Komodo.Core.ECS.Entities
                             }
                         }
                         break;
-                    default:
+                    case SoundComponent componentToRemove:
+                        if (!Game.SoundSystem.RemoveComponent(componentToRemove))
+                        {
+                            return false;
+                        }
                         break;
+                    default:
+                        return false;
                 }
                 component.Parent = null;
                 return Components.Remove(component);

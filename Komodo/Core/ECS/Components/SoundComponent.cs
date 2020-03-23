@@ -14,23 +14,21 @@ namespace Komodo.Core.ECS.Components
         #region Constructors
         public SoundComponent(string soundPath) : base(true, null)
         {
-            Sound = Game.Content.Load<SoundEffect>(soundPath);
-            _instances = new List<SoundEffectInstance>();
+            Instances = new List<SoundEffectInstance>();
+            SoundPath = soundPath;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public SoundEffect Sound { get; }
+        public SoundEffect Sound { get; set;  }
+        public string SoundPath { get; }
         #endregion Public Members
 
-        #region Protected Members
-        protected List<SoundEffectInstance> _instances { get; set;  }
-        #endregion Protected Members
-
-        #region Private Members
-        #endregion Private Members
+        #region Internal Members
+        internal List<SoundEffectInstance> Instances { get; set;  }
+        #endregion Internal Members
 
         #endregion Members
 
@@ -55,12 +53,12 @@ namespace Komodo.Core.ECS.Components
 
         public void Clear()
         {
-            var instances = _instances.ToList();
+            var instances = Instances.ToList();
             foreach (var instance in instances)
             {
                 Stop(instance);
             }
-            _instances.Clear();
+            Instances.Clear();
         }
 
         public void Pause(SoundEffectInstance soundToPause)
@@ -73,7 +71,7 @@ namespace Komodo.Core.ECS.Components
 
         public void PauseAll()
         {
-            foreach (var instance in _instances)
+            foreach (var instance in Instances)
             {
                 Pause(instance);
             }
@@ -89,7 +87,7 @@ namespace Komodo.Core.ECS.Components
                 {
                     Clear();
                 }
-                _instances.Add(instance);
+                Instances.Add(instance);
                 instance.Play();
 
                 return instance;
@@ -110,41 +108,25 @@ namespace Komodo.Core.ECS.Components
             if (IsValidInstance(soundToStop))
             {
                 soundToStop.Stop();
-                _instances.Remove(soundToStop);
+                Instances.Remove(soundToStop);
                 soundToStop.Dispose();
             }
         }
 
         public void StopAll()
         {
-            var instances = _instances.ToList();
+            var instances = Instances.ToList();
             foreach (var instance in instances)
             {
                 Stop(instance);
             }
-        }
-
-        public void Update(GameTime _)
-        {
-            // base.Update(gameTime);
-
-            var instances = _instances.ToList();
-            foreach (var instance in _instances)
-            {
-                if (instance.State != SoundState.Stopped)
-                {
-                    instances.Add(instance);
-                }
-            }
-
-            _instances = instances;
         }
         #endregion Public Member Methods
 
         #region Protected Member Methods
         protected bool IsValidInstance(SoundEffectInstance instance)
         {
-            return instance != null && !instance.IsDisposed && _instances.Contains(instance);
+            return instance != null && !instance.IsDisposed && Instances.Contains(instance);
         }
         #endregion Protected Member Methods
 
