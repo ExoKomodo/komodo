@@ -32,7 +32,7 @@ namespace Komodo.Core.ECS.Components
                 return Texture.Height * Parent.Scale.Y;
             }
         }
-        public Engine.Graphics.Texture Texture { get; set; }
+        public Texture Texture { get; set; }
         public string TexturePath { get; set; }
         public override float Width
         {

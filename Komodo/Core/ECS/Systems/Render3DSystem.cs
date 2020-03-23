@@ -11,7 +11,6 @@ using Matrix = Microsoft.Xna.Framework.Matrix;
 using BasicEffect = Microsoft.Xna.Framework.Graphics.BasicEffect;
 using BlendState = Microsoft.Xna.Framework.Graphics.BlendState;
 using DepthStencilState = Microsoft.Xna.Framework.Graphics.DepthStencilState;
-using Model = Microsoft.Xna.Framework.Graphics.Model;
 using RasterizerState = Microsoft.Xna.Framework.Graphics.RasterizerState;
 using SamplerState = Microsoft.Xna.Framework.Graphics.SamplerState;
 
@@ -107,12 +106,13 @@ namespace Komodo.Core.ECS.Systems
             try
             {
                 var componentsToDraw = Components.ToArray();
-                Array.ForEach(componentsToDraw, component => {
+                foreach (var component in componentsToDraw)
+                {
                     if (component.Parent.IsEnabled && component.IsEnabled)
                     {
                         DrawComponent(component);
                     }
-                });
+                }
             }
             catch (Exception ex)
             {
@@ -219,8 +219,8 @@ namespace Komodo.Core.ECS.Systems
                 if (!component.IsInitialized)
                 {
                     component.IsInitialized = true;
-                    var loadedModel = Game.Content.Load<Model>(component.ModelPath);
-                    component.ModelData = new Engine.Graphics.Model((Model)loadedModel);
+                    var loadedModel = Game.Content.Load<Microsoft.Xna.Framework.Graphics.Model>(component.ModelPath);
+                    component.ModelData = new Model(loadedModel);
                 }
             }
         }

@@ -15,7 +15,7 @@
 
 #begin MonoGame/audio/sample.ogg
 /importer:OggImporter
-/processor:SongProcessor
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:MonoGame/audio/sample.ogg
 

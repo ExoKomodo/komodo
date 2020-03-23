@@ -30,6 +30,7 @@ namespace Komodo.Core
             CameraSystem = new CameraSystem(this);
             Render2DSystems = new List<Render2DSystem>();
             Render3DSystems = new List<Render3DSystem>();
+            SoundSystem = new SoundSystem(this);
         }
         #endregion Constructors
 
@@ -38,9 +39,10 @@ namespace Komodo.Core
         #region Public Members
         public BehaviorSystem BehaviorSystem { get; private set; }
         public CameraSystem CameraSystem { get; private set; }
+        public BasicEffect DefaultSpriteShader { get; set; }
         public List<Render2DSystem> Render2DSystems { get; private set; }
         public List<Render3DSystem> Render3DSystems { get; private set; }
-        public BasicEffect DefaultSpriteShader { get; set; }
+        public SoundSystem SoundSystem { get; private set; }
 
         public float FramesPerSecond
         {
@@ -110,9 +112,15 @@ namespace Komodo.Core
             var render2DSystems = Render2DSystems.ToArray();
             var render3DSystems = Render3DSystems.ToArray();
             // 3D must render before 2D or else the 2D sprites will fail to render in the Z dimension properly
-            Array.ForEach(render3DSystems, system => system.DrawComponents());
+            foreach (var system in render3DSystems)
+            {
+                system.DrawComponents();
+            }
             var spriteBatch = GraphicsManager.SpriteBatch;
-            Array.ForEach(render2DSystems, system => system.DrawComponents(spriteBatch));
+            foreach (var system in render2DSystems)
+            {
+                system.DrawComponents(spriteBatch);
+            }
         }
 
         public void Exit()
@@ -130,10 +138,21 @@ namespace Komodo.Core
             };
             GraphicsManager.VSync = false;
 
-            BehaviorSystem.Initialize();
             CameraSystem.Initialize();
-            Render3DSystems.ForEach(system => system.Initialize());
-            Render2DSystems.ForEach(system => system.Initialize());
+            SoundSystem.Initialize();
+
+            var render3DSystems = Render3DSystems.ToArray();
+            foreach (var system in render3DSystems)
+            {
+                system.Initialize();
+            }
+            var render2DSystems = Render2DSystems.ToArray();
+            foreach (var system in render2DSystems)
+            {
+                system.Initialize();
+            }
+
+            BehaviorSystem.Initialize();
         }
 
         public void ResetElapsedTime()
@@ -156,20 +175,35 @@ namespace Komodo.Core
             FramesPerSecond = (float)(1 / gameTime.ElapsedGameTime.TotalSeconds);
             InputManager.Update();
 
-            var render2DSystems = Render2DSystems.ToArray();
-            var render3DSystems = Render3DSystems.ToArray();
             BehaviorSystem.PreUpdate(gameTime);
             CameraSystem.PreUpdate(gameTime);
-            Array.ForEach(render3DSystems, system => system.PreUpdate(gameTime));
-            Array.ForEach(render2DSystems, system => system.PreUpdate(gameTime));
+            SoundSystem.PreUpdate(gameTime);
+            var render3DSystems = Render3DSystems.ToArray();
+            foreach (var system in render3DSystems)
+            {
+                system.PreUpdate(gameTime);
+            }
+            var render2DSystems = Render2DSystems.ToArray();
+            foreach (var system in render2DSystems)
+            {
+                system.PreUpdate(gameTime);
+            }
 
             BehaviorSystem.UpdateComponents(gameTime);
-            CameraSystem.UpdateComponents();
+            CameraSystem.UpdateComponents(gameTime);
+            SoundSystem.UpdateComponents(gameTime);
 
             BehaviorSystem.PostUpdate(gameTime);
             CameraSystem.PostUpdate(gameTime);
-            Array.ForEach(render2DSystems, system => system.PostUpdate(gameTime));
-            Array.ForEach(render3DSystems, system => system.PostUpdate(gameTime));
+            SoundSystem.PostUpdate(gameTime);
+            foreach (var system in render3DSystems)
+            {
+                system.PostUpdate(gameTime);
+            }
+            foreach (var system in render2DSystems)
+            {
+                system.PostUpdate(gameTime);
+            }
         }
         #endregion Public Member Methods
         

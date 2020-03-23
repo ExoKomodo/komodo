@@ -227,12 +227,13 @@ namespace Komodo.Core.ECS.Systems
                     shader
                 );
                 var componentsToDraw = components.ToArray();
-                Array.ForEach(componentsToDraw, component => {
+                foreach (var component in componentsToDraw)
+                {
                     if (component.Parent.IsEnabled && component.IsEnabled && component.IsBillboard == drawBillboards)
                     {
                         DrawComponent(component, spriteBatch);
                     }
-                });
+                }
             }
             catch (Exception ex)
             {

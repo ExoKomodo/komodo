@@ -84,12 +84,15 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        internal void UpdateComponents()
+        internal void UpdateComponents(GameTime _)
         {
             if (Components != null)
             {
                 var componentsToUpdate = Components.ToArray();
-                Array.ForEach(componentsToUpdate, component => UpdateComponent(component));
+                foreach (var component in componentsToUpdate)
+                {
+                    UpdateComponent(component);
+                }
             }
         }
 
