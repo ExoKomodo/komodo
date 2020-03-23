@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Color = Microsoft.Xna.Framework.Color;
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Komodo.Core
 {
-    public class KomodoMonoGame : Microsoft.Xna.Framework.Game
+    public class MonoGame : Microsoft.Xna.Framework.Game
     {
         #region Members
 
@@ -13,7 +14,7 @@ namespace Komodo.Core
         #endregion Protected Members
 
         #region Private Members
-        private readonly KomodoGame _komodoGame;
+        private readonly Game _game;
         #endregion Private Members
 
         #endregion Members
@@ -26,7 +27,7 @@ namespace Komodo.Core
         #region Protected Member Methods
         protected override void Draw(GameTime gameTime)
         {
-            _komodoGame.Draw(gameTime, Color.Green);
+            _game.Draw(gameTime, Color.Green);
 
             base.Draw(gameTime);
         }
@@ -36,7 +37,7 @@ namespace Komodo.Core
             // Framework should initialize all resources before wrapping classes can initialize
             base.Initialize();
 
-            _komodoGame.Initialize();
+            _game.Initialize();
         }
 
         protected override void LoadContent()
@@ -45,7 +46,7 @@ namespace Komodo.Core
 
         protected override void Update(GameTime gameTime)
         {
-            _komodoGame.Update(gameTime);
+            _game.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -57,9 +58,9 @@ namespace Komodo.Core
         #endregion Member Methods
 
         #region Constructors
-        public KomodoMonoGame(KomodoGame komodoGame)
+        public MonoGame(Game game)
         {
-            _komodoGame = komodoGame;
+            _game = game;
             Content.RootDirectory = "Content/MonoGame";
         }
         #endregion Constructors

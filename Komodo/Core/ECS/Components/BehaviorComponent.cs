@@ -1,11 +1,11 @@
-using Microsoft.Xna.Framework;
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Komodo.Core.ECS.Components
 {
     public abstract class BehaviorComponent : Component
     {
         #region Constructors
-        public BehaviorComponent() : base(true, null)
+        protected BehaviorComponent() : base(true, null)
         {
         }
         #endregion Constructors

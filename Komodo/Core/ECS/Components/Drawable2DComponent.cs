@@ -1,13 +1,14 @@
 using Komodo.Core.ECS.Entities;
-using Komodo.Core.Engine.Graphics;
-using Microsoft.Xna.Framework.Graphics;
+using Komodo.Lib.Math;
+
+using Effect = Microsoft.Xna.Framework.Graphics.Effect;
 
 namespace Komodo.Core.ECS.Components
 {
     public abstract class Drawable2DComponent : Component
     {
         #region Constructors
-        public Drawable2DComponent(bool isEnabled = true, Entity parent = null) : base(isEnabled, parent)
+        protected Drawable2DComponent(bool isEnabled = true, Entity parent = null) : base(isEnabled, parent)
         {
         }
         #endregion
@@ -15,7 +16,7 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
-        public abstract KomodoVector2 Center { get; }
+        public abstract Vector2 Center { get; }
         public abstract float Height { get; }
         public bool IsBillboard { get; set; }
         public Effect Shader

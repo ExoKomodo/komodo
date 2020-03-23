@@ -1,13 +1,14 @@
 using Komodo.Core.Engine.Graphics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Komodo.Lib.Math;
+
+using Effect = Microsoft.Xna.Framework.Graphics.Effect;
 
 namespace Komodo.Core.ECS.Components
 {
     public class SpriteComponent : Drawable2DComponent
     {
         #region Constructors
-        public SpriteComponent(KomodoTexture texture, Effect shader) : base(true, null)
+        public SpriteComponent(Engine.Graphics.Texture texture, Effect shader) : base(true, null)
         {
             Shader = shader;
             Texture = texture;
@@ -23,7 +24,7 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
-        public override KomodoVector2 Center => Texture != null ? new KomodoVector2(Texture.Width / 2, Texture.Height / 2) : KomodoVector2.Zero;
+        public override Vector2 Center => Texture != null ? new Vector2(Texture.Width / 2, Texture.Height / 2) : Vector2.Zero;
         public override float Height
         {
             get
@@ -31,7 +32,7 @@ namespace Komodo.Core.ECS.Components
                 return Texture.Height * Parent.Scale.Y;
             }
         }
-        public KomodoTexture Texture { get; set; }
+        public Engine.Graphics.Texture Texture { get; set; }
         public string TexturePath { get; set; }
         public override float Width
         {

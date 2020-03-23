@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.ECS.Systems;
-using Microsoft.Xna.Framework;
+using Komodo.Lib.Math;
+
+using Matrix = Microsoft.Xna.Framework.Matrix;
+using Quaternion = Microsoft.Xna.Framework.Quaternion;
 
 namespace Komodo.Core.ECS.Entities
 {
     public class Entity
     {
         #region Constructors
-        public Entity([NotNull] KomodoGame game)
+        public Entity([NotNull] Game game)
         {
             ID = Guid.NewGuid();
             Components = new List<Component>();
             Game = game;
             IsEnabled = true;
-            Position = KomodoVector3.Zero;
-            Rotation = KomodoVector3.Zero;
-            Scale = KomodoVector3.One;
+            Position = Vector3.Zero;
+            Rotation = Vector3.Zero;
+            Scale = Vector3.One;
         }
         #endregion Constructors
 
@@ -36,13 +39,13 @@ namespace Komodo.Core.ECS.Entities
                 _components = value;
             }
         }
-        public KomodoGame Game { get; private set; }
+        public Game Game { get; private set; }
         public Guid ID { get; private set; }
         public bool IsEnabled { get; set; }
-        public KomodoVector3 Position { get; set; }
+        public Vector3 Position { get; set; }
         public Render2DSystem Render2DSystem { get; set; }
         public Render3DSystem Render3DSystem { get; set; }
-        public KomodoVector3 Rotation { get; set; }
+        public Vector3 Rotation { get; set; }
         public Matrix RotationMatrix
         {
             get
@@ -57,7 +60,7 @@ namespace Komodo.Core.ECS.Entities
                 return Quaternion.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z);
             }
         }
-        public KomodoVector3 Scale { get; set; }
+        public Vector3 Scale { get; set; }
         #endregion Public Members
 
         #region Protected Members

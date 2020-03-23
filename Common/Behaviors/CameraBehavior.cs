@@ -1,7 +1,7 @@
-using Komodo.Core;
 using Komodo.Core.ECS.Components;
 using Komodo.Core.Engine.Input;
-using Microsoft.Xna.Framework;
+
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Common.Behaviors
 {
@@ -48,30 +48,30 @@ namespace Common.Behaviors
             var cameraForward = InputManager.GetInput("camera_forward", PlayerIndex);
             var cameraBack = InputManager.GetInput("camera_back", PlayerIndex);
 
-            var direction = KomodoVector3.Zero;
+            var direction = Komodo.Lib.Math.Vector3.Zero;
             if (cameraLeft.State == InputState.Down)
             {
-                direction += KomodoVector3.Left;
+                direction += Komodo.Lib.Math.Vector3.Left;
             }
             if (cameraRight.State == InputState.Down)
             {
-                direction += KomodoVector3.Right;
+                direction += Komodo.Lib.Math.Vector3.Right;
             }
             if (cameraUp.State == InputState.Down)
             {
-                direction += KomodoVector3.Up;
+                direction += Komodo.Lib.Math.Vector3.Up;
             }
             if (cameraDown.State == InputState.Down)
             {
-                direction += KomodoVector3.Down;
+                direction += Komodo.Lib.Math.Vector3.Down;
             }
             if (cameraForward.State == InputState.Down)
             {
-                direction += KomodoVector3.Forward;
+                direction += Komodo.Lib.Math.Vector3.Forward;
             }
             if (cameraBack.State == InputState.Down)
             {
-                direction += KomodoVector3.Back;
+                direction += Komodo.Lib.Math.Vector3.Back;
             }
 
             var cameraMove = (

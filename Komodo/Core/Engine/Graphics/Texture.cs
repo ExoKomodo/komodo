@@ -1,13 +1,14 @@
 using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using Color = Microsoft.Xna.Framework.Color;
+using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 
 namespace Komodo.Core.Engine.Graphics
 {
-    public class KomodoTexture : IKomodoTexture
+    public class Texture : ITexture
     {
         #region Constructors
-        public KomodoTexture(Texture2D monoGameTexture)
+        public Texture(Texture2D monoGameTexture)
         {
             SetData(null);
             MonoGameTexture = monoGameTexture;
@@ -15,7 +16,7 @@ namespace Komodo.Core.Engine.Graphics
             _width = 0;
         }
 
-        public KomodoTexture(
+        public Texture(
             GraphicsManager graphicsManager,
             Color[] data,
             int width,
@@ -31,7 +32,7 @@ namespace Komodo.Core.Engine.Graphics
             CreateMonoGameTexture(graphicsManager);
         }
         
-        public KomodoTexture(
+        public Texture(
             GraphicsManager graphicsManager,
             Color[,] data
         )

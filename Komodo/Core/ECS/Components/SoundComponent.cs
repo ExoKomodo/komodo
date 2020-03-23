@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
+
+using GameTime = Microsoft.Xna.Framework.GameTime;
+
+using SoundEffect = Microsoft.Xna.Framework.Audio.SoundEffect;
+using SoundEffectInstance = Microsoft.Xna.Framework.Audio.SoundEffectInstance;
+using SoundState = Microsoft.Xna.Framework.Audio.SoundState;
 
 namespace Komodo.Core.ECS.Components
 {
@@ -11,7 +14,7 @@ namespace Komodo.Core.ECS.Components
         #region Constructors
         public SoundComponent(string soundPath) : base(true, null)
         {
-            Sound = KomodoGame.Content.Load<SoundEffect>(soundPath);
+            Sound = Game.Content.Load<SoundEffect>(soundPath);
             _instances = new List<SoundEffectInstance>();
         }
         #endregion Constructors
@@ -121,7 +124,7 @@ namespace Komodo.Core.ECS.Components
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime _)
         {
             // base.Update(gameTime);
 

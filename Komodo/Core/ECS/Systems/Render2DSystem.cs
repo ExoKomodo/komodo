@@ -1,19 +1,32 @@
 using Komodo.Core.ECS.Components;
 using Komodo.Core.ECS.Entities;
-using Komodo.Core.Engine.Graphics;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Linq;
+using Komodo.Lib.Math;
+
+using Color = Microsoft.Xna.Framework.Color;
+using GameTime = Microsoft.Xna.Framework.GameTime;
+using Matrix = Microsoft.Xna.Framework.Matrix;
+
+using BasicEffect = Microsoft.Xna.Framework.Graphics.BasicEffect;
+using DepthStencilState = Microsoft.Xna.Framework.Graphics.DepthStencilState;
+using Effect = Microsoft.Xna.Framework.Graphics.Effect;
+using RasterizerState = Microsoft.Xna.Framework.Graphics.RasterizerState;
+using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
+using SpriteEffect = Microsoft.Xna.Framework.Graphics.SpriteEffect;
+using SpriteEffects = Microsoft.Xna.Framework.Graphics.SpriteEffects;
+using SpriteSortMode = Microsoft.Xna.Framework.Graphics.SpriteSortMode;
+using SpriteFont = Microsoft.Xna.Framework.Graphics.SpriteFont;
+using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 
 namespace Komodo.Core.ECS.Systems
 {
     public class Render2DSystem
     {
         #region Constructors
-        public Render2DSystem(KomodoGame game)
+        public Render2DSystem(Game game)
         {
             Components = new List<Drawable2DComponent>();
             Entities = new Dictionary<Guid, Entity>();
@@ -28,7 +41,7 @@ namespace Komodo.Core.ECS.Systems
         public CameraComponent ActiveCamera { get; set; }
         public List<Drawable2DComponent> Components { get; private set; }
         public Dictionary<Guid, Entity> Entities { get; set; }
-        public KomodoGame Game { get; set; }
+        public Game Game { get; set; }
         public bool IsInitialized { get; private set; }
         #endregion Public Members
 
@@ -108,11 +121,11 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        public void PostUpdate(GameTime gameTime)
+        public void PostUpdate(GameTime _)
         {
             InitializeComponents();
         }
-        public void PreUpdate(GameTime gameTime)
+        public void PreUpdate(GameTime _)
         {
             InitializeComponents();
         }
@@ -251,14 +264,14 @@ namespace Komodo.Core.ECS.Systems
             {
                 if (component.IsBillboard)
                 {
-                    position = KomodoVector3.Transform(
+                    position = Vector3.Transform(
                         position,
                         ActiveCamera.ViewMatrix * Matrix.CreateScale(1f, -1f, 1f)
                     );
                 }
                 else
                 {
-                    position = KomodoVector3.Transform(
+                    position = Vector3.Transform(
                         position,
                         Matrix.CreateScale(1f, -1f, 1f)
                     );
@@ -289,7 +302,7 @@ namespace Komodo.Core.ECS.Systems
                         position.XY.MonoGameVector,
                         textComponent.Color,
                         -rotation.Z,
-                        textComponent.IsCentered ? textComponent.Center.MonoGameVector : KomodoVector2.Zero.MonoGameVector,
+                        textComponent.IsCentered ? textComponent.Center.MonoGameVector : Vector2.Zero.MonoGameVector,
                         scale.XY.MonoGameVector,
                         SpriteEffects.None,
                         position.Z
@@ -309,11 +322,11 @@ namespace Komodo.Core.ECS.Systems
                     switch (component)
                     {
                         case SpriteComponent spriteComponent:
-                            var loadedTexture = KomodoGame.Content.Load<Texture2D>(spriteComponent.TexturePath);
-                            spriteComponent.Texture = new KomodoTexture(loadedTexture);
+                            var loadedTexture = Game.Content.Load<Texture2D>(spriteComponent.TexturePath);
+                            spriteComponent.Texture = new Engine.Graphics.Texture(loadedTexture);
                             break;
                         case TextComponent textComponent:
-                            var loadedFont = KomodoGame.Content.Load<SpriteFont>(textComponent.FontPath);
+                            var loadedFont = Game.Content.Load<SpriteFont>(textComponent.FontPath);
                             textComponent.Font = loadedFont;
                             break;
                     }

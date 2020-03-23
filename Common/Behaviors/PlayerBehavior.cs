@@ -1,6 +1,7 @@
-using Komodo.Core;
 using Komodo.Core.ECS.Components;
-using Microsoft.Xna.Framework;
+
+using Color = Microsoft.Xna.Framework.Color;
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Common.Behaviors
 {
@@ -49,7 +50,7 @@ namespace Common.Behaviors
                 new TextComponent("fonts/font", Color.Black, Game?.DefaultSpriteShader, $"Test {PlayerIndex}")
                 {
                     IsBillboard = false,
-                    Position = new KomodoVector3(0f, 20f, 0)
+                    Position = new Komodo.Lib.Math.Vector3(0f, 20f, 0)
                 }
             );
         }

@@ -1,16 +1,17 @@
 using Komodo.Core.ECS.Components;
 using Komodo.Core.ECS.Entities;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System;
+
+using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Komodo.Core.ECS.Systems
 {
     public class CameraSystem
     {
         #region Constructors
-        public CameraSystem(KomodoGame game)
+        public CameraSystem(Game game)
         {
             Components = new List<CameraComponent>();
             Entities = new Dictionary<Guid, Entity>();
@@ -24,7 +25,7 @@ namespace Komodo.Core.ECS.Systems
         #region Public Members
         public List<CameraComponent> Components { get; private set; }
         public Dictionary<Guid, Entity> Entities { get; set; }
-        public KomodoGame Game { get; set; }
+        public Game Game { get; set; }
         public bool IsInitialized { get; private set; }
         #endregion Public Members
 
@@ -101,11 +102,11 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        public void PostUpdate(GameTime gameTime)
+        public void PostUpdate(GameTime _)
         {
             InitializeComponents();
         }
-        public void PreUpdate(GameTime gameTime)
+        public void PreUpdate(GameTime _)
         {
             InitializeComponents();
         }
