@@ -8,9 +8,13 @@ using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Komodo.Core.ECS.Systems
 {
-    public class BehaviorSystem
+    /// <summary>
+    /// Manages all <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+    /// </summary>
+    public class BehaviorSystem : ISystem<BehaviorComponent>
     {
         #region Constructors
+        /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
         public BehaviorSystem(Game game)
         {
             Components = new List<BehaviorComponent>();
@@ -23,17 +27,33 @@ namespace Komodo.Core.ECS.Systems
         #region Members
 
         #region Public Members
+        /// <summary>
+        /// All tracked <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+        /// </summary>
         public List<BehaviorComponent> Components { get; private set; }
+
+        /// <summary>
+        /// All tracked <see cref="Komodo.Core.ECS.Entities.Entity"/> objects.
+        /// </summary>
         public Dictionary<Guid, Entity> Entities { get; set; }
-        public Game Game { get; set; }
+
+        /// <summary>
+        /// Reference to current <see cref="Komodo.Core.Game"/> instance.
+        /// </summary>
+        public Game Game { get; }
+
+        /// <summary>
+        /// Whether or not the BehaviorSystem has called <see cref="Initialize()"/>.
+        /// </summary>
         public bool IsInitialized { get; private set; }
         #endregion Public Members
 
-        #region Protected Members
-        protected Queue<BehaviorComponent> _uninitializedComponents { get; }
-        #endregion Protected Members
-
         #region Private Members
+        /// <summary>
+        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+        /// All <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
+        /// </summary>
+        private Queue<BehaviorComponent> _uninitializedComponents { get; }
         #endregion Private Members
 
         #endregion Members
@@ -41,20 +61,20 @@ namespace Komodo.Core.ECS.Systems
         #region Member Methods
 
         #region Public Member Methods
-        public bool AddComponent(BehaviorComponent componentToAdd)
-        {
-            if (!componentToAdd.IsInitialized)
-            {
-                _uninitializedComponents.Enqueue(componentToAdd);
-            }
-            return AddBehaviorComponent(componentToAdd);
-        }
-
+        /// <summary>
+        /// Adds a <see cref="Komodo.Core.ECS.Entities.Entity"/> to the BehaviorSystem if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not already present.
+        /// </summary>
+        /// <param name="entityToAdd"><see cref="Komodo.Core.ECS.Entities.Entity"/> to add.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Entities.Entity"/> was added to this BehaviorSystem's <see cref="Entites"/>. Returns false if the <see cref="Komodo.Core.ECS.Entities.Entity"/> already existed.</returns>
         public bool AddEntity([NotNull] Entity entityToAdd)
         {
             if (Entities == null)
             {
                 Entities = new Dictionary<Guid, Entity>();
+            }
+            if (Entities.ContainsKey(entityToAdd.ID))
+            {
+                return false;
             }
             Game.BehaviorSystem.RemoveEntity(entityToAdd.ID);
             Entities[entityToAdd.ID] = entityToAdd;
@@ -72,6 +92,9 @@ namespace Komodo.Core.ECS.Systems
             return true;
         }
 
+        /// <summary>
+        /// Removes all <see cref="Komodo.Core.ECS.Entities.Entity"/> objects from the BehaviorSystem.
+        /// </summary>
         public void ClearEntities()
         {
             if (Entities != null)
@@ -84,18 +107,9 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        internal void UpdateComponents(GameTime gameTime)
-        {
-            if (Components != null)
-            {
-                var componentsToUpdate = Components.ToArray();
-                foreach (var component in componentsToUpdate)
-                {
-                    component.Update(gameTime);
-                }
-            }
-        }
-
+        /// <summary>
+        /// Initializes the BehaviorSystem and all tracked <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+        /// </summary>
         public void Initialize()
         {
             if (!IsInitialized)
@@ -105,25 +119,53 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
+        /// <summary>
+        /// Runs any operations needed at the end of the <see cref="Komodo.Core.Game.Update(GameTime)"/> loop.
+        /// </summary>
+        /// <remarks>
+        /// Will initialize any new uninitialized <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+        /// </remarks>
+        /// <param name="_">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
         public void PostUpdate(GameTime _)
         {
             InitializeComponents();
         }
+
+        /// <summary>
+        /// Runs any operations needed at the beginning of the <see cref="Komodo.Core.Game.Update(GameTime)"/> loop.
+        /// </summary>
+        /// <remarks>
+        /// Will initialize any new uninitialized <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+        /// </remarks>
+        /// <param name="_">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
         public void PreUpdate(GameTime _)
         {
             InitializeComponents();
         }
 
-        public bool RemoveComponent(BehaviorComponent componentToRemove)
-        {
-            return RemoveBehaviorComponent(componentToRemove);
-        }
-
+        /// <summary>
+        /// Removes a <see cref="Komodo.Core.ECS.Entities.Entity"/> from the BehaviorSystem, including all the <see cref="Komodo.Core.ECS.Entities.Entity"/>'s <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+        /// </summary>
+        /// <param name="entityID">Unique identifier for the <see cref="Komodo.Core.ECS.Entities.Entity"/>.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Entities.Entity"/> was removed from this BehaviorSystem's <see cref="Entities"/>. Will return false if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not present in <see cref="Entities"/>.</returns>
         public bool RemoveEntity(Guid entityID)
         {
             if (Entities != null && Entities.ContainsKey(entityID))
             {
-                var entityToRemove = Entities[entityID];
+                return RemoveEntity(Entities[entityID]);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Removes a <see cref="Komodo.Core.ECS.Entities.Entity"/> from the BehaviorSystem, including all the <see cref="Komodo.Core.ECS.Entities.Entity"/>'s <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+        /// </summary>
+        /// <param name="entityToRemove"><see cref="Komodo.Core.ECS.Entities.Entity"/> to remove.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Entities.Entity"/> was removed from this BehaviorSystem's <see cref="Entities"/>. Will return false if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not present in <see cref="Entities"/>.</returns>
+        public bool RemoveEntity(Entity entityToRemove)
+        {
+            if (Entities != null && Entities.ContainsKey(entityToRemove.ID))
+            {
                 foreach (var component in entityToRemove.Components)
                 {
                     switch (component)
@@ -135,13 +177,63 @@ namespace Komodo.Core.ECS.Systems
                             continue;
                     }
                 }
-                return Entities.Remove(entityID);
+                return Entities.Remove(entityToRemove.ID);
             }
             return false;
         }
         #endregion Public Member Methods
 
+        #region Internal Member Methods
+        /// <summary>
+        /// Adds a <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> is not initialized, it will be queued for initialization.
+        /// </summary>
+        /// <param name="componentToAdd"><see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> to add.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> was added to this BehaviorSystem's <see cref="Components"/>. Returns false if the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> already existed.</returns>
+        internal bool AddComponent(BehaviorComponent componentToAdd)
+        {
+            if (!componentToAdd.IsInitialized)
+            {
+                _uninitializedComponents.Enqueue(componentToAdd);
+            }
+            return AddBehaviorComponent(componentToAdd);
+        }
+
+        /// <summary>
+        /// Removes an individual <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> from this BehaviorSystem's <see cref="Components"/>.
+        /// </summary>
+        /// <param name="componentToRemove"><see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> to remove.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> was removed from this BehaviorSystem's <see cref="Components"/>. Will return false if the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> is not present in <see cref="Components"/>.</returns>
+        internal bool RemoveComponent(BehaviorComponent componentToRemove)
+        {
+            return RemoveBehaviorComponent(componentToRemove);
+        }
+
+        /// <summary>
+        /// Calls <see cref="Komodo.Core.ECS.Components.BehaviorComponent.Update(GameTime)"/> on each enabled <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/>.
+        /// </summary>
+        /// <param name="gameTime">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
+        internal void UpdateComponents(GameTime gameTime)
+        {
+            if (Components != null)
+            {
+                var componentsToUpdate = Components.ToArray();
+                foreach (var component in componentsToUpdate)
+                {
+                    if (component.IsEnabled && component.Parent.IsEnabled)
+                    {
+                        component.Update(gameTime);
+                    }
+                }
+            }
+        }
+        #endregion Internal Member Methods
+
         #region Private Member Methods
+        /// <summary>
+        /// Adds a <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> is not initialized, it will be queued for initialization.
+        /// </summary>
+        /// <param name="componentToAdd"><see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> to add.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> was added to this BehaviorSystem's <see cref="Components"/>. Returns false if the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> already existed.</returns>
         private bool AddBehaviorComponent([NotNull] BehaviorComponent componentToAdd)
         {
             if (Components.Contains(componentToAdd))
@@ -152,6 +244,9 @@ namespace Komodo.Core.ECS.Systems
             return true;
         }
 
+        /// <summary>
+        /// Initializes all uninitialized <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/>.
+        /// </summary>
         private void InitializeComponents()
         {
             while (_uninitializedComponents.Count > 0)
@@ -165,14 +260,16 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        protected bool RemoveBehaviorComponent([NotNull] BehaviorComponent componentToRemove)
+        /// <summary>
+        /// Removes an individual <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> from this BehaviorSystem's <see cref="Components"/>.
+        /// </summary>
+        /// <param name="componentToRemove"><see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> to remove.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> was removed from this BehaviorSystem's <see cref="Components"/>. Will return false if the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> is not present in <see cref="Components"/>.</returns>
+        private bool RemoveBehaviorComponent([NotNull] BehaviorComponent componentToRemove)
         {
             return Components.Remove(componentToRemove);
         }
         #endregion Protected Member Methods
-
-        #region Private Member Methods
-        #endregion Private Member Methods
 
         #endregion Member Methods
     }

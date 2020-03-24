@@ -23,9 +23,13 @@ using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 
 namespace Komodo.Core.ECS.Systems
 {
-    public class Render2DSystem
+    /// <summary>
+    /// Manages all <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects. There can be more than one Render2DSystem per <see cref="Komodo.Core.Game"/>.
+    /// </summary>
+    public class Render2DSystem : ISystem<Drawable2DComponent>
     {
         #region Constructors
+        /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
         public Render2DSystem(Game game)
         {
             Components = new List<Drawable2DComponent>();
@@ -38,18 +42,38 @@ namespace Komodo.Core.ECS.Systems
         #region Members
 
         #region Public Members
+        /// <summary>
+        /// <see cref="Komodo.Core.ECS.Components.CameraComponent"/> to be used for rendering all tracked <see cref="Components"/>.
+        /// </summary>
         public CameraComponent ActiveCamera { get; set; }
+        
+        /// <summary>
+        /// All tracked <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// </summary>
         public List<Drawable2DComponent> Components { get; private set; }
+
+        /// <summary>
+        /// All tracked <see cref="Komodo.Core.ECS.Entities.Entity"/> objects.
+        /// </summary>
         public Dictionary<Guid, Entity> Entities { get; set; }
-        public Game Game { get; set; }
+
+        /// <summary>
+        /// Reference to current <see cref="Komodo.Core.Game"/> instance.
+        /// </summary>
+        public Game Game { get; }
+
+        /// <summary>
+        /// Whether or not the Drawable2DSystem has called <see cref="Initialize()"/>.
+        /// </summary>
         public bool IsInitialized { get; private set; }
         #endregion Public Members
 
-        #region Protected Members
-        protected Queue<Drawable2DComponent> _uninitializedComponents { get; }
-        #endregion Protected Members
-
         #region Private Members
+        /// <summary>
+        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// All <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
+        /// </summary>
+        private Queue<Drawable2DComponent> _uninitializedComponents { get; }
         #endregion Private Members
 
         #endregion Members
@@ -57,20 +81,20 @@ namespace Komodo.Core.ECS.Systems
         #region Member Methods
 
         #region Public Member Methods
-        public bool AddComponent(Drawable2DComponent componentToAdd)
-        {
-            if (!componentToAdd.IsInitialized)
-            {
-                _uninitializedComponents.Enqueue(componentToAdd);
-            }
-            return AddDrawable2DComponent(componentToAdd);
-        }
-
+        /// <summary>
+        /// Adds a <see cref="Komodo.Core.ECS.Entities.Entity"/> to the Drawable2DSystem if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not already present.
+        /// </summary>
+        /// <param name="entityToAdd"><see cref="Komodo.Core.ECS.Entities.Entity"/> to add.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Entities.Entity"/> was added to this Drawable2DSystem's <see cref="Entites"/>. Returns false if the <see cref="Komodo.Core.ECS.Entities.Entity"/> already existed.</returns>
         public bool AddEntity([NotNull] Entity entityToAdd)
         {
             if (Entities == null)
             {
                 Entities = new Dictionary<Guid, Entity>();
+            }
+            if (Entities.ContainsKey(entityToAdd.ID))
+            {
+                return false;
             }
             if (entityToAdd.Render2DSystem != null)
             {
@@ -91,6 +115,9 @@ namespace Komodo.Core.ECS.Systems
             return true;
         }
 
+        /// <summary>
+        /// Removes all <see cref="Komodo.Core.ECS.Entities.Entity"/> objects from the Drawable2DSystem.
+        /// </summary>
         public void ClearEntities()
         {
             if (Entities != null)
@@ -103,15 +130,9 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        internal void DrawComponents(SpriteBatch spriteBatch)
-        {
-            if (Components != null)
-            {
-                DrawComponents(Components, spriteBatch, drawBillboards: false, shader: Game.DefaultSpriteShader);
-                DrawComponents(Components, spriteBatch, drawBillboards: true, shader: Game.DefaultSpriteShader);
-            }
-        }
-
+        /// <summary>
+        /// Initializes the Drawable2DSystem and all tracked <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// </summary>
         public void Initialize()
         {
             if (!IsInitialized)
@@ -121,25 +142,53 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
+        /// <summary>
+        /// Runs any operations needed at the end of the <see cref="Komodo.Core.Game.Update(GameTime)"/> loop.
+        /// </summary>
+        /// <remarks>
+        /// Will initialize any new uninitialized <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// </remarks>
+        /// <param name="_">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
         public void PostUpdate(GameTime _)
         {
             InitializeComponents();
         }
+
+        /// <summary>
+        /// Runs any operations needed at the beginning of the <see cref="Komodo.Core.Game.Update(GameTime)"/> loop.
+        /// </summary>
+        /// <remarks>
+        /// Will initialize any new uninitialized <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// </remarks>
+        /// <param name="_">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
         public void PreUpdate(GameTime _)
         {
             InitializeComponents();
         }
 
-        public bool RemoveComponent(Drawable2DComponent componentToRemove)
-        {
-            return RemoveDrawable2DComponent(componentToRemove);
-        }
-
+        /// <summary>
+        /// Removes a <see cref="Komodo.Core.ECS.Entities.Entity"/> from the Drawable2DSystem, including all the <see cref="Komodo.Core.ECS.Entities.Entity"/>'s <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// </summary>
+        /// <param name="entityID">Unique identifier for the <see cref="Komodo.Core.ECS.Entities.Entity"/>.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Entities.Entity"/> was removed from this Drawable2DSystem's <see cref="Entities"/>. Will return false if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not present in <see cref="Entities"/>.</returns>
         public bool RemoveEntity(Guid entityID)
         {
             if (Entities != null && Entities.ContainsKey(entityID))
             {
-                var entityToRemove = Entities[entityID];
+                return RemoveEntity(Entities[entityID]);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Removes a <see cref="Komodo.Core.ECS.Entities.Entity"/> from the Drawable2DSystem, including all the <see cref="Komodo.Core.ECS.Entities.Entity"/>'s <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// </summary>
+        /// <param name="entityToRemove"><see cref="Komodo.Core.ECS.Entities.Entity"/> to remove.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Entities.Entity"/> was removed from this Drawable2DSystem's <see cref="Entities"/>. Will return false if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not present in <see cref="Entities"/>.</returns>
+        public bool RemoveEntity(Entity entityToRemove)
+        {
+            if (Entities != null && Entities.ContainsKey(entityToRemove.ID))
+            {
                 foreach (var component in entityToRemove.Components)
                 {
                     switch (component)
@@ -150,15 +199,58 @@ namespace Komodo.Core.ECS.Systems
                         default:
                             continue;
                     }
-                }
-                entityToRemove.Render2DSystem = null;
-                return Entities.Remove(entityID);
+}
+                return Entities.Remove(entityToRemove.ID);
             }
             return false;
         }
         #endregion Public Member Methods
 
+        #region Internal Member Methods
+        /// <summary>
+        /// Adds a <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> is not initialized, it will be queued for initialization.
+        /// </summary>
+        /// <param name="componentToAdd"><see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> to add.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> was added to this Drawable2DSystem's <see cref="Components"/>. Returns false if the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> already existed.</returns>
+        internal bool AddComponent(Drawable2DComponent componentToAdd)
+        {
+            if (!componentToAdd.IsInitialized)
+            {
+                _uninitializedComponents.Enqueue(componentToAdd);
+            }
+            return AddDrawable2DComponent(componentToAdd);
+        }
+
+        /// <summary>
+        /// Renders all <see cref="Components"/>. This is done in two passes, first for non-billboarded <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects, and a second pass for billboards.
+        /// </summary>
+        /// <param name="spriteBatch"><see cref="Microsoft.Xna.Framework.Graphics.SpriteBatch"/> to render with.</param>
+        internal void DrawComponents(SpriteBatch spriteBatch)
+        {
+            if (Components != null)
+            {
+                DrawComponents(Components, spriteBatch, drawBillboards: false, shader: Game.DefaultSpriteShader);
+                DrawComponents(Components, spriteBatch, drawBillboards: true, shader: Game.DefaultSpriteShader);
+            }
+        }
+
+        /// <summary>
+        /// Removes an individual <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> from this Drawable2DSystem's <see cref="Components"/>.
+        /// </summary>
+        /// <param name="componentToRemove"><see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> to remove.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> was removed from this Drawable2DSystem's <see cref="Components"/>. Will return false if the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> is not present in <see cref="Components"/>.</returns>
+        internal bool RemoveComponent(Drawable2DComponent componentToRemove)
+        {
+            return RemoveDrawable2DComponent(componentToRemove);
+        }
+        #endregion Internal Member Methods
+
         #region Private Member Methods
+        /// <summary>
+        /// Adds a <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> is not initialized, it will be queued for initialization.
+        /// </summary>
+        /// <param name="componentToAdd"><see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> to add.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> was added to this Drawable2DSystem's <see cref="Components"/>. Returns false if the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> already existed.</returns>
         private bool AddDrawable2DComponent([NotNull] Drawable2DComponent componentToAdd)
         {
             if (Components.Contains(componentToAdd))
@@ -169,6 +261,13 @@ namespace Komodo.Core.ECS.Systems
             return true;
         }
 
+        /// <summary>
+        /// Renders the given <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// </summary>
+        /// <param name="components"><see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects to render.</param>
+        /// <param name="spriteBatch"><see cref="Microsoft.Xna.Framework.Graphics.SpriteBatch"/> to render with.</param>
+        /// <param name="drawBillboards">Whether or not to billboard the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/>.</param>
+        /// <param name="shader">Shader to render with.</param>
         private void DrawComponents(
             [NotNull] IEnumerable<Drawable2DComponent> components,
             [NotNull] SpriteBatch spriteBatch,
@@ -226,10 +325,9 @@ namespace Komodo.Core.ECS.Systems
                     RasterizerState.CullNone,
                     shader
                 );
-                var componentsToDraw = components.ToArray();
-                foreach (var component in componentsToDraw)
+                foreach (var component in components)
                 {
-                    if (component.Parent.IsEnabled && component.IsEnabled && component.IsBillboard == drawBillboards)
+                    if (component.IsEnabled && component.Parent.IsEnabled && component.IsBillboard == drawBillboards)
                     {
                         DrawComponent(component, spriteBatch);
                     }
@@ -256,7 +354,12 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        protected void DrawComponent(Drawable2DComponent component, SpriteBatch spriteBatch)
+        /// <summary>
+        /// Draws the individual <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/>.
+        /// </summary>
+        /// <param name="component"><see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> to render.</param>
+        /// <param name="spriteBatch"><see cref="Microsoft.Xna.Framework.Graphics.SpriteBatch"/> to render with.</param>
+        private void DrawComponent(Drawable2DComponent component, SpriteBatch spriteBatch)
         {
             var position = component.WorldPosition;
             var rotation = component.Rotation;
@@ -312,6 +415,9 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
+        /// <summary>
+        /// Initializes all uninitialized <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/>.
+        /// </summary>
         private void InitializeComponents()
         {
             while (_uninitializedComponents.Count > 0)
@@ -335,13 +441,15 @@ namespace Komodo.Core.ECS.Systems
             }
         }
 
-        protected bool RemoveDrawable2DComponent([NotNull] Drawable2DComponent componentToRemove)
+        /// <summary>
+        /// Removes an individual <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> from this Drawable2DSystem's <see cref="Components"/>.
+        /// </summary>
+        /// <param name="componentToRemove"><see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> to remove.</param>
+        /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> was removed from this Drawable2DSystem's <see cref="Components"/>. Will return false if the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> is not present in <see cref="Components"/>.</returns>
+        private bool RemoveDrawable2DComponent([NotNull] Drawable2DComponent componentToRemove)
         {
             return Components.Remove(componentToRemove);
         }
-        #endregion Protected Member Methods
-
-        #region Private Member Methods
         #endregion Private Member Methods
 
         #endregion Member Methods

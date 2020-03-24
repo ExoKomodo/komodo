@@ -1,51 +1,44 @@
 namespace Komodo.Core.Engine.Graphics
 {
-    public class Model : IModel
+    /// <summary>
+    /// Represents raw 3D model data.
+    /// </summary>
+    public class Model
     {
         #region Constructors
+        /// <param name="monoGameModel"><see cref="Microsoft.Xna.Framework.Graphics.Model"/> data loaded in MonoGame's format.</param>
         public Model(Microsoft.Xna.Framework.Graphics.Model monoGameModel)
         {
             MonoGameModel = monoGameModel;
-            _height = 0f;
-            _width = 0f;
-            _depth = 0f;
+            Depth = 0f;
+            Height = 0f;
+            Width = 0f;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
+        /// <summary>
+        /// Z dimensional extremity.
+        /// </summary>
+        public float Depth { get; private set; }
 
-        public float Height
-        {
-            get
-            {
-                return _height;
-            }
-        }
+        /// <summary>
+        /// Y dimensional extremity.
+        /// </summary>
+        public float Height { get; private set; }
 
-        public float Width
-        {
-            get
-            {
-                return _width;
-            }
-        }
-        public float Depth
-        {
-            get
-            {
-                return _depth;
-            }
-        }
+        /// <summary>
+        /// X dimensional extremity.
+        /// </summary>
+        public float Width { get; private set; }
+
+        /// <summary>
+        /// Raw 3D model data.
+        /// </summary>
         public Microsoft.Xna.Framework.Graphics.Model MonoGameModel { get; private set; }
         #endregion Public Members
-
-        #region Private Members
-        private float _height { get; set; }
-        private float _width { get; set; }
-        private float _depth { get; set; }
-        #endregion Private Members
 
         #endregion Members
     }

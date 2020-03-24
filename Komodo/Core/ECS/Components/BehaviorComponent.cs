@@ -2,6 +2,10 @@ using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Komodo.Core.ECS.Components
 {
+    /// <summary>
+    /// Abstract class defining all behaviors.
+    /// A class derived from BehaviorComponent is the main way scripting is achieved in Komodo.
+    /// </summary>
     public abstract class BehaviorComponent : Component
     {
         #region Constructors
@@ -10,22 +14,12 @@ namespace Komodo.Core.ECS.Components
         }
         #endregion Constructors
 
-        #region Members
-
-        #region Public Members
-        #endregion Public Members
-
-        #region Protected Members
-        #endregion Protected Members
-
-        #region Private Members
-        #endregion Private Members
-
-        #endregion Members
-
         #region Member Methods
 
         #region Public Member Methods
+        /// <summary>
+        /// Virtual method initializing a BehaviorComponent.
+        /// </summary>
         public virtual void Initialize()
         {
             if (!IsInitialized)
@@ -33,18 +27,13 @@ namespace Komodo.Core.ECS.Components
                 IsInitialized = true;
             }
         }
-        
-        public virtual void Update(GameTime gameTime)
-        {
-            
-        }
+
+        /// <summary>
+        /// Abstract method for updating a BehaviorComponent.
+        /// </summary>
+        /// <param name="gameTime">Time passed since last <see cref="Update"/></param>
+        public abstract void Update(GameTime gameTime);
         #endregion Public Member Methods
-
-        #region Protected Member Methods
-        #endregion Protected Member Methods
-
-        #region Private Member Methods
-        #endregion Private Member Methods
 
         #endregion Member Methods
     }
