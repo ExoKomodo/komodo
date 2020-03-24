@@ -1,49 +1,70 @@
-﻿using Color = Microsoft.Xna.Framework.Color;
-using GameTime = Microsoft.Xna.Framework.GameTime;
+﻿using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Komodo.Core
 {
-    public class MonoGame : Microsoft.Xna.Framework.Game
+    /// <summary>
+    /// Underlying implementation of the MonoGame <see cref="Microsoft.Xna.Framework.Game"/>.
+    /// </summary>
+    internal class MonoGame : Microsoft.Xna.Framework.Game
     {
+        #region Constructors
+        /// <summary>
+        /// Defines the root directory of content files.
+        /// </summary>
+        /// /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
+        public MonoGame(Game game)
+        {
+            _game = game;
+            Content.RootDirectory = "Content/MonoGame";
+        }
+        #endregion Constructors
+
         #region Members
 
-        #region Public Members
-        #endregion Public Members
-
-        #region Protected Members
-        #endregion Protected Members
-
         #region Private Members
-        private readonly Game _game;
+        /// <summary>
+        /// Reference to current <see cref="Komodo.Core.Game"/> instance.
+        /// </summary>
+        private Game _game { get; }
         #endregion Private Members
 
         #endregion Members
 
         #region Member Methods
-        
-        #region Public Member Methods
-        #endregion Public Member Methods
-        
+
         #region Protected Member Methods
+        /// <summary>
+        /// Passthrough function to <see cref="Komodo.Core.Game.Draw(GameTime)"/>.
+        /// </summary>
+        /// <param name="gameTime">Time passed since last <see cref="Draw(GameTime)."/>.</param>
         protected override void Draw(GameTime gameTime)
         {
-            _game.Draw(gameTime, Color.Green);
+            _game.Draw(gameTime);
 
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Initializes all low-level resources so <see cref="Komodo.Core.Game"/> can be initialized.
+        /// </summary>
         protected override void Initialize()
         {
-            // Framework should initialize all resources before wrapping classes can initialize
             base.Initialize();
 
             _game.Initialize();
         }
 
+        /// <summary>
+        /// Used to load content files before beginning game loop. [Unused]
+        /// </summary>
         protected override void LoadContent()
         {
         }
 
+        /// <summary>
+        /// Passthrough function to <see cref="Komodo.Core.Game.Update(GameTime)"/>.
+        /// </summary>
+        /// <param name="gameTime">Time passed since last <see cref="Update(GameTime)."/>.</param>
         protected override void Update(GameTime gameTime)
         {
             _game.Update(gameTime);
@@ -51,18 +72,7 @@ namespace Komodo.Core
             base.Update(gameTime);
         }
         #endregion Protected Member Methods
-        
-        #region Private Member Methods
-        #endregion Private Member Methods
 
         #endregion Member Methods
-
-        #region Constructors
-        public MonoGame(Game game)
-        {
-            _game = game;
-            Content.RootDirectory = "Content/MonoGame";
-        }
-        #endregion Constructors
     }
 }

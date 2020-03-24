@@ -1,5 +1,8 @@
 namespace Komodo.Core.Engine.Input
 {
+    /// <summary>
+    /// Defines all button, keyboard, and mouse inputs.
+    /// </summary>
     public enum Inputs
     {
         Undefined,

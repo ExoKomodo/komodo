@@ -13,13 +13,19 @@ using BasicEffect = Microsoft.Xna.Framework.Graphics.BasicEffect;
 
 namespace Komodo.Core
 {
+    /// <summary>
+    /// Manages all graphics initialization, systems, and underlying interactions with the MonoGame framework.
+    /// </summary>
     public class Game : IDisposable
     {
         #region Constructors
+        /// <summary>
+        /// Creates the Game instance, instantiating the underlying <see cref="Komodo.Core.MonoGame"/> instance, <see cref="Komodo.Core.Engine.Graphics.GraphicsManager"/>, and <see cref="Komodo.Core.ECS.Systems.ISystem"/> objects.
+        /// </summary>
         public Game()
         {
             _monoGame = new MonoGame(this);
-            GraphicsManager = new GraphicsManager(_monoGame)
+            GraphicsManager = new GraphicsManager(this)
             {
                 IsMouseVisible = true
             };
@@ -37,19 +43,49 @@ namespace Komodo.Core
         #region Members
 
         #region Public Members
-        public BehaviorSystem BehaviorSystem { get; private set; }
-        public CameraSystem CameraSystem { get; private set; }
-        public BasicEffect DefaultSpriteShader { get; set; }
-        public List<Render2DSystem> Render2DSystems { get; private set; }
-        public List<Render3DSystem> Render3DSystems { get; private set; }
-        public SoundSystem SoundSystem { get; private set; }
+        /// <summary>
+        /// Manages all <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+        /// </summary>
+        public BehaviorSystem BehaviorSystem { get; }
 
-        public float FramesPerSecond
-        {
-            get;
-            protected set;
-        }
+        /// <summary>
+        /// Manages all <see cref="Komodo.Core.ECS.Components.CameraComponent"/> objects.
+        /// </summary>
+        public CameraSystem CameraSystem { get; }
+
+        /// <summary>
+        /// Default shader for all <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/>.
+        /// </summary>
+        public BasicEffect DefaultSpriteShader { get; set; }
+
+        /// <summary>
+        /// Manages all <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// </summary>
+        public List<Render2DSystem> Render2DSystems { get; }
+
+        /// <summary>
+        /// Manages all <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> objects.
+        /// </summary>
+        public List<Render3DSystem> Render3DSystems { get; }
+
+        /// <summary>
+        /// Manages all <see cref="Komodo.Core.ECS.Components.SoundComponent"/> objects.
+        /// </summary>
+        public SoundSystem SoundSystem { get; }
+
+        /// <summary>
+        /// Tracks the FPS based on current <see cref="Microsoft.Xna.Framework.GameTime"/>.
+        /// </summary>
+        public float FramesPerSecond { get; private set; }
+
+        /// <summary>
+        /// Manages graphics devices for the Game window.
+        /// </summary>
         public GraphicsManager GraphicsManager { get; private set; }
+
+        /// <summary>
+        /// Window title.
+        /// </summary>
         public string Title
         {
             get
@@ -66,18 +102,21 @@ namespace Komodo.Core
         }
         #endregion Public Members
         
-        #region Protected Members
-        #endregion Protected Members
-        
-        #region Private Members
-        private readonly MonoGame _monoGame;
-        #endregion Private Members
+        #region Internal Members
+        /// <summary>
+        /// Provides access to MonoGame APIs.
+        /// </summary>
+        internal readonly MonoGame _monoGame;
+        #endregion Internal Members
 
         #endregion Members
 
         #region Static Members
 
         #region Public Static Members
+        /// <summary>
+        /// Provides access to the content files compiled by the MonoGame Content Pipeline (Releases: https://github.com/MonoGame/MonoGame/releases).
+        /// </summary>
         public static ContentManager Content { get; private set; }
         #endregion Public Static Members
 
@@ -85,7 +124,10 @@ namespace Komodo.Core
 
         #region Member Methods
 
-        #region Public Member Methods        
+        #region Public Member Methods
+        /// <summary>
+        /// Creates and begins tracking a new <see cref="Komodo.Core.ECS.Systems.Render2DSystem"/>.
+        /// </summary>
         public Render2DSystem CreateRender2DSystem()
         {
             var system = new Render2DSystem(this);
@@ -93,6 +135,9 @@ namespace Komodo.Core
             return system;
         }
 
+        /// <summary>
+        /// Creates and begins tracking a new <see cref="Komodo.Core.ECS.Systems.Render3DSystem"/>.
+        /// </summary>
         public Render3DSystem CreateRender3DSystem()
         {
             var system = new Render3DSystem(this);
@@ -100,11 +145,20 @@ namespace Komodo.Core
             return system;
         }
 
+        /// <summary>
+        /// Draws a frame with a default clear color.
+        /// </summary>
+        /// <param name="gameTime">Time passed since last <see cref="Draw(GameTime)"/>.</param>
         public void Draw(GameTime gameTime)
         {
-            Draw(gameTime, Color.Transparent);
+            Draw(gameTime, Color.DarkOliveGreen);
         }
 
+        /// <summary>
+        /// Draws a frame with a provided clear color.
+        /// </summary>
+        /// <param name="_">Time passed since last <see cref="Draw(GameTime)"/>.</param>
+        /// <param name="clearColor"><see cref="Microsoft.Xna.Framework.Color"/> to clear the screen with.</param>
         public void Draw(GameTime _, Color clearColor)
         {
             GraphicsManager.Clear(clearColor);
@@ -123,11 +177,18 @@ namespace Komodo.Core
             }
         }
 
+        /// <summary>
+        /// Exits the application.
+        /// </summary>
         public void Exit()
         {
             _monoGame.Exit();
         }
 
+
+        /// <summary>
+        /// Initializes the <see cref="Komodo.Core.Engine.Graphics.GraphicsManager"/> and all <see cref="Komodo.Core.ECS.Systems.ISystem"/> objects.
+        /// </summary>
         public void Initialize()
         {
             GraphicsManager.Initialize();
@@ -155,21 +216,15 @@ namespace Komodo.Core
             BehaviorSystem.Initialize();
         }
 
-        public void ResetElapsedTime()
-        {
-            _monoGame.ResetElapsedTime();
-        }
-
         public void Run()
         {
             _monoGame.Run();
         }
 
-        public void RunOneFrame()
-        {
-            _monoGame.RunOneFrame();
-        }
-
+        /// <summary>
+        /// Updates <see cref="Komodo.Core.ECS.Systems.ISystem"/> objects.
+        /// </summary>
+        /// <param name="gameTime">Time passed since last <see cref="Update(GameTime)"/>.</param>
         public void Update(GameTime gameTime)
         {
             FramesPerSecond = (float)(1 / gameTime.ElapsedGameTime.TotalSeconds);
@@ -206,49 +261,38 @@ namespace Komodo.Core
             }
         }
         #endregion Public Member Methods
-        
-        #region Protected Member Methods
-        #endregion Protected Member Methods
-        
-        #region Private Member Methods
-        #endregion Private Member Methods
-        
+
         #endregion Member Methods
 
         #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+        /// <summary>
+        /// Implicit call to <see cref="Dispose(bool)"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
-        protected virtual void Dispose(bool disposing)
+        /// <summary>
+        /// Detects redundant calls to <see cref="Dispose(bool)"/>.
+        /// </summary>
+        private bool disposedValue = false;
+
+        /// <summary>
+        /// Disposes of the underlying <see cref="Komodo.Core.MonoGame"/> instance.
+        /// </summary>
+        /// <param name="isDisposing">Whether or not the Game is disposing.</param>
+        protected virtual void Dispose(bool isDisposing)
         {
             if (!disposedValue)
             {
-                if (disposing)
+                if (isDisposing)
                 {
-                    // TODO: dispose managed state (managed objects).
                     _monoGame.Dispose();
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
                 disposedValue = true;
             }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~KomodoGame()
-        // {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
         }
         #endregion
     }
