@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System;
 
+using ContainmentType = Microsoft.Xna.Framework.ContainmentType;
 using GameTime = Microsoft.Xna.Framework.GameTime;
 using Matrix = Microsoft.Xna.Framework.Matrix;
 
@@ -269,7 +270,7 @@ namespace Komodo.Core.ECS.Systems
         }
 
         /// <summary>
-        /// Renders the give <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/>.
+        /// Renders the given <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/>.
         /// </summary>
         /// <param name="component"><see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> to render.</param>
         private void DrawComponent(Drawable3DComponent component)
@@ -279,6 +280,11 @@ namespace Komodo.Core.ECS.Systems
             var scale = component.Scale;
             if (ActiveCamera != null)
             {
+                var bounds = component.BoundingBox;
+                if (ActiveCamera.BoundingFrustum.Contains(bounds) == ContainmentType.Disjoint)
+                {
+                    return;
+                }
                 rotationQuaternion *= ActiveCamera.RotationQuaternion;
                 scale *= ActiveCamera.Zoom;
             }
@@ -317,8 +323,11 @@ namespace Komodo.Core.ECS.Systems
                 if (!component.IsInitialized)
                 {
                     component.IsInitialized = true;
-                    var loadedModel = Game.Content.Load<Microsoft.Xna.Framework.Graphics.Model>(component.ModelPath);
-                    component.ModelData = new Model(loadedModel);
+                    if (component.ModelPath != null)
+                    {
+                        var loadedModel = Game.Content.Load<Microsoft.Xna.Framework.Graphics.Model>(component.ModelPath);
+                        component.ModelData = new Model(loadedModel);
+                    }
                 }
             }
         }
