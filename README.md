@@ -4,6 +4,7 @@ Komodo was spawned out of a desire to learn popular game engine design, like com
 
 ## Links
 * [Nuget Package](https://www.nuget.org/packages/Komodo)
+* [Templates Package](https://www.nuget.org/packages/Komodo.Templates)
 * [Documentation](https://exokomodo.github.io/Komodo/docs)
 * [Discord](https://discord.gg/2g6dftW)
 * [Reddit](https://www.reddit.com/r/komodoengine)
