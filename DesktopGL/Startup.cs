@@ -6,7 +6,7 @@ using Komodo.Core.ECS.Entities;
 using Komodo.Core.Engine.Input;
 using Komodo.Lib.Math;
 
-namespace Komodo
+namespace DesktopGL
 {
     public static class Startup
     {
