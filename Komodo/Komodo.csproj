@@ -8,7 +8,7 @@
     <Authors>ExoKomodo</Authors>
     <Company>ExoKomodo</Company>
     <Description>Komodo was spawned out of a desire to learn popular game engine design, like composition over inheritance and ECS. Komodo is an attempt at making an engine that places the developer first, providing simple control over 2D and 3D game development.</Description>
-    <Copyright>Copyright (c) 2020 KomodoEngine</Copyright>
+    <Copyright>Copyright (c) 2020 ExoKomodo</Copyright>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <NeutralLanguage>en</NeutralLanguage>
@@ -17,7 +17,8 @@
     <PackageTags>game-engine, ecs, 2d-game-engine, 3d-game-engine</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageVersion>1.0.6</PackageVersion>
+    
+    <PackageVersion>1.0.10</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
