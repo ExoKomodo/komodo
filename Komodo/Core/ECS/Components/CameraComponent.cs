@@ -36,7 +36,7 @@ namespace Komodo.Core.ECS.Components
         /// <summary>
         /// Provides a <see cref="Microsoft.Xna.Framework.BoundingFrustum"/> representing the projected space of the CameraComponent.
         /// </summary>
-        public BoundingFrustum BoundingFrustum => new BoundingFrustum(Projection);
+        public BoundingFrustum BoundingFrustum => new BoundingFrustum(ViewMatrix * Projection);
         
         /// <summary>
         /// Provides a <see cref="Microsoft.Xna.Framework.Rectangle"/> representing the projected space of the CameraComponent.

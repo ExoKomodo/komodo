@@ -1,6 +1,8 @@
 using Komodo.Core.Engine.Graphics;
 
+using BoundingBox = Microsoft.Xna.Framework.BoundingBox;
 using Color = Microsoft.Xna.Framework.Color;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Komodo.Core.ECS.Components
 {
@@ -40,6 +42,31 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
+        /// <summary>
+        /// Provides a <see cref="Microsoft.Xna.Framework.BoundingBox"/> representing the bounds of the model.
+        /// </summary>
+        public BoundingBox BoundingBox
+        {
+            get
+            {
+                var bounds = ModelData.BoundingBox;
+                var min = bounds.Min;
+                var max = bounds.Max;
+                min.X *= Width;
+                max.X *= Width;
+                
+                min.Y *= Height;
+                max.Y *= Height;
+                
+                min.Z *= Depth;
+                max.Z *= Depth;
+
+                min += WorldPosition.MonoGameVector;
+                max += WorldPosition.MonoGameVector;
+                return new BoundingBox(min, max);
+            }
+        }
+
         /// <summary>
         /// <see cref="Microsoft.Xna.Framework.Color"/> to tint the entire <see cref="Komodo.Core.Engine.Graphics.Model"/> with.
         /// </summary>

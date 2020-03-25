@@ -429,12 +429,18 @@ namespace Komodo.Core.ECS.Systems
                     switch (component)
                     {
                         case SpriteComponent spriteComponent:
-                            var loadedTexture = Game.Content.Load<Texture2D>(spriteComponent.TexturePath);
-                            spriteComponent.Texture = new Engine.Graphics.Texture(loadedTexture);
+                            if (spriteComponent.TexturePath != null)
+                            {
+                                var loadedTexture = Game.Content.Load<Texture2D>(spriteComponent.TexturePath);
+                                spriteComponent.Texture = new Engine.Graphics.Texture(loadedTexture);
+                            }
                             break;
                         case TextComponent textComponent:
-                            var loadedFont = Game.Content.Load<SpriteFont>(textComponent.FontPath);
-                            textComponent.Font = loadedFont;
+                            if (textComponent.FontPath != null)
+                            {
+                                var loadedFont = Game.Content.Load<SpriteFont>(textComponent.FontPath);
+                                textComponent.Font = loadedFont;
+                            }
                             break;
                     }
                 }

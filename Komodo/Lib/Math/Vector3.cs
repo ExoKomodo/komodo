@@ -162,6 +162,14 @@ namespace Komodo.Lib.Math
         public static Vector3 Left => -Right;
         public static Vector3 Back => new Vector3(0f, 0f, 1f);
         public static Vector3 Forward => -Back;
+        public static Vector3 Max(Vector3 left, Vector3 right)
+        {
+            return new Vector3(Microsoft.Xna.Framework.Vector3.Max(left.MonoGameVector, right.MonoGameVector));
+        }
+        public static Vector3 Min(Vector3 left, Vector3 right)
+        {
+            return new Vector3(Microsoft.Xna.Framework.Vector3.Min(left.MonoGameVector, right.MonoGameVector));
+        }
         #endregion Public Static Members
 
         #endregion Static Members
