@@ -22,6 +22,7 @@ namespace Komodo.Core.ECS.Components
             ModelPath = null;
             DiffuseColor = Color.White;
             Texture = null;
+            TexturePath = null;
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace Komodo.Core.ECS.Components
             ModelPath = modelPath;
             DiffuseColor = Color.White;
             Texture = null;
+            TexturePath = null;
         }
         #endregion Constructors
 
@@ -108,6 +110,14 @@ namespace Komodo.Core.ECS.Components
         /// Texture to be applied to the <see cref="Komodo.Core.Engine.Graphics.Model"/> surface. 
         /// </summary>
         public Texture Texture { get; set; }
+
+        /// <summary>
+        /// Path to texture to be applied to the <see cref="Komodo.Core.Engine.Graphics.Model"/> surface. 
+        /// </summary>
+        /// <remarks>
+        /// Will only be read on <see cref="Komodo.Core.ECS.System.Render3DSystem.Initialize"/>. Will only be used if <see cref="Texture"/> is null.
+        /// </remarks>
+        public string TexturePath { get; set; }
 
         /// <summary>
         /// X dimensional extremity.
