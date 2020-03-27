@@ -184,13 +184,13 @@ namespace Komodo.Core.Engine.Graphics
             }
             else
             {
-                _height = data.Rank;
                 _width = data.GetLength(0);
-                SetData(new Color[_width * _height]);
+                _height = data.Length / _width;
+                _data = new Color[_width * _height];
                 int i = 0;
-                foreach (Color color in data)
+                foreach (var color in data)
                 {
-                    GetData()[i] = color;
+                    _data[i] = color;
                     i++;
                 }
             }

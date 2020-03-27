@@ -1,6 +1,7 @@
 using Komodo.Core.ECS.Components;
-using Komodo.Core.Engine.Graphics;
 using Komodo.Lib.Math;
+
+using Color = Microsoft.Xna.Framework.Color;
 using GameTime = Microsoft.Xna.Framework.GameTime;
 
 using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
@@ -49,21 +50,17 @@ namespace Common.Behaviors
             if (!_createdBoxes)
             {
                 _createdBoxes = true;
-                var component = new Drawable3DComponent(RootComponent.ModelData);
-                var model = component.ModelData;
-                float scale = 20f;
-                for (int i = 0; i < 50; ++i)
+                var colors = new Color[5, 5];
+                for (int i = 0; i < 5; i++)
                 {
-                    for (int j = 0; j < 20; ++j)
+                    for (int j = 0; j < 5; j++)
                     {
-                        Parent.AddComponent(
-                            new Drawable3DComponent(model)
-                            {
-                                Position = new Vector3(50f * i, 50f * j, 0f)
-                            }
-                        );
+                        colors[i, j] = Color.Red;
                     }
                 }
+                var texture = Game.GraphicsManager.CreateTexture(colors);
+                RootComponent.Texture = texture;
+                float scale = 20f;
                 Parent.Scale = new Vector3(scale, scale, scale);
             }
         }

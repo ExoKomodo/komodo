@@ -36,9 +36,4 @@
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.*" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.*" />
-  </ItemGroup>
-
 </Project>
