@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json.Serialization;
 using Komodo.Core.ECS.Entities;
 using Komodo.Lib.Math;
@@ -16,6 +17,7 @@ namespace Komodo.Core.ECS.Components
         #region Constructors
         protected Component(bool isEnabled = true, Entity parent = null)
         {
+            ID = Guid.NewGuid();
             IsEnabled = isEnabled;
             Parent = parent;
         }
@@ -34,6 +36,11 @@ namespace Komodo.Core.ECS.Components
                 return Parent?.Game;
             }
         }
+
+        /// <summary>
+        /// Unique identifier for the Component.
+        /// </summary>
+        public Guid ID { get; private set; }
 
         /// <summary>
         /// Enabled Components are managed by their corresponding <see cref="Komodo.Core.ECS.Systems.ISystem"/>, otherwise the Component is ignored.
