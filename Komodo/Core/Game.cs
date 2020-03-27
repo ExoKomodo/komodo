@@ -151,6 +151,7 @@ namespace Komodo.Core
         /// <param name="gameTime">Time passed since last <see cref="Draw(GameTime)"/>.</param>
         public void Draw(GameTime gameTime)
         {
+            FramesPerSecond = (float)(1 / gameTime.ElapsedGameTime.TotalSeconds);
             Draw(gameTime, Color.DarkOliveGreen);
         }
 
@@ -227,7 +228,6 @@ namespace Komodo.Core
         /// <param name="gameTime">Time passed since last <see cref="Update(GameTime)"/>.</param>
         public void Update(GameTime gameTime)
         {
-            FramesPerSecond = (float)(1 / gameTime.ElapsedGameTime.TotalSeconds);
             InputManager.Update();
 
             BehaviorSystem.PreUpdate(gameTime);
