@@ -23,14 +23,14 @@ namespace Komodo.Core.ECS.Components
         /// <param name="soundPath">File path to a compiled <see cref="Microsoft.Xna.Framework.Audio.SoundEffect"/> content file.</param>
         public SoundComponent(string soundPath) : base(true, null)
         {
-            _instances = new List<SoundEffectInstance>();
+            _instances = new Dictionary<Guid, SoundEffectInstance>();
             SoundPath = soundPath;
         }
         #endregion Constructors
 
         #region Destructor
         /// <summary>
-        /// Stops all <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> objects found in <see cref="Instances"/>.
+        /// Stops all sound instance found in <see cref="_instances"/>.
         /// </summary>
         ~SoundComponent()
         {
@@ -41,11 +41,6 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
-        /// <summary>
-        /// Collection of current and valid <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> objects.
-        /// </summary>
-        public List<SoundEffectInstance> Instances => _instances;
-        
         /// <summary>
         /// Raw sound data loaded from disk.
         /// </summary>
@@ -58,7 +53,7 @@ namespace Komodo.Core.ECS.Components
         #endregion Public Members
 
         #region Internal Members
-        internal List<SoundEffectInstance> _instances { get; set;  }
+        internal Dictionary<Guid, SoundEffectInstance> _instances { get; set;  }
         #endregion Internal Members
 
         #endregion Members
@@ -67,14 +62,15 @@ namespace Komodo.Core.ECS.Components
 
         #region Public Member Methods
         /// <summary>
-        /// Changes the intensity of a valid sound instance found in <see cref="Instances"/>.
+        /// Changes the intensity of a valid sound instance found in <see cref="_instances"/>.
         /// </summary>
-        /// <param name="sound">Specific instance that will have its volume intensity modified.</param>
+        /// <param name="id">Identifier for the instance that will have its volume intensity modified.</param>
         /// <param name="volume">Value, clamped between 0 and 1, representing the volume intensity.</param>
-        public void ChangeVolume(SoundEffectInstance sound, float volume)
+        public void ChangeVolume(Guid id, float volume)
         {
-            if (IsValidInstance(sound))
+            if (IsValidInstance(id))
             {
+                var instance = _instances[id];
                 if (volume < 0f)
                 {
                     volume = 0f;
@@ -83,64 +79,66 @@ namespace Komodo.Core.ECS.Components
                 {
                     volume = 1f;
                 }
-                sound.Volume = volume;
+                instance.Volume = volume;
             }
         }
 
         /// <summary>
-        /// Clears all <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> objects found in <see cref="Instances"/>, stopping all of them immediately.
+        /// Clears all sound instances, stopping all of them immediately.
         /// </summary>
         public void Clear()
         {
-            var instances = Instances.ToList();
-            foreach (var instance in instances)
+            foreach (var id in _instances.Keys)
             {
-                Stop(instance);
+                Stop(id);
             }
-            Instances.Clear();
+            _instances.Clear();
         }
 
         /// <summary>
-        /// Checks whether or not a <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> is not null, not disposed, and is present in <see cref="Instances"/>.
+        /// Checks whether or not a sound instance exists and is not disposed.
         /// </summary>
-        /// <param name="instance"></param>
-        /// <returns>Whether or not the <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> is valid.</returns>
-        public bool IsValidInstance(SoundEffectInstance instance)
+        /// <param name="id">Identifier of the instance to check.</param>
+        /// <returns>Whether or not the id represents a valid sound instance.</returns>
+        public bool IsValidInstance(Guid id)
         {
-            return instance != null && !instance.IsDisposed && Instances.Contains(instance);
+            bool instanceExists = _instances.TryGetValue(id, out SoundEffectInstance instance);
+            return instanceExists && !instance.IsDisposed;
         }
 
         /// <summary>
-        /// Pauses the given <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> if the instance is present on the SoundComponent.
+        /// Pauses the given sound if the instance is present on the SoundComponent.
         /// </summary>
-        /// <param name="soundToPause">Specific instance to pause.</param>
-        public void Pause(SoundEffectInstance soundToPause)
+        /// <param name="id">Identifier for the specific instance to pause.</param>
+        public void Pause(Guid id)
         {
-            if (IsValidInstance(soundToPause))
+            if (IsValidInstance(id))
             {
-                soundToPause.Pause();
+                var instance = _instances[id];
+                instance.Pause();
             }
         }
 
         /// <summary>
-        /// Pauses all <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> objects found in <see cref="Instances"/>.
+        /// Pauses all sound instances found in <see cref="_instances"/>.
         /// </summary>
         public void PauseAll()
         {
-            foreach (var instance in Instances)
+            foreach (var id in _instances.Keys)
             {
-                Pause(instance);
+                Pause(id);
             }
         }
 
         /// <summary>
-        /// Creates a <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> from <see cref="Sound"/>.
+        /// Creates a sound instance from <see cref="Sound"/>.
         /// </summary>
-        /// <param name="loop">The <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> will continue to repeat until paused or stopped.</param>
+        /// <param name="loop">The sound instance will continue to repeat until paused or stopped.</param>
         /// <param name="shouldLayerSound"></param>
-        /// <returns>A <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> handle for pausing, resuming, and stopping.</returns>
-        public SoundEffectInstance Play(bool loop = false, bool shouldLayerSound = true)
+        /// <returns>A sound instance ID for pausing, resuming, and stopping.</returns>
+        public Guid Play(bool loop = false, bool shouldLayerSound = true)
         {
+            var id = Guid.Empty;
             if (Sound != null)
             {
                 var instance = Sound.CreateInstance();
@@ -149,49 +147,52 @@ namespace Komodo.Core.ECS.Components
                 {
                     Clear();
                 }
-                Instances.Add(instance);
+                id = Guid.NewGuid();
+                _instances[id] = instance;
                 instance.Play();
-
-                return instance;
             }
-            return null;
+            return id;
         }
 
         /// <summary>
-        /// Resumes a paused <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/>.
+        /// Resumes a paused sound instance.
         /// </summary>
-        /// <param name="soundToResume"><see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> to resume playing.</param>
-        public void Resume(SoundEffectInstance soundToResume)
+        /// <param name="id">Sound instance to resume playing.</param>
+        public void Resume(Guid id)
         {
-            if (IsValidInstance(soundToResume) && soundToResume.State == SoundState.Paused)
+            if (IsValidInstance(id))
             {
-                soundToResume.Resume();
+                var instance = _instances[id];
+                if (instance.State == SoundState.Paused)
+                {
+                    instance.Resume();
+                }
             }
         }
 
         /// <summary>
-        /// Stops a <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/>. Stopping a sound will remove the <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> from <see cref="Instances"/>.
+        /// Stops a sound instance. Stopping a sound will remove the instance from <see cref="_instances"/>.
         /// </summary>
-        /// <param name="soundToStop"><see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> to stop.</param>
-        public void Stop(SoundEffectInstance soundToStop)
+        /// <param name="id">Identifier for sound to stop.</param>
+        public void Stop(Guid id)
         {
-            if (IsValidInstance(soundToStop))
+            if (IsValidInstance(id))
             {
-                soundToStop.Stop();
-                Instances.Remove(soundToStop);
-                soundToStop.Dispose();
+                var instance = _instances[id];
+                instance.Stop();
+                _instances.Remove(id);
+                instance.Dispose();
             }
         }
 
         /// <summary>
-        /// Stops all <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> objects found in <see cref="Instances"/>.
+        /// Stops all sound instances found in <see cref="_instances"/>.
         /// </summary>
         public void StopAll()
         {
-            var instances = Instances.ToList();
-            foreach (var instance in instances)
+            foreach (var id in _instances.Keys)
             {
-                Stop(instance);
+                Stop(id);
             }
         }
         #endregion Public Member Methods
