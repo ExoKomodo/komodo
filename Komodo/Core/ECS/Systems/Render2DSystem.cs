@@ -318,7 +318,7 @@ namespace Komodo.Core.ECS.Systems
                         break;
                 }
                 spriteBatch.Begin(
-                    SpriteSortMode.BackToFront,
+                    SpriteSortMode.FrontToBack,
                     null,
                     null,
                     DepthStencilState.DepthRead,
