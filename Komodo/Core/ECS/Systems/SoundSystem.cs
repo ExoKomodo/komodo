@@ -280,12 +280,14 @@ namespace Komodo.Core.ECS.Systems
         /// <param name="_">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
         private void UpdateComponent(SoundComponent component, GameTime _)
         {
-            var instances = new List<SoundEffectInstance>();
-            foreach (var instance in component.Instances)
+            var instances = new Dictionary<Guid, SoundEffectInstance>();
+            foreach (var pair in component._instances)
             {
+                var id = pair.Key;
+                var instance = pair.Value;
                 if (instance.State != SoundState.Stopped)
                 {
-                    instances.Add(instance);
+                    instances[id] = instance;
                 }
             }
 
