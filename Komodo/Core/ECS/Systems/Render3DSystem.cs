@@ -328,6 +328,11 @@ namespace Komodo.Core.ECS.Systems
                         var loadedModel = Game.Content.Load<Microsoft.Xna.Framework.Graphics.Model>(component.ModelPath);
                         component.ModelData = new Model(loadedModel);
                     }
+                    if (component.Texture == null && component.TexturePath != null)
+                    {
+                        var loadedTexture = Game.Content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(component.TexturePath);
+                        component.Texture = new Texture(loadedTexture);
+                    }
                 }
             }
         }

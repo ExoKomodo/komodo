@@ -58,7 +58,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"class_komodo_1_1_lib_1_1_network_1_1_client.html#a27edaba094fa7572736765f4bb8bd100"
+"class_komodo_1_1_lib_1_1_network_1_1_client.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

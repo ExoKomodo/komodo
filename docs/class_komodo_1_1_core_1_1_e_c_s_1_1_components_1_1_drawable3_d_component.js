@@ -9,5 +9,6 @@ var class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_drawable3_d_component =
     [ "ModelData", "class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_drawable3_d_component.html#a561eb40f674fd296f721f53a52c5fd9d", null ],
     [ "ModelPath", "class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_drawable3_d_component.html#a8cb64dd5d73c8b0ae81a87261ff434bd", null ],
     [ "Texture", "class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_drawable3_d_component.html#a9dc9562153be4eabb9f799a4d5d4fab5", null ],
+    [ "TexturePath", "class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_drawable3_d_component.html#aed1680bba19e485a448c11cceec3bb23", null ],
     [ "Width", "class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_drawable3_d_component.html#a51d087058e5d446d80baa26554e09cc2", null ]
 ];

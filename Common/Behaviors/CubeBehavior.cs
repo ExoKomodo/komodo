@@ -40,7 +40,10 @@ namespace Common.Behaviors
 
             if (ModelPath != null)
             {
-                RootComponent = new Drawable3DComponent(ModelPath);
+                RootComponent = new Drawable3DComponent(ModelPath)
+                {
+                    TexturePath = "player/idle/player_idle_01"
+                };
                 Parent.AddComponent(RootComponent);
             }
         }
@@ -50,16 +53,6 @@ namespace Common.Behaviors
             if (!_createdBoxes)
             {
                 _createdBoxes = true;
-                var colors = new Color[5, 5];
-                for (int i = 0; i < 5; i++)
-                {
-                    for (int j = 0; j < 5; j++)
-                    {
-                        colors[i, j] = Color.Red;
-                    }
-                }
-                var texture = Game.GraphicsManager.CreateTexture(colors);
-                RootComponent.Texture = texture;
                 float scale = 20f;
                 Parent.Scale = new Vector3(scale, scale, scale);
             }
