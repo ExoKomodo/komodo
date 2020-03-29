@@ -19,15 +19,7 @@ namespace Common.Behaviors
 
         #region Public Members
         public int PlayerIndex { get; }
-        public SoundComponent Sound { get; private set; }
-        public Guid SoundInstance { get; private set; }
         #endregion Public Members
-
-        #region Protected Members
-        #endregion Protected Members
-
-        #region Private Members
-        #endregion Private Members
 
         #endregion Members
 
@@ -48,31 +40,19 @@ namespace Common.Behaviors
             {
                 Parent.AddComponent(new MoveBehavior(PlayerIndex));
             }
-            Sound = new SoundComponent("audio/sample");
-            Parent.AddComponent(Sound);
 
             Parent.AddComponent(
                 new TextComponent("fonts/font", Color.Black, Game?.DefaultSpriteShader, $"Test {PlayerIndex}")
                 {
-                    IsBillboard = false,
+                    IsBillboard = true,
                     Position = new Komodo.Lib.Math.Vector3(0f, 20f, 0)
                 }
             );
         }
         public override void Update(GameTime gameTime)
         {
-            if (Sound != null && SoundInstance == Guid.Empty)
-            {
-                SoundInstance = Sound.Play();
-            }
         }
         #endregion Public Member Methods
-
-        #region Protected Member Methods
-        #endregion Protected Member Methods
-
-        #region Private Member Methods
-        #endregion Private Member Methods
 
         #endregion Member Methods
     }

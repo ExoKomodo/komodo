@@ -19,34 +19,28 @@ namespace DesktopGL
                 var render2DSystem = Game.CreateRender2DSystem();
                 var render3DSystem = Game.CreateRender3DSystem();
 
-                var player1Entity = new Entity(Game)
+                var player = new Entity(Game)
                 {
-                    Position = new Vector3(0f, 0f, 0f),
+                    Position = new Vector3(0f, 0f, 100f),
                     Render2DSystem = render2DSystem,
+                    Render3DSystem = render3DSystem,
                 };
-                player1Entity.AddComponent(new PlayerBehavior(0));
-                var player2Entity = new Entity(Game)
+                player.AddComponent(new PlayerBehavior(0));
+                var cube = new Entity(Game)
                 {
                     Position = new Vector3(0f, 0f, 0f),
                     Render3DSystem = render3DSystem,
                 };
-                player2Entity.AddComponent(new CubeBehavior("models/cube"));
-                var cameraEntity = new Entity(Game)
-                {
-                    Position = new Vector3(0f, 50f, 200f),
-                    Render2DSystem = render2DSystem,
-                    Render3DSystem = render3DSystem,
-                };
+                cube.AddComponent(new CubeBehavior("models/cube"));
                 var camera = new CameraComponent()
                 {
                     Position = new Vector3(0, 0, 100f),
                     FarPlane = 10000000f,
                     IsPerspective = true,
                     Zoom = 1f,
-                    Target = player1Entity,
                 };
-                cameraEntity.AddComponent(camera);
-                cameraEntity.AddComponent(new CameraBehavior(camera, 0));
+                player.AddComponent(camera);
+                player.AddComponent(new CameraBehavior(camera, 0));
                 camera.SetActive();
 
                 render2DSystem = Game.CreateRender2DSystem();
@@ -55,7 +49,7 @@ namespace DesktopGL
                     Render2DSystem = render2DSystem,
                 };
                 counterEntity.AddComponent(new FPSCounterBehavior());
-                cameraEntity = new Entity(Game)
+                var cameraEntity = new Entity(Game)
                 {
                     Position = new Vector3(0f, 0f, 0f),
                     Render2DSystem = render2DSystem,

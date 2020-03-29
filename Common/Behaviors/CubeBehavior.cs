@@ -53,17 +53,21 @@ namespace Common.Behaviors
             if (!_createdBoxes)
             {
                 _createdBoxes = true;
-                float scale = 20f;
-                Parent.Scale = new Vector3(scale, scale, scale);
+                var scale = Vector3.One * 20f;
+                for (int i = 0; i < 10; i++)
+                {
+                    Parent.AddComponent(
+                        new Drawable3DComponent(RootComponent.ModelData)
+                        {
+                            Position = new Vector3(i + 5, 0f, 0f) * scale.X,
+                            Scale = scale
+                        }
+                    ); ;
+                }
+                Parent.Scale = scale;
             }
         }
         #endregion Public Member Methods
-
-        #region Protected Member Methods
-        #endregion Protected Member Methods
-
-        #region Private Member Methods
-        #endregion Private Member Methods
 
         #endregion Member Methods
     }

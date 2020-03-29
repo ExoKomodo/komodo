@@ -1,5 +1,6 @@
 using Komodo.Core.ECS.Components;
 using Komodo.Core.Engine.Input;
+using Komodo.Lib.Math;
 
 using GameTime = Microsoft.Xna.Framework.GameTime;
 
@@ -45,33 +46,23 @@ namespace Common.Behaviors
             var cameraRight = InputManager.GetInput("camera_right", PlayerIndex);
             var cameraUp = InputManager.GetInput("camera_up", PlayerIndex);
             var cameraDown = InputManager.GetInput("camera_down", PlayerIndex);
-            var cameraForward = InputManager.GetInput("camera_forward", PlayerIndex);
-            var cameraBack = InputManager.GetInput("camera_back", PlayerIndex);
 
-            var direction = Komodo.Lib.Math.Vector3.Zero;
+            var direction = Vector3.Zero;
             if (cameraLeft.State == InputState.Down)
             {
-                direction += Komodo.Lib.Math.Vector3.Left;
+                direction += Camera.Left;
             }
             if (cameraRight.State == InputState.Down)
             {
-                direction += Komodo.Lib.Math.Vector3.Right;
+                direction += Camera.Right;
             }
             if (cameraUp.State == InputState.Down)
             {
-                direction += Komodo.Lib.Math.Vector3.Up;
+                direction += Camera.Forward;
             }
             if (cameraDown.State == InputState.Down)
             {
-                direction += Komodo.Lib.Math.Vector3.Down;
-            }
-            if (cameraForward.State == InputState.Down)
-            {
-                direction += Komodo.Lib.Math.Vector3.Forward;
-            }
-            if (cameraBack.State == InputState.Down)
-            {
-                direction += Komodo.Lib.Math.Vector3.Back;
+                direction += Camera.Backward;
             }
 
             var cameraMove = (
@@ -82,12 +73,6 @@ namespace Common.Behaviors
             Camera.Move(cameraMove);
         }
         #endregion Public Member Methods
-
-        #region Protected Member Methods
-        #endregion Protected Member Methods
-
-        #region Private Member Methods
-        #endregion Private Member Methods
 
         #endregion Member Methods
     }

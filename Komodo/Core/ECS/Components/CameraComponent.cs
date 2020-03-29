@@ -26,13 +26,16 @@ namespace Komodo.Core.ECS.Components
             NearPlane = 1f;
             FarPlane = 2f;
             FieldOfView = 90f;
-            Up = Vector3.Up;
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
+        /// <summary>
+        /// Backward direction for current view matrix.
+        /// </summary>
+        public Vector3 Backward { get; private set; }
         /// <summary>
         /// Provides a <see cref="Microsoft.Xna.Framework.BoundingFrustum"/> representing the projected space of the CameraComponent.
         /// </summary>
@@ -61,6 +64,11 @@ namespace Komodo.Core.ECS.Components
         }
 
         public Vector3 Center => WorldPosition + Origin;
+
+        /// <summary>
+        /// Down direction for current view matrix.
+        /// </summary>
+        public Vector3 Down { get; private set; }
         
         /// <summary>
         /// <see cref="MaximumZoom"/> defines the furthest distance a Component can be from the CameraComponent and still be rendered.
@@ -95,9 +103,19 @@ namespace Komodo.Core.ECS.Components
             }
         }
 
+        /// <summary>
+        /// Forward direction for current view matrix.
+        /// </summary>
+        public Vector3 Forward { get; private set; }
+
         public Matrix InverseViewMatrix => Matrix.Invert(ViewMatrix);
 
         public bool IsPerspective { get; set; }
+
+        /// <summary>
+        /// Left direction for current view matrix.
+        /// </summary>
+        public Vector3 Left { get; private set; }
 
         /// <summary>
         /// <see cref="MaximumZoom"/> defines the upper bound of how far the CameraComponent can zoom in.
@@ -204,13 +222,43 @@ namespace Komodo.Core.ECS.Components
         }
 
         /// <summary>
+        /// Right direction for current view matrix.
+        /// </summary>
+        public Vector3 Right { get; private set; }
+
+        /// <summary>
         /// <see cref="Target"/> defines the Komodo.Core.ECS.Entities.Entity that is followed by the CameraComponent.
         /// </summary>
         public Entity Target { get; set; }
 
-        public Vector3 Up { get; set; }
+        /// <summary>
+        /// Up direction for current view matrix.
+        /// </summary>
+        public Vector3 Up { get; private set; }
 
-        public Matrix ViewMatrix { get; internal set; }
+        public Matrix ViewMatrix
+        {
+            get
+            {
+                return _viewMatrix;
+            }
+            internal set
+            {
+                _viewMatrix = value;
+
+                Backward = new Vector3(ViewMatrix.M13, ViewMatrix.M23, ViewMatrix.M33);
+                Backward.Normalize();
+                Forward = -Backward;
+
+                Right = new Vector3(ViewMatrix.M11, ViewMatrix.M21, ViewMatrix.M31);
+                Right.Normalize();
+                Left = -Right;
+
+                Up = Target == null ? new Vector3(ViewMatrix.M12, ViewMatrix.M22, ViewMatrix.M32) : Vector3.Cross(Vector3.Cross(Forward, Vector3.Up), Forward);
+                Up.Normalize();
+                Down = -Up;
+            }
+        }
 
         /// <summary>
         /// <see cref="Zoom"/> is the current zoom level of the CameraComponent. 
@@ -244,6 +292,8 @@ namespace Komodo.Core.ECS.Components
         private float _minimumZoom { get; set; }
 
         private float _nearPlane { get; set; }
+
+        private Matrix _viewMatrix { get; set; }
 
         private float _zoom { get; set; }
         #endregion Private Members
@@ -385,10 +435,23 @@ namespace Komodo.Core.ECS.Components
         /// <returns>A <see cref="Microsoft.Xna.Framework.Matrix"/> representing the View matrix of the CameraComponent.</returns>
         internal Matrix CalculateViewMatrix()
         {
+            var forward = Vector3.Transform(Vector3.Forward, RotationQuaternion);
+            var up = Vector3.Transform(Vector3.Up, RotationQuaternion);
+            if (IsInitialized)
+            {
+                if (Target == null)
+                {
+                    forward = WorldPosition + forward;
+                }
+                else
+                {
+                    forward = Target.Position;
+                }
+            }
             return Matrix.CreateLookAt(
                 WorldPosition.MonoGameVector,
-                Target == null ? (WorldPosition + Vector3.Forward).MonoGameVector : Target.Position.MonoGameVector,
-                Up.MonoGameVector
+                forward.MonoGameVector,
+                up.MonoGameVector
             );
         }
         #endregion Internal Member Methods
