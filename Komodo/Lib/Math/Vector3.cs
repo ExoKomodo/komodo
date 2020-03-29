@@ -1,6 +1,7 @@
 using System;
 
 using Matrix = Microsoft.Xna.Framework.Matrix;
+using Quaternion = Microsoft.Xna.Framework.Quaternion;
 
 namespace Komodo.Lib.Math
 {
@@ -193,6 +194,11 @@ namespace Komodo.Lib.Math
         {
             return X.GetHashCode() + Y.GetHashCode() + Z.GetHashCode();
         }
+
+        public void Normalize()
+        {
+            MonoGameVector.Normalize();
+        }
         #endregion Public Member Methods
 
         #endregion Member Methods
@@ -274,6 +280,18 @@ namespace Komodo.Lib.Math
             return new Vector3(
                 Microsoft.Xna.Framework.Vector3.Transform(vector.MonoGameVector, transform)
             );
+        }
+
+        public static Vector3 Transform(Vector3 vector, Quaternion transform)
+        {
+            return new Vector3(
+                Microsoft.Xna.Framework.Vector3.Transform(vector.MonoGameVector, transform)
+            );
+        }
+
+        public static Vector3 Cross(Vector3 a, Vector3 b)
+        {
+            return new Vector3(Microsoft.Xna.Framework.Vector3.Cross(a.MonoGameVector, b.MonoGameVector));
         }
 
         public static float Distance(Vector3 a, Vector3 b)

@@ -60,44 +60,44 @@ namespace Common.Behaviors
             var quit = InputManager.GetInput("quit", PlayerIndex);
 
             var direction = Vector3.Zero;
+            float rotation = 0f;
+            float rotationSpeed = 1f;
+            var camera = Parent.Render2DSystem.ActiveCamera;
             if (quit.State == InputState.Down)
             {
                 Game.Exit();
             }
             if (left.State == InputState.Down)
             {
-                direction += Vector3.Left;
+                rotation += rotationSpeed;
             }
             if (right.State == InputState.Down)
             {
-                direction += Vector3.Right;
+                rotation -= rotationSpeed;
             }
             if (up.State == InputState.Down)
             {
-                direction += Vector3.Up;
+                direction += camera.Forward;
             }
             if (down.State == InputState.Down)
             {
-                direction += Vector3.Down;
+                direction += camera.Backward;
             }
             if (sprint.State == InputState.Down)
             {
                 direction *= SprintFactor;
             }
 
+            float timeScale = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             Parent.Position += (
                 direction
                 * Velocity
-                * (float)gameTime.ElapsedGameTime.TotalSeconds
+                * timeScale
             );
+            Parent.Rotation += new Vector3(0f, rotation * timeScale, 0f);
         }
         #endregion Public Member Methods
-
-        #region Protected Member Methods
-        #endregion Protected Member Methods
-
-        #region Private Member Methods
-        #endregion Private Member Methods
 
         #endregion Member Methods
     }

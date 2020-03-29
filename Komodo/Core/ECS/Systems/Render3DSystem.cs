@@ -285,7 +285,6 @@ namespace Komodo.Core.ECS.Systems
                 {
                     return;
                 }
-                rotationQuaternion *= ActiveCamera.RotationQuaternion;
                 scale *= ActiveCamera.Zoom;
             }
             var positionMatrix = Matrix.CreateTranslation(position.MonoGameVector);

@@ -380,7 +380,6 @@ namespace Komodo.Core.ECS.Systems
                         Matrix.CreateScale(1f, -1f, 1f)
                     );
                 }
-                rotation += ActiveCamera.Rotation;
                 scale *= ActiveCamera.Zoom;
             }
             

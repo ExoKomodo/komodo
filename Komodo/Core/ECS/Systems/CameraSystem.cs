@@ -254,8 +254,8 @@ namespace Komodo.Core.ECS.Systems
                 var component = _uninitializedComponents.Dequeue();
                 if (!component.IsInitialized)
                 {
-                    component.IsInitialized = true;
                     UpdateComponent(component);
+                    component.IsInitialized = true;
                 }
             }
         }

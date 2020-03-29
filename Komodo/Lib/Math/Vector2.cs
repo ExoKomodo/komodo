@@ -1,5 +1,8 @@
 using System;
 
+using Matrix = Microsoft.Xna.Framework.Matrix;
+using Quaternion = Microsoft.Xna.Framework.Quaternion;
+
 namespace Komodo.Lib.Math
 {
     public readonly struct Vector2 : IEquatable<Vector2>
@@ -92,6 +95,11 @@ namespace Komodo.Lib.Math
         {
             return X.GetHashCode() + Y.GetHashCode();
         }
+
+        public void Normalize()
+        {
+            MonoGameVector.Normalize();
+        }
         #endregion Public Member Methods
 
         #endregion Member Methods
@@ -152,10 +160,34 @@ namespace Komodo.Lib.Math
             return Subtract(left, right);
         }
 
+        public static Vector2 Transform(Vector2 vector, Matrix transform)
+        {
+            return new Vector2(
+                Microsoft.Xna.Framework.Vector2.Transform(vector.MonoGameVector, transform)
+            );
+        }
+
+        public static Vector2 Transform(Vector2 vector, Quaternion transform)
+        {
+            return new Vector2(
+                Microsoft.Xna.Framework.Vector2.Transform(vector.MonoGameVector, transform)
+            );
+        }
+
         public static Vector2 Normalize(Vector2 vectorToNormalize)
         {
             vectorToNormalize.MonoGameVector.Normalize();
             return new Vector2(vectorToNormalize.X, vectorToNormalize.Y);
+        }
+
+        public static float Distance(Vector2 a, Vector2 b)
+        {
+            return Microsoft.Xna.Framework.Vector2.Distance(a.MonoGameVector, b.MonoGameVector);
+        }
+
+        public static float DistanceSquared(Vector2 a, Vector2 b)
+        {
+            return Microsoft.Xna.Framework.Vector2.DistanceSquared(a.MonoGameVector, b.MonoGameVector);
         }
         #endregion Public Static Methods
 
