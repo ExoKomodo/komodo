@@ -19,13 +19,15 @@ namespace Komodo.Core.ECS.Components
         #region Constructors
         public CameraComponent() : base(true, null)
         {
-            Rotation = Vector3.Zero;
-            Zoom = 1;
-            Position = Vector3.Zero;
-            IsPerspective = false;
-            NearPlane = 1f;
             FarPlane = 2f;
             FieldOfView = 90f;
+            IsPerspective = false;
+            MaximumZoom = 2f;
+            MinimumZoom = 1f;
+            NearPlane = 1f;
+            Position = Vector3.Zero;
+            Rotation = Vector3.Zero;
+            Zoom = 1;
         }
         #endregion Constructors
 
@@ -71,7 +73,7 @@ namespace Komodo.Core.ECS.Components
         public Vector3 Down { get; private set; }
         
         /// <summary>
-        /// <see cref="MaximumZoom"/> defines the furthest distance a Component can be from the CameraComponent and still be rendered.
+        /// <see cref="FarPlane"/> defines the furthest distance a Component can be from the CameraComponent and still be rendered.
         /// </summary>
         public float FarPlane
         {
@@ -88,6 +90,9 @@ namespace Komodo.Core.ECS.Components
             }
         }
 
+        /// <summary>
+        /// <see cref="FieldOfView"/> Defines the visible field of view for the camera.
+        /// </summary>
         public float FieldOfView
         {
             get
@@ -96,7 +101,7 @@ namespace Komodo.Core.ECS.Components
             }
             set
             {
-                if (value > 0 && value <= 360)
+                if (value > 0 && value <= 180)
                 {
                     _fieldOfView = value;
                 }
@@ -131,7 +136,7 @@ namespace Komodo.Core.ECS.Components
             }
             set
             {
-                if (value >= 0)
+                if (value >= 1 && value >= MinimumZoom)
                 {
                     if (Zoom > value)
                     {
@@ -157,7 +162,7 @@ namespace Komodo.Core.ECS.Components
             }
             set
             {
-                if (value >= 0)
+                if (value >= 1 && value <= MaximumZoom)
                 {
                     if (Zoom < value)
                     {
@@ -196,8 +201,15 @@ namespace Komodo.Core.ECS.Components
                 var viewport = Game.GraphicsManager.ViewPort;
                 if (IsPerspective)
                 {
+                    float zoomedFieldOfView = MathHelper.Max(
+                        0,
+                        MathHelper.Min(
+                            MathHelper.ToRadians(FieldOfView / Zoom),
+                            MathHelper.Pi
+                        )
+                    );
                     return Matrix.CreatePerspectiveFieldOfView(
-                        MathHelper.ToRadians(FieldOfView),
+                        zoomedFieldOfView,
                         viewport.Width / viewport.Height,
                         NearPlane,
                         FarPlane

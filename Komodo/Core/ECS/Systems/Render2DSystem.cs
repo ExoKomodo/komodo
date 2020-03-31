@@ -387,7 +387,6 @@ namespace Komodo.Core.ECS.Systems
                         Matrix.CreateScale(1f, -1f, 1f)
                     );
                 }
-                scale *= ActiveCamera.Zoom;
             }
             
             switch (component)
