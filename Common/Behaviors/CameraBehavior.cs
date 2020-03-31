@@ -65,10 +65,11 @@ namespace Common.Behaviors
                 direction += Camera.Backward;
             }
 
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var cameraMove = (
                 direction
                 * PanVelocity
-                * (float)gameTime.ElapsedGameTime.TotalSeconds
+                * delta
             );
             Camera.Move(cameraMove);
         }
