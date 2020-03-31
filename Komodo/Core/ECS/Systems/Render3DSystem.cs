@@ -29,6 +29,8 @@ namespace Komodo.Core.ECS.Systems
             Components = new List<Drawable3DComponent>();
             Entities = new Dictionary<Guid, Entity>();
             Game = game;
+            TextureFilter = SamplerState.PointWrap;
+
             _uninitializedComponents = new Queue<Drawable3DComponent>();
         }
         #endregion Constructors
@@ -60,6 +62,11 @@ namespace Komodo.Core.ECS.Systems
         /// Whether or not the Drawable3DSystem has called <see cref="Initialize()"/>.
         /// </summary>
         public bool IsInitialized { get; private set; }
+        
+        /// <summary>
+        /// Texture filtering to use for 3D textures.
+        /// </summary>
+        public SamplerState TextureFilter { get; set; }
         #endregion Public Members
 
         #region Private Members
@@ -224,7 +231,7 @@ namespace Komodo.Core.ECS.Systems
             graphicsManager.GraphicsDeviceManager.GraphicsDevice.BlendState = BlendState.Opaque;
             graphicsManager.GraphicsDeviceManager.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphicsManager.GraphicsDeviceManager.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            graphicsManager.GraphicsDeviceManager.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            graphicsManager.GraphicsDeviceManager.GraphicsDevice.SamplerStates[0] = TextureFilter;
             try
             {
                 var componentsToDraw = Components.ToArray();

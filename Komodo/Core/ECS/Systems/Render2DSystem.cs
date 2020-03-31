@@ -3,7 +3,6 @@ using Komodo.Core.ECS.Entities;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System;
-using System.Linq;
 using Komodo.Lib.Math;
 
 using Color = Microsoft.Xna.Framework.Color;
@@ -14,6 +13,7 @@ using BasicEffect = Microsoft.Xna.Framework.Graphics.BasicEffect;
 using DepthStencilState = Microsoft.Xna.Framework.Graphics.DepthStencilState;
 using Effect = Microsoft.Xna.Framework.Graphics.Effect;
 using RasterizerState = Microsoft.Xna.Framework.Graphics.RasterizerState;
+using SamplerState = Microsoft.Xna.Framework.Graphics.SamplerState;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 using SpriteEffect = Microsoft.Xna.Framework.Graphics.SpriteEffect;
 using SpriteEffects = Microsoft.Xna.Framework.Graphics.SpriteEffects;
@@ -35,6 +35,8 @@ namespace Komodo.Core.ECS.Systems
             Components = new List<Drawable2DComponent>();
             Entities = new Dictionary<Guid, Entity>();
             Game = game;
+            TextureFilter = SamplerState.PointWrap;
+
             _uninitializedComponents = new Queue<Drawable2DComponent>();
         }
         #endregion Constructors
@@ -66,6 +68,11 @@ namespace Komodo.Core.ECS.Systems
         /// Whether or not the Drawable2DSystem has called <see cref="Initialize()"/>.
         /// </summary>
         public bool IsInitialized { get; private set; }
+
+        /// <summary>
+        /// Texture filtering to use for 2D sprites and fonts.
+        /// </summary>
+        public SamplerState TextureFilter { get; set; }
         #endregion Public Members
 
         #region Private Members
@@ -320,7 +327,7 @@ namespace Komodo.Core.ECS.Systems
                 spriteBatch.Begin(
                     SpriteSortMode.FrontToBack,
                     null,
-                    null,
+                    TextureFilter,
                     DepthStencilState.DepthRead,
                     RasterizerState.CullNone,
                     shader
