@@ -219,7 +219,15 @@ namespace Komodo.Core.ECS.Systems
             {
                 _uninitializedComponents.Enqueue(componentToAdd);
             }
-            return AddDrawable3DComponent(componentToAdd);
+            var parent = componentToAdd.Parent;
+            if (!Entities.ContainsKey(parent.ID))
+            {
+                return AddEntity(parent);
+            }
+            else
+            {
+                return AddDrawable3DComponent(componentToAdd);
+            }
         }
 
         /// <summary>

@@ -123,14 +123,6 @@ namespace Komodo.Core.ECS.Entities
                 case BehaviorComponent componentToAdd:
                     return Game.BehaviorSystem.AddComponent(componentToAdd);
                 case CameraComponent componentToAdd:
-                    if (Render2DSystem == null)
-                    {
-                        Render2DSystem = Game.CreateRender2DSystem();
-                    }
-                    if (Render3DSystem == null)
-                    {
-                        Render3DSystem = Game.CreateRender3DSystem();
-                    }
                     return Game.CameraSystem.AddComponent(componentToAdd);
                 case Drawable2DComponent componentToAdd:
                     if (Render2DSystem == null)

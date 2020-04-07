@@ -225,7 +225,15 @@ namespace Komodo.Core.ECS.Systems
             {
                 _uninitializedComponents.Enqueue(componentToAdd);
             }
-            return AddDrawable2DComponent(componentToAdd);
+            var parent = componentToAdd.Parent;
+            if (!Entities.ContainsKey(parent.ID))
+            {
+                return AddEntity(parent);
+            }
+            else
+            {
+                return AddDrawable2DComponent(componentToAdd);
+            }
         }
 
         /// <summary>
