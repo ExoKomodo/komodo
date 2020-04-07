@@ -200,7 +200,15 @@ namespace Komodo.Core.ECS.Systems
             {
                 _uninitializedComponents.Enqueue(componentToAdd);
             }
-            return AddSoundComponent(componentToAdd);
+            var parent = componentToAdd.Parent;
+            if (!Entities.ContainsKey(parent.ID))
+            {
+                return AddEntity(parent);
+            }
+            else
+            {
+                return AddSoundComponent(componentToAdd);
+            }
         }
 
         /// <summary>
