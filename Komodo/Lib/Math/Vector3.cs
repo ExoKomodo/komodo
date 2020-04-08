@@ -194,11 +194,6 @@ namespace Komodo.Lib.Math
         {
             return X.GetHashCode() + Y.GetHashCode() + Z.GetHashCode();
         }
-
-        public void Normalize()
-        {
-            MonoGameVector.Normalize();
-        }
         #endregion Public Member Methods
 
         #endregion Member Methods
@@ -271,8 +266,8 @@ namespace Komodo.Lib.Math
 
         public static Vector3 Normalize(Vector3 vectorToNormalize)
         {
-            vectorToNormalize.MonoGameVector.Normalize();
-            return new Vector3(vectorToNormalize.X, vectorToNormalize.Y, vectorToNormalize.Z);
+            var normalizedVector = Microsoft.Xna.Framework.Vector3.Normalize(vectorToNormalize.MonoGameVector);
+            return new Vector3(normalizedVector);
         }
 
         public static Vector3 Transform(Vector3 vector, Matrix transform)
