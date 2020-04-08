@@ -259,15 +259,15 @@ namespace Komodo.Core.ECS.Components
                 _viewMatrix = value;
 
                 Backward = new Vector3(ViewMatrix.M13, ViewMatrix.M23, ViewMatrix.M33);
-                Backward.Normalize();
+                Backward = Vector3.Normalize(Backward);
                 Forward = -Backward;
 
                 Right = new Vector3(ViewMatrix.M11, ViewMatrix.M21, ViewMatrix.M31);
-                Right.Normalize();
+                Right = Vector3.Normalize(Right);
                 Left = -Right;
 
                 Up = Target == null ? new Vector3(ViewMatrix.M12, ViewMatrix.M22, ViewMatrix.M32) : Vector3.Cross(Vector3.Cross(Forward, Vector3.Up), Forward);
-                Up.Normalize();
+                Up = Vector3.Normalize(Up);
                 Down = -Up;
             }
         }
