@@ -286,10 +286,7 @@ namespace Komodo.Core.ECS.Components
             }
             set
             {
-                if ((value >= MinimumZoom) && (value < MaximumZoom))
-                {
-                    _zoom = value;
-                }
+                ClampZoom(value);
             }
         }
         #endregion Public Members
@@ -475,14 +472,13 @@ namespace Komodo.Core.ECS.Components
         /// <param name="value"><see cref="Zoom"/> value to be tested. If the value is legal, <see cref="Zoom"/> will be set with the given value, otherwise <see cref="Zoom"/> will be clamped to between <see cref="MaximumZoom"/> or <see cref="MinimumZoom"/>.</param>
         private void ClampZoom(float value)
         {
-            if (value < MinimumZoom)
-            {
-                Zoom = MinimumZoom;
-            }
-            else
-            {
-                Zoom = value > MaximumZoom ? MaximumZoom : value;
-            }
+            _zoom = MathHelper.Max(
+                MathHelper.Min(
+                    value,
+                    MaximumZoom
+                ),
+                MinimumZoom
+            );
         }
         #endregion Private Member Methods
 
