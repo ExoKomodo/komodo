@@ -227,7 +227,7 @@ namespace Komodo.Core.ECS.Systems
                 var componentsToUpdate = Components.ToArray();
                 foreach (var component in componentsToUpdate)
                 {
-                    if (component.IsEnabled && component.Parent.IsEnabled)
+                    if (component.IsEnabled && component.Parent != null && component.Parent.IsEnabled)
                     {
                         component.Update(gameTime);
                     }

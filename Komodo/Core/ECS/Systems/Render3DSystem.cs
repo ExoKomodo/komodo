@@ -245,7 +245,7 @@ namespace Komodo.Core.ECS.Systems
                 var componentsToDraw = Components.ToArray();
                 foreach (var component in componentsToDraw)
                 {
-                    if (component.Parent.IsEnabled && component.IsEnabled)
+                    if (component.IsEnabled && component.Parent != null && component.Parent.IsEnabled)
                     {
                         DrawComponent(component);
                     }

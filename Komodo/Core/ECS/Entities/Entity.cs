@@ -178,6 +178,14 @@ namespace Komodo.Core.ECS.Entities
                         }
                         break;
                     case CameraComponent componentToRemove:
+                        if (Render2DSystem.ActiveCamera == componentToRemove)
+                        {
+                            Render2DSystem.ActiveCamera = null;
+                        }
+                        if (Render3DSystem.ActiveCamera == componentToRemove)
+                        {
+                            Render3DSystem.ActiveCamera = null;
+                        }
                         if (!Game.CameraSystem.RemoveComponent(componentToRemove))
                         {
                             return false;
