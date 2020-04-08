@@ -342,7 +342,7 @@ namespace Komodo.Core.ECS.Systems
                 );
                 foreach (var component in components)
                 {
-                    if (component.IsEnabled && component.Parent.IsEnabled && component.IsBillboard == drawBillboards)
+                    if (component.IsEnabled && component.Parent != null && component.Parent.IsEnabled && component.IsBillboard == drawBillboards)
                     {
                         DrawComponent(component, spriteBatch);
                     }

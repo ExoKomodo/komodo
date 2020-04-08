@@ -232,7 +232,10 @@ namespace Komodo.Core.ECS.Systems
                 var componentsToUpdate = Components.ToArray();
                 foreach (var component in componentsToUpdate)
                 {
-                    UpdateComponent(component, gameTime);
+                    if (component.IsEnabled && component.Parent != null && component.Parent.IsEnabled)
+                    {
+                        UpdateComponent(component, gameTime);
+                    }
                 }
             }
         }
