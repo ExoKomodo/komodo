@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{D0C0DD66-A020-4AFD-A30D-3F429148C18C}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "KLang", "KLang\KLang.fsproj", "{FECD1E54-558D-4604-9EBE-6E469BE9C756}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Scales", "Scales\Scales.fsproj", "{FECD1E54-558D-4604-9EBE-6E469BE9C756}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
