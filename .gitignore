@@ -370,3 +370,5 @@ _deps
 
 .vscode/
 .DS_STORE
+.fake
+.ionide
