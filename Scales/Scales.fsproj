@@ -6,11 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="DSL\Lexer.fs" />
+    <Compile Include="AST.fs" />
+    <Compile Include="Tokens.fs" />
+    <Compile Include="Lexer.fs" />
+    <Compile Include="Interpreter.fs" />
     <Compile Include="Program.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DSL\" />
   </ItemGroup>
 </Project>
