@@ -6,10 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="AST.fs" />
-    <Compile Include="Tokens.fs" />
-    <Compile Include="Lexer.fs" />
-    <Compile Include="Interpreter.fs" />
+    <Compile Include="Scale.fs" />
     <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup />
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Compiler.Service" Version="35.0.0" />
+    <PackageReference Include="Komodo" Version="1.1.*" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,10 @@
 ﻿open Scales
+open System.IO
+open Komodo
 
 [<EntryPoint>]
 let main argv : int =
-    let interpreter = new Interpreter()
-    interpreter.ExecuteFile "../../../test.scl"
+    let command = File.ReadAllText("../../../thing.fsx")
+    let scale = Scale(command)
+    scale.Execute()
     0
