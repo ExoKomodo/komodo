@@ -3,5 +3,5 @@
 [<EntryPoint>]
 let main argv : int =
     let interpreter = new Interpreter()
-    interpreter.ExecuteFile "../../../test.sc"
+    interpreter.ExecuteFile "../../../test.scl"
     0
