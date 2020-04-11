@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.0.13"/>
+    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.0.13" />
   </ItemGroup>
 
   <ItemGroup>
