@@ -1,5 +1,6 @@
 using Komodo.Core.ECS.Components;
 using Komodo.Core.Engine.Input;
+using Komodo.Core.Physics;
 using Komodo.Lib.Math;
 
 using GameTime = Microsoft.Xna.Framework.GameTime;
@@ -19,20 +20,14 @@ namespace Common.Behaviors
             SprintFactor = 2f;
             Velocity = 50f;
 
-            //var client = new Client("127.0.0.1", 5000);
-            // var b = client.SendAsync(
-            //     new
-            //     {
-            //         a = 1
-            //     },
-            //     "a"
-            // );
+            Body = new KinematicBodyComponent(new Box(Vector3.One, 1f));
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
+        public KinematicBodyComponent Body { get; private set; }
         public int PlayerIndex { get; set; }
         public float SprintFactor { get; set; }
         public float Velocity { get; set; }
@@ -51,6 +46,9 @@ namespace Common.Behaviors
         #region Public Member Methods
         public override void Update(GameTime gameTime)
         {
+            //Body.ClearVelocities();
+            Body.Parent = Parent;
+
             var left = InputManager.GetInput("left", PlayerIndex);
             var right = InputManager.GetInput("right", PlayerIndex);
             var up = InputManager.GetInput("up", PlayerIndex);
@@ -60,8 +58,6 @@ namespace Common.Behaviors
             var quit = InputManager.GetInput("quit", PlayerIndex);
 
             var direction = Vector3.Zero;
-            float rotation = 0f;
-            float rotationSpeed = 1f;
             var camera = Parent.Render2DSystem.ActiveCamera;
             if (quit.State == InputState.Down)
             {
@@ -69,11 +65,11 @@ namespace Common.Behaviors
             }
             if (left.State == InputState.Down)
             {
-                rotation += rotationSpeed;
+                direction += camera.Left;
             }
             if (right.State == InputState.Down)
             {
-                rotation -= rotationSpeed;
+                direction += camera.Right;
             }
             if (up.State == InputState.Down)
             {
@@ -88,14 +84,8 @@ namespace Common.Behaviors
                 direction *= SprintFactor;
             }
 
-            float timeScale = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            Parent.Position += (
-                direction
-                * Velocity
-                * timeScale
-            );
-            Parent.Rotation += new Vector3(0f, rotation * timeScale, 0f);
+            Body.Move(direction * Velocity, gameTime);
+            Body.Update(gameTime);
         }
         #endregion Public Member Methods
 

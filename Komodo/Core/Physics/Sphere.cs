@@ -1,4 +1,6 @@
-﻿namespace Komodo.Core.Physics
+﻿using Komodo.Lib.Math;
+
+namespace Komodo.Core.Physics
 {
     /// <summary>
     /// A box shape to be used in physics simulation.
@@ -46,7 +48,7 @@
         /// <summary>
         /// Moment of inertia for the Sphere
         /// </summary>
-        public float MomentOfInertia { get; private set; }
+        public Vector3 MomentOfInertia { get; private set; }
         #endregion Public Members
 
         #region Private Members
@@ -61,7 +63,8 @@
         /// </summary>
         private void UpdateMomentOfInertia()
         {
-            MomentOfInertia = Mass * Radius * Radius * 0.4f;
+            float moment = Mass * Radius * Radius * 0.4f;
+            MomentOfInertia = new Vector3(moment, moment, moment);
         }
     }
 }
