@@ -19,8 +19,8 @@ namespace Komodo.Core.ECS.Components
         #region Members
 
         #region Public Members
-        public Vector3 AngularVelocity { get; protected set; }
-        public Vector3 Force { get; protected set; }
+        public Vector3 AngularVelocity { get; internal set; }
+        public Vector3 Force { get; internal set; }
         public float Friction
         {
             get
@@ -35,29 +35,29 @@ namespace Komodo.Core.ECS.Components
                 }
             }
         }
-        public Vector3 LinearVelocity { get; protected set; }
+        public Lib.Math.Vector3 LinearVelocity { get; internal set; }
         public float Restitution
         {
             get
             {
-                return _restitution;
+                return Friction;
             }
             set
             {
                 if (value >= 0)
                 {
-                    _restitution = value;
+                    Restitution = value;
                 }
             }
         }
         public IPhysicsShape Shape { get; set; }
-        public Vector3 Torque { get; protected set; }
+        public Vector3 Torque { get; internal set; }
         #endregion Public Members
 
-        #region Private Members
-        private float _friction { get; set; }
-        private float _restitution { get; set; }
-        #endregion Private Members
+        #region Internal Members
+        internal float _friction { get; set; }
+        internal float _restitution { get; set; }
+        #endregion Internal Members
 
         #endregion Members
 

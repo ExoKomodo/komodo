@@ -18,6 +18,14 @@ namespace Komodo.Core.ECS.Components
         }
         #endregion Constructors
 
+        #region Members
+
+        #region Public Members
+        public Vector3 PositionDelta { get; internal set; }
+        #endregion Public Members
+
+        #endregion Members
+
         #region Member Methods
 
         #region Public Member Methods
@@ -32,30 +40,19 @@ namespace Komodo.Core.ECS.Components
         /// <summary>
         /// Moves the body in the direction of the movement by its magnitude.
         /// </summary>
+        /// <remarks>
+        /// Movement will later be scaled by <see cref="Microsoft.Xna.Framework.GameTime"/>.
+        /// </remarks>
         /// <param name="movement">Direction and magnitude of the movement.</param>
         public void Move(Vector3 movement)
         {
-            Parent.Position += movement;
-        }
-
-        /// <summary>
-        /// Moves the body in the direction of the movement by its magnitude. Scales by <see cref="gameTime"/> delta.
-        /// </summary>
-        /// <param name="movement">Direction and magnitude of the movement.</param>
-        /// <param name="gameTime">Time to scale the movement by.</param>
-        public void Move(Vector3 movement, GameTime gameTime) => Move(movement * (float)gameTime.ElapsedGameTime.TotalSeconds);
-
-        /// <summary>
-        /// Updates a KinematicBodyComponent.
-        /// </summary>
-        /// <param name="gameTime">Time passed since last <see cref="Update"/></param>
-        public override void Update(GameTime gameTime)
-        {
+            if (PhysicsSystem == null)
+            {
+                throw new Exception("Cannot move a KinematicBodyComponent without a registered PhysicsSystem");
+            }
+            PositionDelta += movement;
         }
         #endregion Public Member Methods
-
-        #region Private Member Methods
-        #endregion Private Member Methods
 
         #endregion Member Methods
     }
