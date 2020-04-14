@@ -1,3 +1,5 @@
+using Komodo.Core.ECS.Systems;
+
 using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Komodo.Core.ECS.Components
@@ -16,6 +18,14 @@ namespace Komodo.Core.ECS.Components
         #region Member Methods
 
         #region Public Member Methods
+        public PhysicsSystem PhysicsSystem => Parent?.PhysicsSystem;
+        #endregion Public Member Methods
+        
+        #endregion Member Methods
+
+        #region Member Methods
+
+        #region Public Member Methods
         /// <summary>
         /// Virtual method initializing a PhysicsComponent.
         /// </summary>
@@ -26,12 +36,6 @@ namespace Komodo.Core.ECS.Components
                 IsInitialized = true;
             }
         }
-
-        /// <summary>
-        /// Abstract method for updating a PhysicsComponent.
-        /// </summary>
-        /// <param name="gameTime">Time passed since last <see cref="Update"/></param>
-        public abstract void Update(GameTime gameTime);
         #endregion Public Member Methods
 
         #endregion Member Methods

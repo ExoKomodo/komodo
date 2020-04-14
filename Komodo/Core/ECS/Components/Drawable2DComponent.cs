@@ -8,7 +8,7 @@ namespace Komodo.Core.ECS.Components
     /// <summary>
     /// Abstract class defining all 2D drawable Components.
     /// A class derived from Drawable2DComponent will render in a SpriteBatch in a <see cref="Komodo.Core.ECS.Systems.Render2DSystem"/>.
-    /// </summary>
+    /// </summary>4
     public abstract class Drawable2DComponent : Component
     {
         #region Constructors
