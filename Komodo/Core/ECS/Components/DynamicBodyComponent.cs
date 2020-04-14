@@ -63,48 +63,7 @@ namespace Komodo.Core.ECS.Components
         {
             base.Initialize();
         }
-
-        /// <summary>
-        /// Updates a DynamicBodyComponent.
-        /// </summary>
-        /// <param name="gameTime">Time passed since last <see cref="Update"/></param>
-        public override void Update(GameTime gameTime)
-        {
-            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            CalculateAngularVelocity(delta);
-            CalculateLinearVelocity(delta);
-
-            Parent.Position += this.LinearVelocity * delta;
-            Parent.Rotation += this.AngularVelocity * delta;
-
-            Force = Vector3.Zero;
-            Torque = Vector3.Zero;
-        }
         #endregion Public Member Methods
-
-        #region Private Member Methods
-        /// <summary>
-        /// Calculates angular velocity for the current frame.
-        /// </summary>
-        private void CalculateAngularVelocity(float delta)
-        {
-            var angularAcceleration = new Vector3(
-                Torque.X * (1.0f / Shape.MomentOfInertia.X),
-                Torque.Y * (1.0f / Shape.MomentOfInertia.Y),
-                Torque.Z * (1.0f / Shape.MomentOfInertia.Z)
-            );
-            AngularVelocity += angularAcceleration * delta;
-        }
-
-        /// <summary>
-        /// Calculates linear velocity for the current frame.
-        /// </summary>
-        private void CalculateLinearVelocity(float delta)
-        {
-            var linearAcceleration = Force * (1f / Shape.Mass);
-            LinearVelocity += linearAcceleration * delta;
-        }
-        #endregion Private Member Methods
 
         #endregion Member Methods
     }

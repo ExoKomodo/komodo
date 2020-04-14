@@ -19,15 +19,13 @@ namespace Common.Behaviors
             PlayerIndex = playerIndex;
             SprintFactor = 2f;
             Velocity = 50f;
-
-            Body = new KinematicBodyComponent(new Box(Vector3.One, 1f));
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public KinematicBodyComponent Body { get; private set; }
+        public RigidBodyComponent Body { get; private set; }
         public int PlayerIndex { get; set; }
         public float SprintFactor { get; set; }
         public float Velocity { get; set; }
@@ -44,11 +42,16 @@ namespace Common.Behaviors
         #region Member Methods
 
         #region Public Member Methods
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            Body = new KinematicBodyComponent(new Box(Vector3.One, 1f));
+            Parent.AddComponent(Body);
+        }
+
         public override void Update(GameTime gameTime)
         {
-            //Body.ClearVelocities();
-            Body.Parent = Parent;
-
             var left = InputManager.GetInput("left", PlayerIndex);
             var right = InputManager.GetInput("right", PlayerIndex);
             var up = InputManager.GetInput("up", PlayerIndex);
@@ -84,8 +87,7 @@ namespace Common.Behaviors
                 direction *= SprintFactor;
             }
 
-            Body.Move(direction * Velocity, gameTime);
-            Body.Update(gameTime);
+            (Body as KinematicBodyComponent).Move(direction * Velocity);
         }
         #endregion Public Member Methods
 

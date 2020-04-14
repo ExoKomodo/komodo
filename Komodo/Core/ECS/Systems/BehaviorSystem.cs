@@ -76,7 +76,7 @@ namespace Komodo.Core.ECS.Systems
             {
                 return false;
             }
-            Game.BehaviorSystem.RemoveEntity(entityToAdd.ID);
+            this.RemoveEntity(entityToAdd.ID);
             Entities[entityToAdd.ID] = entityToAdd;
             foreach (var component in entityToAdd.Components)
             {

@@ -34,6 +34,7 @@ namespace Komodo.Core
 
             BehaviorSystem = new BehaviorSystem(this);
             CameraSystem = new CameraSystem(this);
+            PhysicsSystems = new List<PhysicsSystem>();
             Render2DSystems = new List<Render2DSystem>();
             Render3DSystems = new List<Render3DSystem>();
             SoundSystem = new SoundSystem(this);
@@ -57,6 +58,11 @@ namespace Komodo.Core
         /// Default shader for all <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/>.
         /// </summary>
         public BasicEffect DefaultSpriteShader { get; set; }
+
+        /// <summary>
+        /// Manages all <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> objects.
+        /// </summary>
+        public List<PhysicsSystem> PhysicsSystems { get; }
 
         /// <summary>
         /// Manages all <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
@@ -125,6 +131,16 @@ namespace Komodo.Core
         #region Member Methods
 
         #region Public Member Methods
+        /// <summary>
+        /// Creates and begins tracking a new <see cref="Komodo.Core.ECS.Systems.PhysicsSystem"/>.
+        /// </summary>
+        public PhysicsSystem CreatePhysicsSystem()
+        {
+            var system = new PhysicsSystem(this);
+            PhysicsSystems.Add(system);
+            return system;
+        }
+
         /// <summary>
         /// Creates and begins tracking a new <see cref="Komodo.Core.ECS.Systems.Render2DSystem"/>.
         /// </summary>
@@ -203,6 +219,11 @@ namespace Komodo.Core
             CameraSystem.Initialize();
             SoundSystem.Initialize();
 
+            var physicsSystems = PhysicsSystems.ToArray();
+            foreach (var system in physicsSystems)
+            {
+                system.Initialize();
+            }
             var render3DSystems = Render3DSystems.ToArray();
             foreach (var system in render3DSystems)
             {
@@ -233,6 +254,11 @@ namespace Komodo.Core
             BehaviorSystem.PreUpdate(gameTime);
             CameraSystem.PreUpdate(gameTime);
             SoundSystem.PreUpdate(gameTime);
+            var physicsSystems = PhysicsSystems.ToArray();
+            foreach (var system in physicsSystems)
+            {
+                system.PreUpdate(gameTime);
+            }
             var render3DSystems = Render3DSystems.ToArray();
             foreach (var system in render3DSystems)
             {
@@ -247,10 +273,18 @@ namespace Komodo.Core
             BehaviorSystem.UpdateComponents(gameTime);
             CameraSystem.UpdateComponents(gameTime);
             SoundSystem.UpdateComponents(gameTime);
+            foreach (var system in physicsSystems)
+            {
+                system.UpdateComponents(gameTime);
+            }
 
             BehaviorSystem.PostUpdate(gameTime);
             CameraSystem.PostUpdate(gameTime);
             SoundSystem.PostUpdate(gameTime);
+            foreach (var system in physicsSystems)
+            {
+                system.PostUpdate(gameTime);
+            }
             foreach (var system in render3DSystems)
             {
                 system.PostUpdate(gameTime);

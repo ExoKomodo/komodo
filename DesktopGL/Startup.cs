@@ -16,12 +16,14 @@ namespace DesktopGL
         {
             using (Game = new Game()) {
                 SetupInputs();
+                var physicsSytem = Game.CreatePhysicsSystem();
                 var render2DSystem = Game.CreateRender2DSystem();
                 var render3DSystem = Game.CreateRender3DSystem();
 
                 var player = new Entity(Game)
                 {
                     Position = new Vector3(0f, 0f, 100f),
+                    PhysicsSystem = physicsSytem,
                     Render2DSystem = render2DSystem,
                     Render3DSystem = render3DSystem,
                 };

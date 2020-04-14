@@ -53,6 +53,11 @@ namespace Komodo.Core.ECS.Entities
         public bool IsEnabled { get; set; }
 
         /// <summary>
+        /// Defines what <see cref="Komodo.Core.ECS.Systems.PhysicsSystem"/> should be used to simulate <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> objects. This allows for <see cref="Komodo.Core.ECS.Components.PhsyicsComponent"/> objects to simulate specific subsets of all Entity objects.
+        /// </summary>
+        public PhysicsSystem PhysicsSystem { get; set; }
+
+        /// <summary>
         /// Position in world space. Used by <see cref="Komodo.Core.ECS.Components.Component"/> objects to determine their world space.
         /// </summary>
         public Vector3 Position { get; set; }
@@ -136,6 +141,12 @@ namespace Komodo.Core.ECS.Entities
                         Render3DSystem = Game.CreateRender3DSystem();
                     }
                     return Render3DSystem.AddComponent(componentToAdd);
+                case PhysicsComponent componentToAdd:
+                    if (PhysicsSystem == null)
+                    {
+                        PhysicsSystem = Game.CreatePhysicsSystem();
+                    }
+                    return PhysicsSystem.AddComponent(componentToAdd);
                 case SoundComponent componentToAdd:
                     return Game.SoundSystem.AddComponent(componentToAdd);
                 default:
@@ -204,6 +215,15 @@ namespace Komodo.Core.ECS.Entities
                         if (Render3DSystem != null)
                         {
                             if (!Render3DSystem.RemoveComponent(componentToRemove))
+                            {
+                                return false;
+                            }
+                        }
+                        break;
+                    case PhysicsComponent componentToRemove:
+                        if (PhysicsSystem != null)
+                        {
+                            if (!PhysicsSystem.RemoveComponent(componentToRemove))
                             {
                                 return false;
                             }
