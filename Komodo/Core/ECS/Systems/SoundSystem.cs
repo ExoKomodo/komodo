@@ -283,13 +283,19 @@ namespace Komodo.Core.ECS.Systems
         {
             return Components.Remove(componentToRemove);
         }
+        #endregion Private Member Methods
 
+        #endregion Member Methods
+
+        #region Static Methods
+
+        #region Private Static Methods
         /// <summary>
         /// Performs the update logic on all <see cref="Komodo.Core.ECS.Components.SoundComponent"/> objects.
         /// </summary>
         /// <param name="component"><see cref="Komodo.Core.ECS.Components.SoundComponent"/> to update.</param>
         /// <param name="_">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
-        private void UpdateComponent(SoundComponent component, GameTime _)
+        private static void UpdateComponent(SoundComponent component, GameTime _)
         {
             var instances = new Dictionary<Guid, SoundEffectInstance>();
             foreach (var pair in component._instances)
@@ -304,8 +310,8 @@ namespace Komodo.Core.ECS.Systems
 
             component._instances = instances;
         }
-        #endregion Private Member Methods
+        #endregion Private Static Methods
 
-        #endregion Member Methods
+        #endregion Static Methods
     }
 }

@@ -277,17 +277,23 @@ namespace Komodo.Core.ECS.Systems
         {
             return Components.Remove(componentToRemove);
         }
+        #endregion Private Member Methods
 
+        #endregion Member Methods
+
+        #region Static Methods
+
+        #region Private Static Methods
         /// <summary>
         /// Performs the update logic on all <see cref="Komodo.Core.ECS.Components.CameraComponent"/> objects.
         /// </summary>
         /// <param name="component"><see cref="Komodo.Core.ECS.Components.CameraComponent"/> to update.</param>
-        private void UpdateComponent([NotNull] CameraComponent component)
+        private static void UpdateComponent([NotNull] CameraComponent component)
         {
             component.ViewMatrix = component.CalculateViewMatrix();
         }
-        #endregion Private Member Methods
+        #endregion Private Static Methods
 
-        #endregion Member Methods
+        #endregion Static Methods
     }
 }
