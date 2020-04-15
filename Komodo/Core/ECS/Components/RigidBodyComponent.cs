@@ -13,50 +13,70 @@ namespace Komodo.Core.ECS.Components
         #region Constructors
         protected RigidBodyComponent()
         {
+            Material = PhysicsMaterial.GetPhysicsMaterial("default");
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
+        /// <summary>
+        /// Rotational velocity.
+        /// </summary>
         public Vector3 AngularVelocity { get; internal set; }
+
+        /// <summary>
+        /// Current force applied to the RigidBodyComponent.
+        /// </summary>
         public Vector3 Force { get; internal set; }
-        public float Friction
+
+        /// <summary>
+        /// Directional velocity.
+        /// </summary>
+        public Vector3 LinearVelocity { get; internal set; }
+
+        /// <summary>
+        /// Material defining the physical parameters of the RigidBodyComponent.
+        /// </summary>
+        public PhysicsMaterial Material
         {
             get
             {
-                return _friction;
+                return _material;
             }
             set
             {
-                if (value >= 0)
+                if (value != null)
                 {
-                    _friction = value;
+                    _material = value;
                 }
             }
         }
-        public Lib.Math.Vector3 LinearVelocity { get; internal set; }
-        public float Restitution
+
+        /// <summary>
+        /// Shape of the RigidBodyComponent.
+        /// </summary>
+        public IPhysicsShape Shape
         {
             get
             {
-                return Friction;
+                return _shape.GetScaledShape(Scale);
             }
             set
             {
-                if (value >= 0)
-                {
-                    Restitution = value;
-                }
+                _shape = value;
             }
         }
-        public IPhysicsShape Shape { get; set; }
+
+        /// <summary>
+        /// Current torque applied to the RigidBodyComponent.
+        /// </summary>
         public Vector3 Torque { get; internal set; }
         #endregion Public Members
 
         #region Internal Members
-        internal float _friction { get; set; }
-        internal float _restitution { get; set; }
+        internal PhysicsMaterial _material { get; set; }
+        internal IPhysicsShape _shape { get; set; }
         #endregion Internal Members
 
         #endregion Members

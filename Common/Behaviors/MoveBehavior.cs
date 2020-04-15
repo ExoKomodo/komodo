@@ -25,7 +25,7 @@ namespace Common.Behaviors
         #region Members
 
         #region Public Members
-        public RigidBodyComponent Body { get; private set; }
+        public DynamicBodyComponent Body { get; private set; }
         public int PlayerIndex { get; set; }
         public float SprintFactor { get; set; }
         public float Velocity { get; set; }
@@ -46,7 +46,19 @@ namespace Common.Behaviors
         {
             base.Initialize();
 
-            Body = new KinematicBodyComponent(new Box(Vector3.One, 1f));
+            var material = new PhysicsMaterial("player")
+            {
+                Restitution = 1f,
+                LinearDamping = 1f,
+                LinearDampingLimit = 0.1f,
+            };
+            Body = new DynamicBodyComponent(
+                new Box(2f, 2f, 2f, 1f)
+            )
+            {
+                Position = new Vector3(0, 0f, 0f),
+                Material = material,
+            };
             Parent.AddComponent(Body);
         }
 
@@ -86,8 +98,13 @@ namespace Common.Behaviors
             {
                 direction *= SprintFactor;
             }
-
-            (Body as KinematicBodyComponent).Move(direction * Velocity);
+            /*var collision = Body.Collisions.Values.FirstOrDefault();
+            if (collision.IsColliding)
+            {
+                Parent.Position += collision.Correction;
+            }*/
+            //Body.Move(direction * Velocity);
+            Body.ApplyForce(direction * Velocity);
         }
         #endregion Public Member Methods
 

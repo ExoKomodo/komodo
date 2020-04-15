@@ -1,5 +1,7 @@
 ﻿using Komodo.Lib.Math;
 
+using BoundingBox = Microsoft.Xna.Framework.BoundingBox;
+
 namespace Komodo.Core.Physics
 {
     /// <summary>
@@ -122,6 +124,16 @@ namespace Komodo.Core.Physics
 
         #endregion Members
 
+        #region Member Methods
+
+        #region Public Member Methods
+        public IPhysicsShape GetScaledShape(Vector3 scale)
+        {
+            return new Box(Width * scale.X, Height * scale.Y, Depth * scale.Z, Mass);
+        }
+        #endregion Public Member Methods
+
+        #region Private Member Methods
         /// <summary>
         /// Updates the moment of intertia. Called whenever relevant fields have been updated.
         /// </summary>
@@ -132,5 +144,8 @@ namespace Komodo.Core.Physics
             float z = Mass * (Width * Width + Height * Height) / 12f;
             MomentOfInertia = new Vector3(x, y, z);
         }
+        #endregion Private Member Methods
+        
+        #endregion Member Methods
     }
 }

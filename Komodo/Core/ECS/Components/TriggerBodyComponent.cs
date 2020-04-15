@@ -1,15 +1,19 @@
-using GameTime = Microsoft.Xna.Framework.GameTime;
+using Komodo.Core.Physics;
 
 namespace Komodo.Core.ECS.Components
 {
     /// <summary>
     /// Class defining trigger bodies.
     /// </summary>
+    /// <remarks>
+    /// Has yet to define enter and exit triggers
+    /// </remarks>
     public class TriggerBodyComponent : RigidBodyComponent
     {
         #region Constructors
-        public TriggerBodyComponent()
+        public TriggerBodyComponent(IPhysicsShape shape)
         {
+            Shape = shape;
         }
         #endregion Constructors
 

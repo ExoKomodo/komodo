@@ -21,5 +21,13 @@ namespace Komodo.Core.Physics
         #endregion Public Members
 
         #endregion Members
+
+        #region Member Methods
+
+        #region Public Member Methods
+        IPhysicsShape GetScaledShape(Vector3 scale);
+        #endregion Public Member Methods
+
+        #endregion Member Methods
     }
 }
