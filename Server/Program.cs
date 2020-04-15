@@ -5,7 +5,7 @@ namespace Server
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string[] _)
         {
             var server = new TCPServer(5000);
             server.RegisterAction(

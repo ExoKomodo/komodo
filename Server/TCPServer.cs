@@ -77,37 +77,34 @@ namespace Server
             using (client)
             {
                 Console.WriteLine("Connection accepted");
-                using (var networkStream = client.GetStream())
+                using var networkStream = client.GetStream();
+                try
                 {
-                    try
+                    var tmp = new byte[1024];
+                    var rawData = new List<byte>();
+                    int bytesRead = 0;
+                    do
                     {
-                        var tmp = new byte[1024];
-                        var rawData = new List<byte>();
-                        int bytesRead = 0;
-                        do
-                        {
-                            bytesRead = networkStream.Read(tmp);
-                            rawData.AddRange(tmp);
-                        } while (networkStream.DataAvailable && bytesRead != 0);
+                        bytesRead = networkStream.Read(tmp);
+                        rawData.AddRange(tmp);
+                    } while (networkStream.DataAvailable && bytesRead != 0);
 
 
-                        var data = Brotli.Decompress(rawData.ToArray());
-                        var message = System.Text.Json.JsonSerializer.Deserialize<Message>(Encoding.ASCII.GetString(data));
-                        Route(message);
-                        networkStream.Write(Brotli.Compress(data));
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                    }
+                    var data = Brotli.Decompress(rawData.ToArray());
+                    var message = System.Text.Json.JsonSerializer.Deserialize<Message>(Encoding.ASCII.GetString(data));
+                    Route(message);
+                    networkStream.Write(Brotli.Compress(data));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
 
         protected void Route([NotNull] Message message)
         {
-            Action<Message> action = null;
-            bool isActionRegistered = _routes.TryGetValue(message.Endpoint, out action);
+            bool isActionRegistered = _routes.TryGetValue(message.Endpoint, out Action<Message> action);
             if (isActionRegistered)
             {
                 action(message);

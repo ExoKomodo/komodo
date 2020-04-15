@@ -295,15 +295,48 @@ namespace Komodo.Core.ECS.Systems
         }
 
         /// <summary>
-        /// Corrects all current collisions.
+        /// Corrects all current collisions between <see cref="Komodo.Core.ECS.Components.DynamicBodyComponent"/> and <see cref="Komodo.Core.ECS.Components.StaticBodyComponent"/>s.
         /// </summary>
         private void CorrectCollisions()
         {
-
+            var dynamicBodies = Components.Where(body => body is DynamicBodyComponent && body.IsEnabled && body.Parent.IsEnabled).Cast<DynamicBodyComponent>();
+            foreach (var body in dynamicBodies)
+            {
+                var ids = body.Collisions.Keys.ToList();
+                foreach (var id in ids)
+                {
+                    var collision = body.Collisions[id];
+                    if (collision._isResolved)
+                    {
+                        continue;
+                    }
+                    var otherBody = Components.Find(b => b.ID == id) as RigidBodyComponent;
+                    if (collision.IsColliding)
+                    {
+                        switch (otherBody)
+                        {
+                            case DynamicBodyComponent dynamicBody:
+                                body.Parent.Position += collision.Correction / 2f;
+                                var otherCollision = dynamicBody.Collisions[body.ID];
+                                otherCollision._isResolved = true;
+                                dynamicBody.Parent.Position += otherCollision.Correction / 2f;
+                                body.LinearVelocity = Vector3.Reflect(body.LinearVelocity, collision.Normal) * body.Material.Restitution;
+                                break;
+                            case StaticBodyComponent _:
+                                body.Parent.Position += collision.Correction;
+                                body.LinearVelocity = Vector3.Reflect(body.LinearVelocity, collision.Normal) * body.Material.Restitution;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    collision._isResolved = true;
+                }
+            }
         }
 
         /// <summary>
-        /// Detects all collisions of all enabled <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/>s.
+        /// Detects collisions of all enabled <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/>s.
         /// </summary>
         private void DetectCollisions()
         {
@@ -327,14 +360,20 @@ namespace Komodo.Core.ECS.Systems
                                 case Box _:
                                     var innerBoundingBox = GenerateBoundingBox(innerBody);
                                     var collision = GetCollision(outerBoundingBox, innerBoundingBox);
-                                    outerBody.Collisions[innerBody.ID] = collision;
-                                    innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    if (collision.IsColliding)
+                                    {
+                                        outerBody.Collisions[innerBody.ID] = collision;
+                                        innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    }
                                     break;
                                 case Sphere _:
                                     var innerBoundingSphere = GenerateBoundingSphere(innerBody);
                                     collision = GetCollision(outerBoundingBox, innerBoundingSphere);
-                                    outerBody.Collisions[innerBody.ID] = collision;
-                                    innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    if (collision.IsColliding)
+                                    {
+                                        outerBody.Collisions[innerBody.ID] = collision;
+                                        innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    }
                                     break;
                             }
                             break;
@@ -345,14 +384,20 @@ namespace Komodo.Core.ECS.Systems
                                 case Box _:
                                     var innerBoundingBox = GenerateBoundingBox(innerBody);
                                     var collision = GetCollision(outerBoundingSphere, innerBoundingBox);
-                                    outerBody.Collisions[innerBody.ID] = collision;
-                                    innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    if (collision.IsColliding)
+                                    {
+                                        outerBody.Collisions[innerBody.ID] = collision;
+                                        innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    }
                                     break;
                                 case Sphere _:
                                     var innerBoundingSphere = GenerateBoundingSphere(innerBody);
                                     collision = GetCollision(outerBoundingSphere, innerBoundingSphere);
-                                    outerBody.Collisions[innerBody.ID] = collision;
-                                    innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    if (collision.IsColliding)
+                                    {
+                                        outerBody.Collisions[innerBody.ID] = collision;
+                                        innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    }
                                     break;
                             }
                             break;
@@ -406,6 +451,12 @@ namespace Komodo.Core.ECS.Systems
         #region Static Methods
 
         #region Private Static Methods
+        /// <summary>
+        /// Performs an AABB AABB collision check.
+        /// </summary>
+        /// <param name="a">First AABB.</param>
+        /// <param name="b">Second AABB.</param>
+        /// <returns></returns>
         private static Collision AABBAABB(BoundingBox a, BoundingBox b)
         {
             // Minimum Translation Vector
@@ -472,10 +523,21 @@ namespace Komodo.Core.ECS.Systems
         /// </summary>
         private static void CalculateLinearVelocity(DynamicBodyComponent body, float delta)
         {
+            var material = body.Material;
             var linearAcceleration = body.Force * (1f / body.Shape.Mass);
             body.LinearVelocity += linearAcceleration * delta;
+            body.LinearVelocity *= 1f - (material.LinearDamping * delta);
+            if (MathF.Abs(body.LinearVelocity.Length()) <= material.LinearDampingLimit)
+            {
+                body.LinearVelocity = Vector3.Zero;
+            }
         }
 
+        /// <summary>
+        /// Generates a <see cref="Microsoft.Xna.Framework.BoundingBox"/> for a <see cref="Komodo.Core.ECS.Components.RigidBodyComponent"/> with an attached <see cref="Komodo.Core.Physics.Box"/>.
+        /// </summary>
+        /// <param name="body">Body to create a <see cref="Microsoft.Xna.Framework.BoundingBox"/> for.</param>
+        /// <returns><see cref="Microsoft.Xna.Framework.BoundingBox"/> representation of the <see cref="Komodo.Core.Physics.Box"/>.</returns>
         private static BoundingBox GenerateBoundingBox(RigidBodyComponent body)
         {
             var box = body.Shape as Box;
@@ -497,6 +559,11 @@ namespace Komodo.Core.ECS.Systems
             return new BoundingBox(min.MonoGameVector, max.MonoGameVector);
         }
 
+        /// <summary>
+        /// Generates a <see cref="Microsoft.Xna.Framework.BoundingSphere"/> for a <see cref="Komodo.Core.ECS.Components.RigidBodyComponent"/> with an attached <see cref="Komodo.Core.Physics.Sphere"/>.
+        /// </summary>
+        /// <param name="body">Body to create a <see cref="Microsoft.Xna.Framework.BoundingSphere"/> for.</param>
+        /// <returns><see cref="Microsoft.Xna.Framework.BoundingSphere"/> representation of the <see cref="Komodo.Core.Physics.Sphere"/>.</returns>
         private static BoundingSphere GenerateBoundingSphere(RigidBodyComponent body)
         {
             var sphere = body.Shape as Sphere;
@@ -504,17 +571,35 @@ namespace Komodo.Core.ECS.Systems
             return new BoundingSphere(body.WorldPosition.MonoGameVector, sphere.Radius);
         }
 
+        /// <summary>
+        /// Gets collision data between two <see cref="Microsoft.Xna.Framework.BoundingBox"/>es.
+        /// </summary>
+        /// <param name="box">First box to check.</param>
+        /// <param name="otherBox">Second box to check.</param>
+        /// <returns><see cref="Komodo.Core.Physics.Collision"/> information between the two boxes.</returns>
         private static Collision GetCollision(BoundingBox box, BoundingBox otherBox)
         {
             return AABBAABB(box, otherBox);
         }
 
+        /// <summary>
+        /// Gets collision data between a <see cref="Microsoft.Xna.Framework.BoundingBox"/> and a <see cref="Microsoft.Xna.Framework.BoundingSphere"/>.
+        /// </summary>
+        /// <param name="box">Box to check.</param>
+        /// <param name="sphere">Sphere to check.</param>
+        /// <returns><see cref="Komodo.Core.Physics.Collision"/> information between the box and sphere.</returns>
         private static Collision GetCollision(BoundingBox box, BoundingSphere sphere)
         {
             var collision = GetCollision(sphere, box);
             return new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
         }
 
+        /// <summary>
+        /// Gets collision data between two <see cref="Microsoft.Xna.Framework.BoundingSphere"/>s.
+        /// </summary>
+        /// <param name="sphere">First sphere to check.</param>
+        /// <param name="otherSphere">Second sphere to check.</param>
+        /// <returns><see cref="Komodo.Core.Physics.Collision"/> information between the two spheres.</returns>
         private static Collision GetCollision(BoundingSphere sphere, BoundingSphere otherSphere)
         {
             var containment = sphere.Contains(otherSphere);
@@ -531,6 +616,12 @@ namespace Komodo.Core.ECS.Systems
             return new Collision(containment != ContainmentType.Disjoint, normal, penetrationDepth);
         }
 
+        /// <summary>
+        /// Gets collision data between a <see cref="Microsoft.Xna.Framework.BoundingSphere"/> and a <see cref="Microsoft.Xna.Framework.BoundingBox"/>.
+        /// </summary>
+        /// <param name="sphere">Sphere to check.</param>
+        /// <param name="box">Box to check.</param>
+        /// <returns><see cref="Komodo.Core.Physics.Collision"/> information between the sphere and box.</returns>
         private static Collision GetCollision(BoundingSphere sphere, BoundingBox box)
         {
             var containment = sphere.Contains(box);
@@ -601,6 +692,11 @@ namespace Komodo.Core.ECS.Systems
             return true;
         }
 
+        /// <summary>
+        /// Updates a <see cref="Komodo.Core.ECS.Components.DynamicBodyComponent"/> for the given frame, considering relevant forces and velocities.
+        /// </summary>
+        /// <param name="body"><see cref="Komodo.Core.ECS.Components.DynamicBodyComponent"/> to update</param>
+        /// <param name="gameTime">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
         private static void UpdateDynamicBodyComponent(DynamicBodyComponent body, GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -611,6 +707,11 @@ namespace Komodo.Core.ECS.Systems
             body.Parent.Rotation += body.AngularVelocity * delta;
         }
 
+        /// <summary>
+        /// Updates a <see cref="Komodo.Core.ECS.Components.KinematicBodyComponent"/> for the given frame, considering relevant movements.
+        /// </summary>
+        /// <param name="body"><see cref="Komodo.Core.ECS.Components.KinematicBodyComponent"/> to update</param>
+        /// <param name="gameTime">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
         private static void UpdateKinematicBodyComponent(KinematicBodyComponent body, GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;

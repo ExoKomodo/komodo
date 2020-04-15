@@ -30,7 +30,7 @@ namespace Komodo.Lib.Network
                 throw new Exception($"Client could not figure out the host address: {ex}");
             }
             _transactions = new ConcurrentDictionary<Guid, Transaction>();
-            _socketArguments = socketArgs == null ? new SocketAsyncEventArgs() : socketArgs;
+            _socketArguments = socketArgs ?? new SocketAsyncEventArgs();
         }
         #endregion Constructors
 
@@ -61,33 +61,33 @@ namespace Komodo.Lib.Network
             Message response = null;
             try
             {
-                using (var clientSocket = new TcpClient())
+                using var clientSocket = new TcpClient();
+                request = new Message(data, endpoint)
                 {
-                    request = new Message(data, endpoint);
-                    request.TransactionId = transaction.Id;
+                    TransactionId = transaction.Id,
+                };
 
-                    // Send request
-                    var serializedObj = JsonSerializer.Serialize(request);
-                    var socketData = Brotli.Compress(serializedObj);
-                    await clientSocket.ConnectAsync(IP, Port);
-                    var stream = clientSocket.GetStream();
-                    await stream.WriteAsync(socketData);
+                // Send request
+                var serializedObj = JsonSerializer.Serialize(request);
+                var socketData = Brotli.Compress(serializedObj);
+                await clientSocket.ConnectAsync(IP, Port);
+                var stream = clientSocket.GetStream();
+                await stream.WriteAsync(socketData);
 
-                    // Read response
-                    var tmp = new byte[1024];
-                    var rawResponseData = new List<byte>();
-                    int bytesRead = 0;
-                    do
-                    {
-                        bytesRead = await stream.ReadAsync(tmp);
-                        rawResponseData.AddRange(tmp);
-                    }
-                    while (stream.DataAvailable && bytesRead != 0);
-                    var responseData = Brotli.Decompress(rawResponseData.ToArray());
-
-                    var responseString = Encoding.ASCII.GetString(responseData);
-                    response = JsonSerializer.Deserialize<Message>(responseString);
+                // Read response
+                var tmp = new byte[1024];
+                var rawResponseData = new List<byte>();
+                int bytesRead = 0;
+                do
+                {
+                    bytesRead = await stream.ReadAsync(tmp);
+                    rawResponseData.AddRange(tmp);
                 }
+                while (stream.DataAvailable && bytesRead != 0);
+                var responseData = Brotli.Decompress(rawResponseData.ToArray());
+
+                var responseString = Encoding.ASCII.GetString(responseData);
+                response = JsonSerializer.Deserialize<Message>(responseString);
             }
             catch (Exception ex)
             {
