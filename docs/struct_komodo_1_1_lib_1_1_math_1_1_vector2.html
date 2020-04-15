@@ -101,9 +101,9 @@ Inheritance diagram for Komodo.Lib.Math.Vector2:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af5f560150dafd00a07ffd0744f0f76b2"><td class="memItemLeft" align="right" valign="top"><a id="af5f560150dafd00a07ffd0744f0f76b2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Vector2</b> (Microsoft.Xna.Framework.Vector2 vector)</td></tr>
-<tr class="separator:af5f560150dafd00a07ffd0744f0f76b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8ed8ed91401bc53b7939508b6d56b4a"><td class="memItemLeft" align="right" valign="top"><a id="ae8ed8ed91401bc53b7939508b6d56b4a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Vector2</b> (MonoGameVector2 vector)</td></tr>
+<tr class="separator:ae8ed8ed91401bc53b7939508b6d56b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a3c2af4d2c4fefd9e97667aa66cddd7"><td class="memItemLeft" align="right" valign="top"><a id="a5a3c2af4d2c4fefd9e97667aa66cddd7"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Vector2</b> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> vector)</td></tr>
 <tr class="separator:a5a3c2af4d2c4fefd9e97667aa66cddd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -119,6 +119,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Equals</b> (<a class=
 <tr class="memitem:ae9d436f2a78245ec38d8cb7dd82b31c5"><td class="memItemLeft" align="right" valign="top"><a id="ae9d436f2a78245ec38d8cb7dd82b31c5"></a>
 override int&#160;</td><td class="memItemRight" valign="bottom"><b>GetHashCode</b> ()</td></tr>
 <tr class="separator:ae9d436f2a78245ec38d8cb7dd82b31c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dcb4509aaccb059ca2243135d205b15"><td class="memItemLeft" align="right" valign="top"><a id="a9dcb4509aaccb059ca2243135d205b15"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>Length</b> ()</td></tr>
+<tr class="separator:a9dcb4509aaccb059ca2243135d205b15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -158,9 +161,30 @@ static <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vect
 <tr class="memitem:ad15c1148241d4b0ef7065e413842f298"><td class="memItemLeft" align="right" valign="top"><a id="ad15c1148241d4b0ef7065e413842f298"></a>
 static <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator-</b> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> left, <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> right)</td></tr>
 <tr class="separator:ad15c1148241d4b0ef7065e413842f298"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3f746745b1ba9762b58cd98646a972"><td class="memItemLeft" align="right" valign="top"><a id="a4f3f746745b1ba9762b58cd98646a972"></a>
+static <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Clamp</b> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> value, <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> min, <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> max)</td></tr>
+<tr class="separator:a4f3f746745b1ba9762b58cd98646a972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a5dbe9a7b16deec28ee70a2feda5356"><td class="memItemLeft" align="right" valign="top"><a id="a8a5dbe9a7b16deec28ee70a2feda5356"></a>
+static <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Transform</b> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> vector, Matrix transform)</td></tr>
+<tr class="separator:a8a5dbe9a7b16deec28ee70a2feda5356"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a630cd4169d387684550b12a1e324b298"><td class="memItemLeft" align="right" valign="top"><a id="a630cd4169d387684550b12a1e324b298"></a>
+static <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Transform</b> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> vector, Quaternion transform)</td></tr>
+<tr class="separator:a630cd4169d387684550b12a1e324b298"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44ab6f2dce4553cddb68950bb359b69b"><td class="memItemLeft" align="right" valign="top"><a id="a44ab6f2dce4553cddb68950bb359b69b"></a>
 static <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Normalize</b> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> vectorToNormalize)</td></tr>
 <tr class="separator:a44ab6f2dce4553cddb68950bb359b69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20fff7e6fef3779660d21274a528e872"><td class="memItemLeft" align="right" valign="top"><a id="a20fff7e6fef3779660d21274a528e872"></a>
+static float&#160;</td><td class="memItemRight" valign="bottom"><b>Distance</b> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> a, <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> b)</td></tr>
+<tr class="separator:a20fff7e6fef3779660d21274a528e872"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78419f4418b53b97ab15526a121e20e8"><td class="memItemLeft" align="right" valign="top"><a id="a78419f4418b53b97ab15526a121e20e8"></a>
+static float&#160;</td><td class="memItemRight" valign="bottom"><b>DistanceSquared</b> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> a, <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> b)</td></tr>
+<tr class="separator:a78419f4418b53b97ab15526a121e20e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d3f11d9539e1bd9105d530bebb4fb3c"><td class="memItemLeft" align="right" valign="top"><a id="a0d3f11d9539e1bd9105d530bebb4fb3c"></a>
+static float&#160;</td><td class="memItemRight" valign="bottom"><b>Dot</b> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> a, <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> b)</td></tr>
+<tr class="separator:a0d3f11d9539e1bd9105d530bebb4fb3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8ddd08800c58e7555a52cadab8791ec"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html#ab8ddd08800c58e7555a52cadab8791ec">Reflect</a> (<a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> vectorToReflect, <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> normal)</td></tr>
+<tr class="memdesc:ab8ddd08800c58e7555a52cadab8791ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the reflection of a vector over a given normal.  <a href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html#ab8ddd08800c58e7555a52cadab8791ec">More...</a><br /></td></tr>
+<tr class="separator:ab8ddd08800c58e7555a52cadab8791ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -185,9 +209,9 @@ static <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vect
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a6db06f30790b4aa967548560a1c41b11"><td class="memItemLeft" align="right" valign="top"><a id="a6db06f30790b4aa967548560a1c41b11"></a>
-Microsoft.Xna.Framework.Vector2&#160;</td><td class="memItemRight" valign="bottom"><b>MonoGameVector</b><code> [get]</code></td></tr>
-<tr class="separator:a6db06f30790b4aa967548560a1c41b11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0acc349fe4cb1619555fc0cc6142270"><td class="memItemLeft" align="right" valign="top"><a id="ae0acc349fe4cb1619555fc0cc6142270"></a>
+MonoGameVector2&#160;</td><td class="memItemRight" valign="bottom"><b>MonoGameVector</b><code> [get]</code></td></tr>
+<tr class="separator:ae0acc349fe4cb1619555fc0cc6142270"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9eceffd3d7b7e991697731868d78a4e7"><td class="memItemLeft" align="right" valign="top"><a id="a9eceffd3d7b7e991697731868d78a4e7"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>X</b><code> [get]</code></td></tr>
 <tr class="separator:a9eceffd3d7b7e991697731868d78a4e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +225,53 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>Y</b><code> [get]</c
 <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>YX</b><code> [get]</code></td></tr>
 <tr class="separator:a0a0f3f8c7f555d8219f3a378b70fe288"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab8ddd08800c58e7555a52cadab8791ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8ddd08800c58e7555a52cadab8791ec">&#9670;&nbsp;</a></span>Reflect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a> Komodo.Lib.Math.Vector2.Reflect </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a>&#160;</td>
+          <td class="paramname"><em>vectorToReflect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_komodo_1_1_lib_1_1_math_1_1_vector2.html">Vector2</a>&#160;</td>
+          <td class="paramname"><em>normal</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the reflection of a vector over a given normal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vectorToReflect</td><td>Vector to reflect over the normal.</td></tr>
+    <tr><td class="paramname">normal</td><td>Normal to reflect the vector over.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Reflected vector over the the normal.</dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
