@@ -1,4 +1,5 @@
 using Komodo.Core.ECS.Components;
+using Komodo.Core.Physics;
 using Komodo.Lib.Math;
 
 using Color = Microsoft.Xna.Framework.Color;
@@ -62,8 +63,18 @@ namespace Common.Behaviors
                             Position = new Vector3(i + 5, 0f, 0f) * scale.X,
                             Scale = scale
                         }
-                    ); ;
+                    );
                 }
+                var material = new PhysicsMaterial("box")
+                {
+                    Friction = 0.8f
+                };
+                Parent.AddComponent(
+                    new StaticBodyComponent(new Box(2f, 2f, 2f, 1f))
+                    {
+                        Material = material,
+                    }
+                );
                 Parent.Scale = scale;
             }
         }

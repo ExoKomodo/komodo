@@ -3,9 +3,15 @@ using Komodo.Core.ECS.Entities;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System;
-
-using GameTime = Microsoft.Xna.Framework.GameTime;
 using Komodo.Lib.Math;
+using System.Linq;
+using Komodo.Core.Physics;
+
+using BoundingBox = Microsoft.Xna.Framework.BoundingBox;
+using BoundingSphere = Microsoft.Xna.Framework.BoundingSphere;
+using ContainmentType = Microsoft.Xna.Framework.ContainmentType;
+using GameTime = Microsoft.Xna.Framework.GameTime;
+using MathHelper = Microsoft.Xna.Framework.MathHelper;
 
 namespace Komodo.Core.ECS.Systems
 {
@@ -140,6 +146,10 @@ namespace Komodo.Core.ECS.Systems
                     case KinematicBodyComponent kinematicBody:
                         kinematicBody.PositionDelta = Vector3.Zero;
                         break;
+                    case DynamicBodyComponent dynamicBody:
+                        dynamicBody.Force = Vector3.Zero;
+                        dynamicBody.Torque = Vector3.Zero;
+                        break;
                     default:
                         break;
                 }
@@ -155,7 +165,6 @@ namespace Komodo.Core.ECS.Systems
         /// <param name="_">Time passed since last <see cref="Komodo.Core.Game.Update(GameTime)"/>.</param>
         public void PreUpdate(GameTime _)
         {
-            InitializeComponents();
             foreach (var component in Components)
             {
                 switch (component)
@@ -247,8 +256,7 @@ namespace Komodo.Core.ECS.Systems
         {
             if (Components != null)
             {
-                var componentsToUpdate = Components.ToArray();
-                foreach (var component in componentsToUpdate)
+                foreach (var component in Components)
                 {
                     if (component.IsEnabled && component.Parent != null && component.Parent.IsEnabled)
                     {
@@ -287,33 +295,83 @@ namespace Komodo.Core.ECS.Systems
         }
 
         /// <summary>
-        /// Calculates angular velocity for the current frame.
+        /// Corrects all current collisions.
         /// </summary>
-        private void CalculateAngularVelocity(DynamicBodyComponent body, float delta)
+        private void CorrectCollisions()
         {
-            var angularAcceleration = new Vector3(
-                body.Torque.X * (1.0f / body.Shape.MomentOfInertia.X),
-                body.Torque.Y * (1.0f / body.Shape.MomentOfInertia.Y),
-                body.Torque.Z * (1.0f / body.Shape.MomentOfInertia.Z)
-            );
-            body.AngularVelocity += angularAcceleration * delta;
+
         }
 
         /// <summary>
-        /// Calculates linear velocity for the current frame.
+        /// Detects all collisions of all enabled <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/>s.
         /// </summary>
-        private void CalculateLinearVelocity(DynamicBodyComponent body, float delta)
+        private void DetectCollisions()
         {
-            var linearAcceleration = body.Force * (1f / body.Shape.Mass);
-            body.LinearVelocity += linearAcceleration * delta;
+            var rigidBodies = Components.Where(body => body is RigidBodyComponent && body.IsEnabled && body.Parent.IsEnabled).Cast<RigidBodyComponent>();
+            foreach (var outerBody in rigidBodies)
+            {
+                var outerShape = outerBody.Shape;
+                foreach (var innerBody in rigidBodies)
+                {
+                    if (innerBody == outerBody || outerBody.Collisions.ContainsKey(innerBody.ID))
+                    {
+                        continue;
+                    }
+                    var innerShape = innerBody.Shape;
+                    switch (outerShape)
+                    {
+                        case Box _:
+                            var outerBoundingBox = GenerateBoundingBox(outerBody);
+                            switch (innerShape)
+                            {
+                                case Box _:
+                                    var innerBoundingBox = GenerateBoundingBox(innerBody);
+                                    var collision = GetCollision(outerBoundingBox, innerBoundingBox);
+                                    outerBody.Collisions[innerBody.ID] = collision;
+                                    innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    break;
+                                case Sphere _:
+                                    var innerBoundingSphere = GenerateBoundingSphere(innerBody);
+                                    collision = GetCollision(outerBoundingBox, innerBoundingSphere);
+                                    outerBody.Collisions[innerBody.ID] = collision;
+                                    innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    break;
+                            }
+                            break;
+                        case Sphere _:
+                            var outerBoundingSphere = GenerateBoundingSphere(outerBody);
+                            switch (innerShape)
+                            {
+                                case Box _:
+                                    var innerBoundingBox = GenerateBoundingBox(innerBody);
+                                    var collision = GetCollision(outerBoundingSphere, innerBoundingBox);
+                                    outerBody.Collisions[innerBody.ID] = collision;
+                                    innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    break;
+                                case Sphere _:
+                                    var innerBoundingSphere = GenerateBoundingSphere(innerBody);
+                                    collision = GetCollision(outerBoundingSphere, innerBoundingSphere);
+                                    outerBody.Collisions[innerBody.ID] = collision;
+                                    innerBody.Collisions[outerBody.ID] = new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+                                    break;
+                            }
+                            break;
+                    }
+                }
+            }
         }
 
         /// <summary>
-        /// Finds collisions and corrects them.
+        /// Detects collisions and corrects them.
         /// </summary>
         private void HandleCollisions()
         {
-
+            foreach (var component in Components)
+            {
+                component.Collisions.Clear();
+            }
+            DetectCollisions();
+            CorrectCollisions();
         }
 
         /// <summary>
@@ -341,8 +399,209 @@ namespace Komodo.Core.ECS.Systems
         {
             return Components.Remove(componentToRemove);
         }
+        #endregion Protected Member Methods
 
-        private void UpdateDynamicBodyComponent(DynamicBodyComponent body, GameTime gameTime)
+        #endregion Member Methods
+
+        #region Static Methods
+
+        #region Private Static Methods
+        private static Collision AABBAABB(BoundingBox a, BoundingBox b)
+        {
+            // Minimum Translation Vector
+            // ==========================
+            float minimumTranslationVectorDistance = float.MaxValue; // Set current minimum distance (max float value so next value is always less)
+            Vector3 minimumTranslationVectorAxis = new Vector3();    // Axis along which to travel with the minimum distance
+            var containment = a.Contains(b);
+            var normal = Vector3.Zero;
+            float penetrationDepth = 0f;
+            if (containment == ContainmentType.Disjoint)
+            {
+                return new Collision(false, normal, penetrationDepth);
+            }
+
+            // Axes of potential separation
+            // ============================
+            // - Each shape must be projected on these axes to test for intersection:
+            //          
+            // (1, 0, 0)                    A0 (= B0) [X Axis]
+            // (0, 1, 0)                    A1 (= B1) [Y Axis]
+            // (0, 0, 1)                    A1 (= B2) [Z Axis]
+
+            // [X Axis]
+            if (!SAT(Vector3.Right, a.Min.X, a.Max.X, b.Min.X, b.Max.X, ref minimumTranslationVectorAxis, ref minimumTranslationVectorDistance))
+            {
+                return new Collision(false, normal, penetrationDepth);
+            }
+            // [Y Axis]
+            if (!SAT(Vector3.Up, a.Min.Y, a.Max.Y, b.Min.Y, b.Max.Y, ref minimumTranslationVectorAxis, ref minimumTranslationVectorDistance))
+            {
+                return new Collision(false, normal, penetrationDepth);
+            }
+            // [Z Axis]
+            if (!SAT(Vector3.Back, a.Min.Z, a.Max.Z, b.Min.Z, b.Max.Z, ref minimumTranslationVectorAxis, ref minimumTranslationVectorDistance))
+            {
+                return new Collision(false, normal, penetrationDepth);
+            }
+
+            // Calculate Minimum Translation Vector (MTV) [normal * penetration]
+            normal = Vector3.Normalize(minimumTranslationVectorAxis);
+
+            // Multiply the penetration depth by itself plus a small increment
+            // When the penetration is resolved using MTV, it will no longer intersect
+            penetrationDepth = MathF.Sqrt(minimumTranslationVectorDistance) * 1.001f;
+
+            return new Collision(true, normal, penetrationDepth);
+        }
+
+        /// <summary>
+        /// Calculates angular velocity for the current frame.
+        /// </summary>
+        private static void CalculateAngularVelocity(DynamicBodyComponent body, float delta)
+        {
+            var angularAcceleration = new Vector3(
+                body.Torque.X * (1.0f / body.Shape.MomentOfInertia.X),
+                body.Torque.Y * (1.0f / body.Shape.MomentOfInertia.Y),
+                body.Torque.Z * (1.0f / body.Shape.MomentOfInertia.Z)
+            );
+            body.AngularVelocity += angularAcceleration * delta;
+        }
+
+        /// <summary>
+        /// Calculates linear velocity for the current frame.
+        /// </summary>
+        private static void CalculateLinearVelocity(DynamicBodyComponent body, float delta)
+        {
+            var linearAcceleration = body.Force * (1f / body.Shape.Mass);
+            body.LinearVelocity += linearAcceleration * delta;
+        }
+
+        private static BoundingBox GenerateBoundingBox(RigidBodyComponent body)
+        {
+            var box = body.Shape as Box;
+            var max = new Vector3(
+                MathHelper.Max(-box.Width / 2f, box.Width / 2f),
+                MathHelper.Max(-box.Height / 2f, box.Height / 2f),
+                MathHelper.Max(-box.Depth / 2f, box.Depth / 2f)
+            ) + body.WorldPosition;
+            var min = new Vector3(
+                MathHelper.Min(-box.Width / 2f, box.Width / 2f),
+                MathHelper.Min(-box.Height / 2f, box.Height / 2f),
+                MathHelper.Min(-box.Depth / 2f, box.Depth / 2f)
+            ) + body.WorldPosition;
+
+            var rotation = body.RotationMatrix;
+            max = Vector3.Transform(max - body.WorldPosition, rotation) + body.WorldPosition;
+            min = Vector3.Transform(min - body.WorldPosition, rotation) + body.WorldPosition;
+
+            return new BoundingBox(min.MonoGameVector, max.MonoGameVector);
+        }
+
+        private static BoundingSphere GenerateBoundingSphere(RigidBodyComponent body)
+        {
+            var sphere = body.Shape as Sphere;
+
+            return new BoundingSphere(body.WorldPosition.MonoGameVector, sphere.Radius);
+        }
+
+        private static Collision GetCollision(BoundingBox box, BoundingBox otherBox)
+        {
+            return AABBAABB(box, otherBox);
+        }
+
+        private static Collision GetCollision(BoundingBox box, BoundingSphere sphere)
+        {
+            var collision = GetCollision(sphere, box);
+            return new Collision(collision.IsColliding, -collision.Normal, collision.PenetrationDepth);
+        }
+
+        private static Collision GetCollision(BoundingSphere sphere, BoundingSphere otherSphere)
+        {
+            var containment = sphere.Contains(otherSphere);
+            var normal = Vector3.Zero;
+            float penetrationDepth = 0f;
+            if (containment != ContainmentType.Disjoint)
+            {
+                var direction = new Vector3(otherSphere.Center - sphere.Center);
+                float distance = direction.Length();
+                normal = Vector3.Normalize(direction);
+                float combinedRadius = sphere.Radius + otherSphere.Radius;
+                penetrationDepth = combinedRadius - distance;
+            }
+            return new Collision(containment != ContainmentType.Disjoint, normal, penetrationDepth);
+        }
+
+        private static Collision GetCollision(BoundingSphere sphere, BoundingBox box)
+        {
+            var containment = sphere.Contains(box);
+            var normal = Vector3.Zero;
+            float penetrationDepth = 0f;
+            if (containment != ContainmentType.Disjoint)
+            {
+                var closestPoint = Microsoft.Xna.Framework.Vector3.Clamp(sphere.Center, box.Min, box.Max);
+                var toClosest = new Vector3(sphere.Center - closestPoint);
+                var closestPointDistance = toClosest.Length();
+                if (closestPointDistance < sphere.Radius)
+                {
+                    penetrationDepth = sphere.Radius - closestPointDistance;
+                    normal = Vector3.Normalize(toClosest);
+                }
+            }
+
+            return new Collision(containment != ContainmentType.Disjoint, normal, penetrationDepth);
+        }
+
+        private static bool SAT(Vector3 axis, float minA, float maxA, float minB, float maxB, ref Vector3 mtvAxis, ref float mtvDistance)
+        {
+            // Separating Axis Theorem
+            // =======================
+            // - Two convex shapes only overlap if they overlap on all axes of separation
+            // - In order to create accurate responses we need to find the collision vector (Minimum Translation Vector)   
+            // - The collision vector is made from a vector and a scalar, 
+            //   - The vector value is the axis associated with the smallest penetration
+            //   - The scalar value is the smallest penetration value
+            // - Find if the two boxes intersect along a single axis
+            // - Compute the intersection interval for that axis
+            // - Keep the smallest intersection/penetration value
+            float axisLengthSquared = Vector3.Dot(axis, axis);
+
+            // If the axis is degenerate then ignore
+            if (axisLengthSquared < 1.0e-8f)
+            {
+                return true;
+            }
+
+            // Calculate the two possible overlap ranges
+            // Either we overlap on the left or the right sides
+            float d0 = (maxB - minA);   // 'Left' side
+            float d1 = (maxA - minB);   // 'Right' side
+
+            // Intervals do not overlap, so no intersection
+            if (d0 <= 0.0f || d1 <= 0.0f)
+            {
+                return false;
+            }
+
+            // Find out if we overlap on the 'right' or 'left' of the object.
+            float overlap = (d0 < d1) ? d0 : -d1;
+
+            // The mtd vector for that axis
+            Vector3 sep = axis * (overlap / axisLengthSquared);
+
+            // The mtd vector length squared
+            float sepLengthSquared = Vector3.Dot(sep, sep);
+
+            // If that vector is smaller than our computed Minimum Translation Distance use that vector as our current MTV distance
+            if (sepLengthSquared < mtvDistance)
+            {
+                mtvDistance = sepLengthSquared;
+                mtvAxis = sep;
+            }
+
+            return true;
+        }
+
+        private static void UpdateDynamicBodyComponent(DynamicBodyComponent body, GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             CalculateAngularVelocity(body, delta);
@@ -350,18 +609,15 @@ namespace Komodo.Core.ECS.Systems
 
             body.Parent.Position += body.LinearVelocity * delta;
             body.Parent.Rotation += body.AngularVelocity * delta;
-
-            body.Force = Vector3.Zero;
-            body.Torque = Vector3.Zero;
         }
 
-        private void UpdateKinematicBodyComponent(KinematicBodyComponent body, GameTime gameTime)
+        private static void UpdateKinematicBodyComponent(KinematicBodyComponent body, GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             body.Parent.Position += body.PositionDelta * delta;
         }
-        #endregion Protected Member Methods
+        #endregion Private Static Methods
 
-        #endregion Member Methods
+        #endregion Static Methods
     }
 }

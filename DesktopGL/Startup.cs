@@ -22,7 +22,7 @@ namespace DesktopGL
 
                 var player = new Entity(Game)
                 {
-                    Position = new Vector3(0f, 0f, 100f),
+                    Position = new Vector3(-100f, 0f, 0f),
                     PhysicsSystem = physicsSytem,
                     Render2DSystem = render2DSystem,
                     Render3DSystem = render3DSystem,
@@ -31,6 +31,7 @@ namespace DesktopGL
                 var cube = new Entity(Game)
                 {
                     Position = new Vector3(0f, 0f, 0f),
+                    PhysicsSystem = physicsSytem,
                     Render3DSystem = render3DSystem,
                 };
                 cube.AddComponent(new CubeBehavior("models/cube"));
@@ -40,6 +41,7 @@ namespace DesktopGL
                     FarPlane = 10000000f,
                     IsPerspective = true,
                     Zoom = 1f,
+                    Target = player,
                 };
                 player.AddComponent(camera);
                 player.AddComponent(new CameraBehavior(camera, 0));

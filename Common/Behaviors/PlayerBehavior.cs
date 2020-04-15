@@ -1,4 +1,5 @@
 using Komodo.Core.ECS.Components;
+using Komodo.Lib.Math;
 using System;
 
 using Color = Microsoft.Xna.Framework.Color;
@@ -30,24 +31,26 @@ namespace Common.Behaviors
         {
             base.Initialize();
 
-            Parent.AddComponent(
+            /*Parent.AddComponent(
                 new SpriteComponent("player/idle/player_idle_01", Game?.DefaultSpriteShader)
                 {
                     IsBillboard = false
                 }
-            );
+            );*/
+            Parent.AddComponent(new Drawable3DComponent("models/cube"));
             if (PlayerIndex == 0)
             {
                 Parent.AddComponent(new MoveBehavior(PlayerIndex));
             }
+            Scale = Vector3.One * 10f;
 
-            Parent.AddComponent(
+            /*Parent.AddComponent(
                 new TextComponent("fonts/font", Color.Black, Game?.DefaultSpriteShader, $"Test {PlayerIndex}")
                 {
                     IsBillboard = true,
                     Position = new Komodo.Lib.Math.Vector3(0f, 20f, 0)
                 }
-            );
+            );*/
         }
         public override void Update(GameTime gameTime)
         {
