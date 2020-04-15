@@ -2,13 +2,14 @@ using System;
 
 using Matrix = Microsoft.Xna.Framework.Matrix;
 using Quaternion = Microsoft.Xna.Framework.Quaternion;
+using MonoGameVector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Komodo.Lib.Math
 {
     public readonly struct Vector2 : IEquatable<Vector2>
     {
         #region Constructors
-        public Vector2(Microsoft.Xna.Framework.Vector2 vector) : this(vector.X, vector.Y)
+        public Vector2(MonoGameVector2 vector) : this(vector.X, vector.Y)
         {
         }
 
@@ -18,14 +19,14 @@ namespace Komodo.Lib.Math
 
         public Vector2(float x = 0f, float y = 0f)
         {
-            MonoGameVector = new Microsoft.Xna.Framework.Vector2(x, y);
+            MonoGameVector = new MonoGameVector2(x, y);
         }
         #endregion Constructors
 
         #region Members
 
         #region Public Members
-        public Microsoft.Xna.Framework.Vector2 MonoGameVector { get; }
+        public MonoGameVector2 MonoGameVector { get; }
         public float X
         {
             get
@@ -95,6 +96,11 @@ namespace Komodo.Lib.Math
         {
             return X.GetHashCode() + Y.GetHashCode();
         }
+
+        public float Length()
+        {
+            return MonoGameVector.Length();
+        }
         #endregion Public Member Methods
 
         #endregion Member Methods
@@ -107,7 +113,7 @@ namespace Komodo.Lib.Math
 
         public static Vector2 Add(Vector2 left, Vector2 right)
         {
-            var result = Microsoft.Xna.Framework.Vector2.Add(left.MonoGameVector, right.MonoGameVector);
+            var result = MonoGameVector2.Add(left.MonoGameVector, right.MonoGameVector);
             return new Vector2(result);
         }
         public static Vector2 operator +(Vector2 left, Vector2 right)
@@ -117,7 +123,7 @@ namespace Komodo.Lib.Math
 
         public static Vector2 Divide(Vector2 vector, float scale)
         {
-            var result = Microsoft.Xna.Framework.Vector2.Divide(vector.MonoGameVector, scale);
+            var result = MonoGameVector2.Divide(vector.MonoGameVector, scale);
             return new Vector2(result);
         }
         public static Vector2 operator /(Vector2 left, float scale)
@@ -137,7 +143,7 @@ namespace Komodo.Lib.Math
 
         public static Vector2 Multiply(Vector2 vector, float scale)
         {
-            var result = Microsoft.Xna.Framework.Vector2.Multiply(vector.MonoGameVector, scale);
+            var result = MonoGameVector2.Multiply(vector.MonoGameVector, scale);
             return new Vector2(result);
         }
         public static Vector2 operator *(Vector2 left, float scale)
@@ -147,7 +153,7 @@ namespace Komodo.Lib.Math
 
         public static Vector2 Subtract(Vector2 left, Vector2 right)
         {
-            var result = Microsoft.Xna.Framework.Vector2.Subtract(left.MonoGameVector, right.MonoGameVector);
+            var result = MonoGameVector2.Subtract(left.MonoGameVector, right.MonoGameVector);
             return new Vector2(result);
         }
         public static Vector2 operator -(Vector2 left, Vector2 right)
@@ -155,34 +161,57 @@ namespace Komodo.Lib.Math
             return Subtract(left, right);
         }
 
+        public static Vector2 Clamp(Vector2 value, Vector2 min, Vector2 max)
+        {
+            var result = MonoGameVector2.Clamp(value.MonoGameVector, min.MonoGameVector, max.MonoGameVector);
+            return new Vector2(result);
+        }
+
         public static Vector2 Transform(Vector2 vector, Matrix transform)
         {
             return new Vector2(
-                Microsoft.Xna.Framework.Vector2.Transform(vector.MonoGameVector, transform)
+                MonoGameVector2.Transform(vector.MonoGameVector, transform)
             );
         }
 
         public static Vector2 Transform(Vector2 vector, Quaternion transform)
         {
             return new Vector2(
-                Microsoft.Xna.Framework.Vector2.Transform(vector.MonoGameVector, transform)
+                MonoGameVector2.Transform(vector.MonoGameVector, transform)
             );
         }
 
         public static Vector2 Normalize(Vector2 vectorToNormalize)
         {
-            var normalizedVector = Microsoft.Xna.Framework.Vector2.Normalize(vectorToNormalize.MonoGameVector);
+            var normalizedVector = MonoGameVector2.Normalize(vectorToNormalize.MonoGameVector);
             return new Vector2(normalizedVector);
         }
 
         public static float Distance(Vector2 a, Vector2 b)
         {
-            return Microsoft.Xna.Framework.Vector2.Distance(a.MonoGameVector, b.MonoGameVector);
+            return MonoGameVector2.Distance(a.MonoGameVector, b.MonoGameVector);
         }
 
         public static float DistanceSquared(Vector2 a, Vector2 b)
         {
-            return Microsoft.Xna.Framework.Vector2.DistanceSquared(a.MonoGameVector, b.MonoGameVector);
+            return MonoGameVector2.DistanceSquared(a.MonoGameVector, b.MonoGameVector);
+        }
+
+        public static float Dot(Vector2 a, Vector2 b)
+        {
+            return MonoGameVector2.Dot(a.MonoGameVector, b.MonoGameVector);
+        }
+
+        /// <summary>
+        /// Returns the reflection of a vector over a given normal.
+        /// </summary>
+        /// <param name="vectorToReflect">Vector to reflect over the normal.</param>
+        /// <param name="normal">Normal to reflect the vector over.</param>
+        /// <returns>Reflected vector over the the normal.</returns>
+        public static Vector2 Reflect(Vector2 vectorToReflect, Vector2 normal)
+        {
+            var reflection = MonoGameVector2.Reflect(vectorToReflect.MonoGameVector, normal.MonoGameVector);
+            return new Vector2(reflection);
         }
         #endregion Public Static Methods
 

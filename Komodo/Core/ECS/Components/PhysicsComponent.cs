@@ -1,6 +1,7 @@
 using Komodo.Core.ECS.Systems;
-
-using GameTime = Microsoft.Xna.Framework.GameTime;
+using Komodo.Core.Physics;
+using System;
+using System.Collections.Generic;
 
 namespace Komodo.Core.ECS.Components
 {
@@ -12,12 +13,14 @@ namespace Komodo.Core.ECS.Components
         #region Constructors
         protected PhysicsComponent() : base(true, null)
         {
+            Collisions = new Dictionary<Guid, Collision>();
         }
         #endregion Constructors
 
         #region Member Methods
 
         #region Public Member Methods
+        public Dictionary<Guid, Collision> Collisions { get; }
         public PhysicsSystem PhysicsSystem => Parent?.PhysicsSystem;
         #endregion Public Member Methods
         

@@ -3,10 +3,18 @@
 namespace Komodo.Core.Physics
 {
     /// <summary>
-    /// A box shape to be used in physics simulation.
+    /// A sphere shape to be used in physics simulation.
     /// </summary>
     public class Sphere : IPhysicsShape
     {
+        #region Constructors
+        public Sphere(float radius, float mass)
+        {
+            Radius = radius;
+            Mass = mass;
+        }
+
+        #endregion Constructors
         #region Members
 
         #region Public Members
@@ -58,6 +66,16 @@ namespace Komodo.Core.Physics
 
         #endregion Members
 
+        #region Member Methods
+
+        #region Public Member Methods
+        public IPhysicsShape GetScaledShape(Vector3 scale)
+        {
+            return new Sphere(Radius * scale.X, Mass);
+        }
+        #endregion Public Member Methods
+
+        #region Private Member Methods
         /// <summary>
         /// Updates the moment of intertia. Called whenever relevant fields have been updated.
         /// </summary>
@@ -66,5 +84,8 @@ namespace Komodo.Core.Physics
             float moment = Mass * Radius * Radius * 0.4f;
             MomentOfInertia = new Vector3(moment, moment, moment);
         }
+        #endregion Private Member Methods
+
+        #endregion Member Methods
     }
 }

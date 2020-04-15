@@ -1,3 +1,4 @@
+using Komodo.Core.Physics;
 using GameTime = Microsoft.Xna.Framework.GameTime;
 
 namespace Komodo.Core.ECS.Components
@@ -8,8 +9,9 @@ namespace Komodo.Core.ECS.Components
     public class StaticBodyComponent : RigidBodyComponent
     {
         #region Constructors
-        public StaticBodyComponent()
+        public StaticBodyComponent(IPhysicsShape shape)
         {
+            Shape = shape;
         }
         #endregion Constructors
 
