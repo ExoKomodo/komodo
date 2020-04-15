@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zoom_320',['Zoom',['../class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_camera_component.html#a33c5970529b0b9c340e09b5732ec74a2',1,'Komodo::Core::ECS::Components::CameraComponent']]]
+  ['vsync_414',['VSync',['../class_komodo_1_1_core_1_1_engine_1_1_graphics_1_1_graphics_manager.html#a6ad8e045911a71d864828ab43cb025ea',1,'Komodo::Core::Engine::Graphics::GraphicsManager']]]
 ];

@@ -13,5 +13,6 @@ var class_komodo_1_1_core_1_1_e_c_s_1_1_systems_1_1_render2_d_system =
     [ "Components", "class_komodo_1_1_core_1_1_e_c_s_1_1_systems_1_1_render2_d_system.html#a1dfc92950cf12446a9955aa2e65130f7", null ],
     [ "Entities", "class_komodo_1_1_core_1_1_e_c_s_1_1_systems_1_1_render2_d_system.html#a47d1af274235e38d7ebb5d53196d9908", null ],
     [ "Game", "class_komodo_1_1_core_1_1_e_c_s_1_1_systems_1_1_render2_d_system.html#a1d0e09b84734e8badc80df220b4f52cb", null ],
-    [ "IsInitialized", "class_komodo_1_1_core_1_1_e_c_s_1_1_systems_1_1_render2_d_system.html#aff5095eef8ebd192cc9774689e4f9e49", null ]
+    [ "IsInitialized", "class_komodo_1_1_core_1_1_e_c_s_1_1_systems_1_1_render2_d_system.html#aff5095eef8ebd192cc9774689e4f9e49", null ],
+    [ "TextureFilter", "class_komodo_1_1_core_1_1_e_c_s_1_1_systems_1_1_render2_d_system.html#aef1e69c7394428dfa8e43b74afa54433", null ]
 ];

@@ -1,12 +1,13 @@
 var struct_komodo_1_1_lib_1_1_math_1_1_vector3 =
 [
-    [ "Vector3", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#ae9cc3d29b875c4de05ee2960e09ea15c", null ],
+    [ "Vector3", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#a281e35cac69fa32555e555c58565d384", null ],
     [ "Vector3", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#a92fc5d6ebe7c80d9e224a74a9f2e9485", null ],
     [ "Vector3", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#a441f3b60faaec3b2ce1022e19422e473", null ],
     [ "Equals", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#a30f14231744a687689f5d4a27eade792", null ],
     [ "Equals", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#a2ac76ed7844f1e1e5b302f0f748f78c3", null ],
     [ "GetHashCode", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#ae5ad94bd7d84b8af7338c6cfeb1e07ab", null ],
-    [ "MonoGameVector", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#a124c7b30a2963b75c30a8ed3cf596209", null ],
+    [ "Length", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#a73b24feeabf0f8b09cce46a11a4da323", null ],
+    [ "MonoGameVector", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#af758f2ad983344b7ebf3b4f043f89ea5", null ],
     [ "X", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#a833ece70b5ab51cbd83ad120cbe8fe13", null ],
     [ "XY", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#ac6d52e59b5f46cdd8a1012db00e57be8", null ],
     [ "XYZ", "struct_komodo_1_1_lib_1_1_math_1_1_vector3.html#ad422b5c1a30fd9fe35827a912fb50f5c", null ],
