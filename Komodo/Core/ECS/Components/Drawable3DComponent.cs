@@ -1,8 +1,7 @@
 using Komodo.Core.Engine.Graphics;
-
+using Komodo.Lib.Math;
 using BoundingBox = Microsoft.Xna.Framework.BoundingBox;
 using Color = Microsoft.Xna.Framework.Color;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Komodo.Core.ECS.Components
 {
@@ -51,21 +50,20 @@ namespace Komodo.Core.ECS.Components
         {
             get
             {
-                var bounds = ModelData.BoundingBox;
-                var min = bounds.Min;
-                var max = bounds.Max;
-                min.X *= Width;
-                max.X *= Width;
-                
-                min.Y *= Height;
-                max.Y *= Height;
-                
-                min.Z *= Depth;
-                max.Z *= Depth;
+                var min = new Vector3(
+                    Width / -2f,
+                    Height / -2f,
+                    Depth / -2f
+                );
+                var max = new Vector3(
+                    Width / 2f,
+                    Height / 2f,
+                    Depth / 2f
+                );
 
-                min += WorldPosition.MonoGameVector;
-                max += WorldPosition.MonoGameVector;
-                return new BoundingBox(min, max);
+                min += WorldPosition;
+                max += WorldPosition;
+                return new BoundingBox(min.MonoGameVector, max.MonoGameVector);
             }
         }
 
