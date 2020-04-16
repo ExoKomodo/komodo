@@ -552,10 +552,6 @@ namespace Komodo.Core.ECS.Systems
                 MathHelper.Min(-box.Depth / 2f, box.Depth / 2f)
             ) + body.WorldPosition;
 
-            var rotation = body.RotationMatrix;
-            max = Vector3.Transform(max - body.WorldPosition, rotation) + body.WorldPosition;
-            min = Vector3.Transform(min - body.WorldPosition, rotation) + body.WorldPosition;
-
             return new BoundingBox(min.MonoGameVector, max.MonoGameVector);
         }
 

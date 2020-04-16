@@ -26,6 +26,7 @@ namespace DesktopGL
                     PhysicsSystem = physicsSytem,
                     Render2DSystem = render2DSystem,
                     Render3DSystem = render3DSystem,
+                    Rotation = new Vector3(0f, 0f, 1f)
                 };
                 player.AddComponent(new PlayerBehavior(0));
                 var cube = new Entity(Game)
@@ -35,16 +36,21 @@ namespace DesktopGL
                     Render3DSystem = render3DSystem,
                 };
                 cube.AddComponent(new CubeBehavior("models/cube"));
+                var cameraEntity = new Entity(Game)
+                {
+                    Render2DSystem = render2DSystem,
+                    Render3DSystem = render3DSystem,
+                };
                 var camera = new CameraComponent()
                 {
-                    Position = new Vector3(0, 0, 100f),
+                    Position = new Vector3(-100f, 0, 100f),
                     FarPlane = 10000000f,
                     IsPerspective = true,
                     Zoom = 1f,
                     Target = player,
                 };
-                player.AddComponent(camera);
-                player.AddComponent(new CameraBehavior(camera, 0));
+                cameraEntity.AddComponent(camera);
+                cameraEntity.AddComponent(new CameraBehavior(camera, 0));
                 camera.SetActive();
 
                 render2DSystem = Game.CreateRender2DSystem();
@@ -53,7 +59,7 @@ namespace DesktopGL
                     Render2DSystem = render2DSystem,
                 };
                 counterEntity.AddComponent(new FPSCounterBehavior());
-                var cameraEntity = new Entity(Game)
+                cameraEntity = new Entity(Game)
                 {
                     Position = new Vector3(0f, 0f, 0f),
                     Render2DSystem = render2DSystem,
