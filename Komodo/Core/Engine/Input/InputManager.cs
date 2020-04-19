@@ -107,7 +107,7 @@ namespace Komodo.Core.Engine.Input
         /// <param name="action">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
         /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
         /// <returns><see cref="Komodo.Core.Engine.Input.InputInfo"/> for the given action and player.</returns>
-        public static InputInfo GetInput(string action, int playerIndex = 0)
+        public static InputInfo GetInput(string action, int playerIndex = 0, bool usePrevious = false)
         {
             var result = new InputInfo();
             if (IsValidPlayerIndex(playerIndex))
@@ -118,7 +118,7 @@ namespace Komodo.Core.Engine.Input
                     var inputList = inputMap[action];
                     foreach (var input in inputList)
                     {
-                        var inputInfo = GetInputInfo(input, playerIndex);
+                        var inputInfo = GetInputInfo(input, playerIndex, usePrevious);
                         if (inputInfo.State == InputState.Undefined)
                         {
                             continue;
@@ -147,6 +147,53 @@ namespace Komodo.Core.Engine.Input
             var mouseState = isCurrent ? Mouse.GetState() : _previousMouseState;
             var position = mouseState.Position;
             return new Vector2(position.X, position.Y);
+        }
+
+        /// <summary>
+        /// Whether or not the input has been held on current frame and frame before.
+        /// </summary>
+        /// <param name="action">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
+        /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
+        public static bool IsHeld(string action, int playerIndex = 0)
+        {
+            var previousInput = GetInput(action, playerIndex, usePrevious: true);
+            var currentInput = GetInput(action, playerIndex, usePrevious: false);
+            return previousInput.State == InputState.Down && currentInput.State == InputState.Down;
+        }
+
+        /// <summary>
+        /// Whether or not the input was just pressed this frame.
+        /// </summary>
+        /// <param name="action">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
+        /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
+        public static bool IsJustPressed(string action, int playerIndex = 0)
+        {
+            var previousInput = GetInput(action, playerIndex, usePrevious: true);
+            var currentInput = GetInput(action, playerIndex, usePrevious: false);
+            return previousInput.State == InputState.Up && currentInput.State == InputState.Down;
+        }
+
+        /// <summary>
+        /// Whether or not the input was just released this frame.
+        /// </summary>
+        /// <param name="action">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
+        /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
+        public static bool IsJustReleased(string action, int playerIndex = 0)
+        {
+            var previousInput = GetInput(action, playerIndex, usePrevious: true);
+            var currentInput = GetInput(action, playerIndex, usePrevious: false);
+            return previousInput.State == InputState.Down && currentInput.State == InputState.Up;
+        }
+
+        /// <summary>
+        /// Whether or not the input is being pressed, including the first frame.
+        /// </summary>
+        /// <param name="action">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
+        /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
+        public static bool IsPressed(string action, int playerIndex = 0)
+        {
+            var currentInput = GetInput(action, playerIndex, usePrevious: false);
+            return currentInput.State == InputState.Down;
         }
 
         /// <summary>
@@ -180,6 +227,28 @@ namespace Komodo.Core.Engine.Input
             }
             return false;
         }
+
+        /// <summary>
+        /// Sets the mouse position to the given coordinates.
+        /// </summary>
+        /// <remarks>
+        /// Will floor each coordinate to an integer.
+        /// </remarks>
+        /// <param name="newMousePosition">New position for the mouse.</param>
+        public static void SetMousePosition(Vector2 newMousePosition)
+        {
+            SetMousePosition((int) newMousePosition.X, (int) newMousePosition.Y);
+        }
+
+        /// <summary>
+        /// Sets the mouse position to the given coordinates.
+        /// </summary>
+        /// <param name="x">New X position for the mouse.</param>
+        /// <param name="y">New Y position for the mouse.</param>
+        public static void SetMousePosition(int x, int y)
+        {
+            Mouse.SetPosition(x, y);
+        }
         #endregion Public Static Methods
 
         #region Internal Static Methods
@@ -211,32 +280,41 @@ namespace Komodo.Core.Engine.Input
         /// <param name="input">Identifier for the device input to query.</param>
         /// <param name="playerIndex">Identifier for the player to query.</param>
         /// <returns><see cref="Komodo.Core.Engine.Input.InputInfo"/> for the given <see cref="Komodo.Core.Engine.Input.Inputs"/> and player.</returns>
-        private static InputInfo GetInputInfo(Inputs input, int playerIndex = 0)
+        private static InputInfo GetInputInfo(Inputs input, int playerIndex = 0, bool usePrevious = false)
         {
             if (!IsValidPlayerIndex(playerIndex))
             {
                 return new InputInfo();
             }
+            var gamePadStates = _gamePadStates;
+            var keyboardState = _keyboardState;
+            var mouseState = _mouseState;
+            if (usePrevious)
+            {
+                gamePadStates = _previousGamePadStates;
+                keyboardState = _previousKeyboardState;
+                mouseState = _previousMouseState;
+            }
             var komodoInputState = InputState.Undefined;
             switch(input)
             {
                 case Inputs.MouseLeftClick:
-                    var buttonState = _mouseState.LeftButton;
+                    var buttonState = mouseState.LeftButton;
                     komodoInputState = buttonState == ButtonState.Pressed ? InputState.Down : InputState.Up;
                     return new InputInfo(input, komodoInputState, Vector2.Zero, 0f);
                 case Inputs.MouseMiddleClick:
-                    buttonState = _mouseState.MiddleButton;
+                    buttonState = mouseState.MiddleButton;
                     komodoInputState = buttonState == ButtonState.Pressed ? InputState.Down : InputState.Up;
                     return new InputInfo(input, komodoInputState, Vector2.Zero, 0f);
                 case Inputs.MouseRightClick:
-                    buttonState = _mouseState.RightButton;
+                    buttonState = mouseState.RightButton;
                     komodoInputState = buttonState == ButtonState.Pressed ? InputState.Down : InputState.Up;
                     return new InputInfo(input, komodoInputState, Vector2.Zero, 0f);
                 default:
                     var monogameButtonInput = InputMapper.ToMonoGameButton(input);
                     if (monogameButtonInput.HasValue)
                     {
-                        var gamePadState = _gamePadStates[playerIndex];
+                        var gamePadState = gamePadStates[playerIndex];
                         bool isDown = gamePadState.IsButtonDown(monogameButtonInput.Value);
                         komodoInputState = isDown ? InputState.Down : InputState.Up;
                     }
@@ -244,7 +322,7 @@ namespace Komodo.Core.Engine.Input
                     var monogameKeyInput = InputMapper.ToMonoGameKey(input);
                     if (monogameKeyInput.HasValue)
                     {
-                        bool isDown = _keyboardState.IsKeyDown(monogameKeyInput.Value);
+                        bool isDown = keyboardState.IsKeyDown(monogameKeyInput.Value);
                         komodoInputState = isDown ? InputState.Down : InputState.Up;
                     }
                     
