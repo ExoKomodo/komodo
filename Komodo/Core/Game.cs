@@ -6,6 +6,8 @@ using Komodo.Core.ECS.Systems;
 
 using Color = Microsoft.Xna.Framework.Color;
 using GameTime = Microsoft.Xna.Framework.GameTime;
+using InputKeyEventArgs = Microsoft.Xna.Framework.InputKeyEventArgs;
+using TextInputEventArgs = Microsoft.Xna.Framework.TextInputEventArgs;
 
 using ContentManager = Microsoft.Xna.Framework.Content.ContentManager;
 
@@ -60,6 +62,24 @@ namespace Komodo.Core
         public BasicEffect DefaultSpriteShader { get; set; }
 
         /// <summary>
+        /// Tracks the FPS based on current <see cref="Microsoft.Xna.Framework.GameTime"/>.
+        /// </summary>
+        public float FramesPerSecond { get; private set; }
+
+        /// <summary>
+        /// Manages graphics devices for the Game window.
+        /// </summary>
+        public GraphicsManager GraphicsManager { get; private set; }
+
+        /// <summary>
+        /// Whether or not the game is the current window in focus.
+        /// </summary>
+        /// <remarks>
+        /// Can be used to know whether or not inputs should be dropped while user is not in game.
+        /// </remarks>
+        public bool IsActive => _monoGame.IsActive;
+
+        /// <summary>
         /// Manages all <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> objects.
         /// </summary>
         public List<PhysicsSystem> PhysicsSystems { get; }
@@ -75,19 +95,14 @@ namespace Komodo.Core
         public List<Render3DSystem> Render3DSystems { get; }
 
         /// <summary>
+        /// Name of the current screen device.
+        /// </summary>
+        public string ScreenDeviceName => _monoGame.Window.ScreenDeviceName;
+
+        /// <summary>
         /// Manages all <see cref="Komodo.Core.ECS.Components.SoundComponent"/> objects.
         /// </summary>
         public SoundSystem SoundSystem { get; }
-
-        /// <summary>
-        /// Tracks the FPS based on current <see cref="Microsoft.Xna.Framework.GameTime"/>.
-        /// </summary>
-        public float FramesPerSecond { get; private set; }
-
-        /// <summary>
-        /// Manages graphics devices for the Game window.
-        /// </summary>
-        public GraphicsManager GraphicsManager { get; private set; }
 
         /// <summary>
         /// Window title.
@@ -131,6 +146,282 @@ namespace Komodo.Core
         #region Member Methods
 
         #region Public Member Methods
+
+        #region Add event handlers
+        /// <summary>
+        /// Adds a handler to be executed when game is exiting.
+        /// </summary>
+        /// <param name="handler">Handler to be executed.</param>
+        public void AddExitingEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Exiting += handler;
+        }
+        
+        /// <summary>
+        /// Adds a handler to be executed when game is exiting.
+        /// </summary>
+        /// <param name="handler">Handler to be executed.</param>
+        /// <returns>Reference to the registered <see cref="System.EventHandler"/>. Can be used to remove the registered handler.</returns>
+        public EventHandler<EventArgs> AddExitingHandler(Action<object, EventArgs> handler)
+        {
+            var eventHandler = new EventHandler<EventArgs>(handler);
+            AddExitingEventHandler(eventHandler);
+            return eventHandler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be executed when game gains window focus.
+        /// </summary>
+        /// <param name="handler">Handler to be executed.</param>
+        public void AddFocusGainedEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Activated += handler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be executed when game gains window focus.
+        /// </summary>
+        /// <param name="handler">Handler to be executed.</param>
+        /// <returns>Reference to the registered <see cref="System.EventHandler"/>. Can be used to remove the registered handler.</returns>
+        public EventHandler<EventArgs> AddFocusGainedHandler(Action<object, EventArgs> handler)
+        {
+            var eventHandler = new EventHandler<EventArgs>(handler);
+            AddFocusGainedEventHandler(eventHandler);
+            return eventHandler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be executed when game loses window focus.
+        /// </summary>
+        /// <param name="handler">Handler to be executed.</param>
+        public void AddFocusLostEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Deactivated += handler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be executed when game loses window focus.
+        /// </summary>
+        /// <param name="handler">Handler to be executed.</param>
+        /// <returns>Reference to the registered <see cref="System.EventHandler"/>. Can be used to remove the registered handler.</returns>
+        public EventHandler<EventArgs> AddFocusLostHandler(Action<object, EventArgs> handler)
+        {
+            var eventHandler = new EventHandler<EventArgs>(handler);
+            AddFocusLostEventHandler(eventHandler);
+            return eventHandler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be executed when key is pressed down.
+        /// </summary>
+        /// <remarks>
+        /// Provides access to the <see cref="Microsoft.Xna.Framework.Input.Keys"/> representation of the key pressed down.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed.</param>
+        public void AddKeyDownEventHandler(EventHandler<InputKeyEventArgs> handler)
+        {
+            _monoGame.Window.KeyDown += handler;
+        }
+        
+        /// <summary>
+        /// Adds a handler to be executed when key is pressed down.
+        /// </summary>
+        /// <remarks>
+        /// Provides access to the <see cref="Microsoft.Xna.Framework.Input.Keys"/> representation of the key pressed down.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed.</param>
+        /// <returns>Reference to the registered <see cref="System.EventHandler"/>. Can be used to remove the registered handler.</returns>
+        public EventHandler<InputKeyEventArgs> AddKeyDownHandler(Action<object, InputKeyEventArgs> handler)
+        {
+            var eventHandler = new EventHandler<InputKeyEventArgs>(handler);
+            AddKeyDownEventHandler(eventHandler);
+            return eventHandler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be executed when key is released.
+        /// </summary>
+        /// <remarks>
+        /// Provides access to the <see cref="Microsoft.Xna.Framework.Input.Keys"/> representation of the key released.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed.</param>
+        public void AddKeyUpEventHandler(EventHandler<InputKeyEventArgs> handler)
+        {
+            _monoGame.Window.KeyUp += handler;
+        }
+        
+        /// <summary>
+        /// Adds a handler to be executed when key is released.
+        /// </summary>
+        /// <remarks>
+        /// Provides access to the <see cref="Microsoft.Xna.Framework.Input.Keys"/> representation of the key released.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed.</param>
+        /// <returns>Reference to the registered <see cref="System.EventHandler"/>. Can be used to remove the registered handler.</returns>
+        public EventHandler<InputKeyEventArgs> AddKeyUpHandler(Action<object, InputKeyEventArgs> handler)
+        {
+            var eventHandler = new EventHandler<InputKeyEventArgs>(handler);
+            AddKeyUpEventHandler(eventHandler);
+            return eventHandler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be executed when screen device name changes, so normally if the screen device is changed.
+        /// </summary>
+        /// <remarks>
+        /// Does not provide access to the new screen device name. This can be retrieved from <see cref="ScreenDeviceName"/>.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed.</param>
+        public void AddScreenDeviceNameChangedEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Window.ScreenDeviceNameChanged += handler;
+        }
+        
+        /// <summary>
+        /// Adds a handler to be executed when screen device name changes, so normally if the screen device is changed.
+        /// </summary>
+        /// <remarks>
+        /// Does not provide access to the new screen device name. This can be retrieved from <see cref="ScreenDeviceName"/>.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed.</param>
+        /// <returns>Reference to the registered <see cref="System.EventHandler"/>. Can be used to remove the registered handler.</returns>
+        public EventHandler<EventArgs> AddScreenDeviceNameChangedHandler(Action<object, EventArgs> handler)
+        {
+            var eventHandler = new EventHandler<EventArgs>(handler);
+            AddScreenDeviceNameChangedEventHandler(eventHandler);
+            return eventHandler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be run when text is input.
+        /// </summary>
+        /// <remarks>
+        /// Provides access to the printable character and the <see cref="Microsoft.Xna.Framework.Input.Keys"/> representation of the key.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed when a key is pressed. <c>object</c> provides access to the Window object the event was sent from. <c>args</c> provides access to the pressed key.</param>
+        public void AddTextInputEventHandler(EventHandler<TextInputEventArgs> handler)
+        {
+            _monoGame.Window.TextInput += handler;
+        }
+        
+        /// <summary>
+        /// Adds a handler to be run when text is input.
+        /// </summary>
+        /// <remarks>
+        /// Provides access to the printable character and the <see cref="Microsoft.Xna.Framework.Input.Keys"/> representation of the key.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed when a key is pressed. <c>object</c> provides access to the Window object the event was sent from. <c>args</c> provides access to the pressed key.</param>
+        /// <returns>Reference to the registered <see cref="System.EventHandler"/>. Can be used to remove the registered handler.</returns>
+        public EventHandler<TextInputEventArgs> AddTextInputHandler(Action<object, TextInputEventArgs> handler)
+        {
+            var eventHandler = new EventHandler<TextInputEventArgs>(handler);
+            AddTextInputEventHandler(eventHandler);
+            return eventHandler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be executed when window changes size.
+        /// </summary>
+        /// <remarks>
+        /// Does not provide access to the new window size. This can be retrieved from <see cref="GraphicsManager.ViewPort"/>.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed.</param>
+        /// <returns>Reference to the registered <see cref="System.EventHandler"/>. Can be used to remove the registered handler.</returns>
+        public EventHandler<EventArgs> AddWindowSizeChangedHandler(Action<object, EventArgs> handler)
+        {
+            _monoGame.Window.AllowUserResizing = true;
+            var eventHandler = new EventHandler<EventArgs>(handler);
+            AddWindowSizeChangedEventHandler(eventHandler);
+            return eventHandler;
+        }
+
+        /// <summary>
+        /// Adds a handler to be executed when window changes size.
+        /// </summary>
+        /// <remarks>
+        /// Does not provide access to the new window size. This can be retrieved from <see cref="GraphicsManager.ViewPort"/>.
+        /// </remarks>
+        /// <param name="handler">Handler to be executed.</param>
+        public void AddWindowSizeChangedEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Window.ClientSizeChanged += handler;
+        }
+        #endregion Add event handlers
+
+        #region Remove event handlers
+        /// <summary>
+        /// Removes a previously registered handler for when game is exiting.
+        /// </summary>
+        /// <param name="handler">Handler to be removed.</param>
+        public void RemoveExitingEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Exiting -= handler;
+        }
+
+        /// <summary>
+        /// Removes a previously registered handler for when game gaining window focus.
+        /// </summary>
+        /// <param name="handler">Handler to be removed.</param>
+        public void RemoveFocusGainedEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Activated -= handler;
+        }
+
+        /// <summary>
+        /// Removes a previously registered handler for when game loses window focus.
+        /// </summary>
+        /// <param name="handler">Handler to be removed.</param>
+        public void RemoveFocusLostEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Deactivated -= handler;
+        }
+
+        /// <summary>
+        /// Removes a previously registered handler for when key is pressed down.
+        /// </summary>
+        /// <param name="handler">Handler to be removed.</param>
+        public void RemoveKeyDownEventHandler(EventHandler<InputKeyEventArgs> handler)
+        {
+            _monoGame.Window.KeyDown -= handler;
+        }
+
+        /// <summary>
+        /// Removes a previously registered handler for when key is released.
+        /// </summary>
+        /// <param name="handler">Handler to be removed.</param>
+        public void RemoveKeyUpEventHandler(EventHandler<InputKeyEventArgs> handler)
+        {
+            _monoGame.Window.KeyUp -= handler;
+        }
+        
+        /// <summary>
+        /// Removes a previously registered handler for when screen device name changes, so normally if the screen device is changed.
+        /// </summary>
+        /// <param name="handler">Handler to be removed.</param>
+        public void RemoveScreenDeviceNameChangedEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Window.ScreenDeviceNameChanged -= handler;
+        }
+
+        /// <summary>
+        /// Removes a previously registered handler for text input.
+        /// </summary>
+        /// <param name="handler">Handler to be removed.</param>
+        public void RemoveTextInputEventHandler(EventHandler<TextInputEventArgs> handler)
+        {
+            _monoGame.Window.TextInput -= handler;
+        }
+
+        /// <summary>
+        /// Removes a previously registered handler for when window changes size.
+        /// </summary>
+        /// <param name="handler">Handler to be removed.</param>
+        public void RemoveWindowSizeChangedEventHandler(EventHandler<EventArgs> handler)
+        {
+            _monoGame.Window.ClientSizeChanged -= handler;
+        }
+        #endregion Remove event handlers
+
         /// <summary>
         /// Creates and begins tracking a new <see cref="Komodo.Core.ECS.Systems.PhysicsSystem"/>.
         /// </summary>
@@ -201,7 +492,6 @@ namespace Komodo.Core
         {
             _monoGame.Exit();
         }
-
 
         /// <summary>
         /// Initializes the <see cref="Komodo.Core.Engine.Graphics.GraphicsManager"/> and all <see cref="Komodo.Core.ECS.Systems.ISystem"/> objects.

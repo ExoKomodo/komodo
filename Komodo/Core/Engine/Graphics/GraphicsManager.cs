@@ -33,6 +33,21 @@ namespace Komodo.Core.Engine.Graphics
         public Game Game { get; }
 
         /// <summary>
+        /// Whether or not to display as a borderless window.
+        /// </summary>
+        public bool IsBorderless
+        {
+            get
+            {
+                return _monoGame.Window.IsBorderless;
+            }
+            set
+            {
+                _monoGame.Window.IsBorderless = value;
+            }
+        }
+
+        /// <summary>
         /// Whether or not to show the mouse in the game window.
         /// </summary>
         public bool IsMouseVisible {
