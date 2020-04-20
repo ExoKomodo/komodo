@@ -42,25 +42,25 @@ namespace Common.Behaviors
         #region Public Member Methods
         public override void Update(GameTime gameTime)
         {
-            var cameraLeft = InputManager.GetInput("camera_left", PlayerIndex);
-            var cameraRight = InputManager.GetInput("camera_right", PlayerIndex);
-            var cameraUp = InputManager.GetInput("camera_up", PlayerIndex);
-            var cameraDown = InputManager.GetInput("camera_down", PlayerIndex);
+            var cameraLeft = InputManager.GetAction("camera_left", PlayerIndex);
+            var cameraRight = InputManager.GetAction("camera_right", PlayerIndex);
+            var cameraUp = InputManager.GetAction("camera_up", PlayerIndex);
+            var cameraDown = InputManager.GetAction("camera_down", PlayerIndex);
 
             var direction = Vector3.Zero;
-            if (cameraLeft.State == InputState.Down)
+            if (cameraLeft[0].State == InputState.Down)
             {
                 direction += Camera.Left;
             }
-            if (cameraRight.State == InputState.Down)
+            if (cameraRight[0].State == InputState.Down)
             {
                 direction += Camera.Right;
             }
-            if (cameraUp.State == InputState.Down)
+            if (cameraUp[0].State == InputState.Down)
             {
                 direction += Camera.Forward;
             }
-            if (cameraDown.State == InputState.Down)
+            if (cameraDown[0].State == InputState.Down)
             {
                 direction += Camera.Backward;
             }

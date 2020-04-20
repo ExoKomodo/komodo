@@ -107,9 +107,9 @@ namespace Komodo.Core.Engine.Input
         /// <param name="action">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
         /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
         /// <returns><see cref="Komodo.Core.Engine.Input.InputInfo"/> for the given action and player.</returns>
-        public static InputInfo GetInput(string action, int playerIndex = 0, bool usePrevious = false)
+        public static List<InputInfo> GetAction(string action, int playerIndex = 0, bool usePrevious = false)
         {
-            var result = new InputInfo();
+            var result = new List<InputInfo>();
             if (IsValidPlayerIndex(playerIndex))
             {
                 var inputMap = _inputMaps[playerIndex];
@@ -119,18 +119,7 @@ namespace Komodo.Core.Engine.Input
                     foreach (var input in inputList)
                     {
                         var inputInfo = GetInputInfo(input, playerIndex, usePrevious);
-                        if (inputInfo.State == InputState.Undefined)
-                        {
-                            continue;
-                        }
-                        if (result.State == InputState.Undefined)
-                        {
-                            result = inputInfo;
-                        }
-                        if (result.State != InputState.Down && inputInfo.State == InputState.Down)
-                        {
-                            result = inputInfo;
-                        }
+                        result.Add(inputInfo);
                     }
                 }
             }
@@ -156,9 +145,19 @@ namespace Komodo.Core.Engine.Input
         /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
         public static bool IsHeld(string action, int playerIndex = 0)
         {
-            var previousInput = GetInput(action, playerIndex, usePrevious: true);
-            var currentInput = GetInput(action, playerIndex, usePrevious: false);
-            return previousInput.State == InputState.Down && currentInput.State == InputState.Down;
+            var previousInputs = GetAction(action, playerIndex, usePrevious: true);
+            var currentInputs = GetAction(action, playerIndex, usePrevious: false);
+
+            for (int i = 0; i < currentInputs.Count; i++)
+            {
+                var previousInput = previousInputs[i];
+                var currentInput = currentInputs[i];
+                if (previousInput.State == InputState.Down && currentInput.State == InputState.Down)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -168,9 +167,19 @@ namespace Komodo.Core.Engine.Input
         /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
         public static bool IsJustPressed(string action, int playerIndex = 0)
         {
-            var previousInput = GetInput(action, playerIndex, usePrevious: true);
-            var currentInput = GetInput(action, playerIndex, usePrevious: false);
-            return previousInput.State == InputState.Up && currentInput.State == InputState.Down;
+            var previousInputs = GetAction(action, playerIndex, usePrevious: true);
+            var currentInputs = GetAction(action, playerIndex, usePrevious: false);
+
+            for (int i = 0; i < currentInputs.Count; i++)
+            {
+                var previousInput = previousInputs[i];
+                var currentInput = currentInputs[i];
+                if (previousInput.State == InputState.Up && currentInput.State == InputState.Down)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -180,9 +189,19 @@ namespace Komodo.Core.Engine.Input
         /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
         public static bool IsJustReleased(string action, int playerIndex = 0)
         {
-            var previousInput = GetInput(action, playerIndex, usePrevious: true);
-            var currentInput = GetInput(action, playerIndex, usePrevious: false);
-            return previousInput.State == InputState.Down && currentInput.State == InputState.Up;
+            var previousInputs = GetAction(action, playerIndex, usePrevious: true);
+            var currentInputs = GetAction(action, playerIndex, usePrevious: false);
+
+            for (int i = 0; i < currentInputs.Count; i++)
+            {
+                var previousInput = previousInputs[i];
+                var currentInput = currentInputs[i];
+                if (previousInput.State == InputState.Down && currentInput.State == InputState.Up)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -192,8 +211,17 @@ namespace Komodo.Core.Engine.Input
         /// <param name="playerIndex">Action to query for <see cref="Komodo.Core.Engine.Input.InputInfo"/>.</param>
         public static bool IsPressed(string action, int playerIndex = 0)
         {
-            var currentInput = GetInput(action, playerIndex, usePrevious: false);
-            return currentInput.State == InputState.Down;
+            var currentInputs = GetAction(action, playerIndex, usePrevious: false);
+
+            for (int i = 0; i < currentInputs.Count; i++)
+            {
+                var currentInput = currentInputs[i];
+                if (currentInput.State == InputState.Down)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>

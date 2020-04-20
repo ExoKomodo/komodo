@@ -64,37 +64,37 @@ namespace Common.Behaviors
 
         public override void Update(GameTime gameTime)
         {
-            var left = InputManager.GetInput("left", PlayerIndex);
-            var right = InputManager.GetInput("right", PlayerIndex);
-            var up = InputManager.GetInput("up", PlayerIndex);
-            var down = InputManager.GetInput("down", PlayerIndex);
-            var sprint = InputManager.GetInput("sprint", PlayerIndex);
+            var left = InputManager.GetAction("left", PlayerIndex);
+            var right = InputManager.GetAction("right", PlayerIndex);
+            var up = InputManager.GetAction("up", PlayerIndex);
+            var down = InputManager.GetAction("down", PlayerIndex);
+            var sprint = InputManager.GetAction("sprint", PlayerIndex);
 
-            var quit = InputManager.GetInput("quit", PlayerIndex);
+            var quit = InputManager.GetAction("quit", PlayerIndex);
 
             var direction = Vector3.Zero;
             var camera = Parent.Render2DSystem.ActiveCamera;
-            if (quit.State == InputState.Down)
+            if (quit[0].State == InputState.Down)
             {
                 Game.Exit();
             }
-            if (left.State == InputState.Down)
+            if (left[0].State == InputState.Down)
             {
                 direction += camera.Left;
             }
-            if (right.State == InputState.Down)
+            if (right[0].State == InputState.Down)
             {
                 direction += camera.Right;
             }
-            if (up.State == InputState.Down)
+            if (up[0].State == InputState.Down)
             {
                 direction += camera.Forward;
             }
-            if (down.State == InputState.Down)
+            if (down[0].State == InputState.Down)
             {
                 direction += camera.Backward;
             }
-            if (sprint.State == InputState.Down)
+            if (sprint[0].State == InputState.Down)
             {
                 direction *= SprintFactor;
             }
