@@ -6,7 +6,7 @@ namespace Komodo.Core.Engine.Input
     public enum Inputs
     {
         Undefined,
-        // Buttons
+        // Gamepad
         ButtonA,
         ButtonB,
         ButtonDown,
@@ -24,6 +24,8 @@ namespace Komodo.Core.Engine.Input
         ButtonUp,
         ButtonX,
         ButtonY,
+        ThumbstickLeft,
+        ThumbstickRight,
         // Keys
         KeyA,
         KeyB,

@@ -14,7 +14,7 @@ namespace Komodo.Core.Engine.Input
         /// </summary>
         /// <param name="input">Input identifier.</param>
         /// <param name="state">State of the digital input.</param>
-        public InputInfo(Inputs input = Inputs.Undefined, InputState state = InputState.Undefined)
+        internal InputInfo(Inputs input = Inputs.Undefined, InputState state = InputState.Undefined)
         {
             Direction = Vector2.Zero;
             Input = input;
@@ -29,7 +29,7 @@ namespace Komodo.Core.Engine.Input
         /// <param name="state">State of the analog input.</param>
         /// <param name="direction">Direction of the analog input.</param>
         /// <param name="strength">Strength of the analog input.</param>
-        public InputInfo(Inputs input, InputState state, Vector2 direction, float strength = 0f)
+        internal InputInfo(Inputs input, InputState state, Vector2 direction, float strength = 0f)
         {
             if (strength > 1f)
             {
@@ -39,7 +39,7 @@ namespace Komodo.Core.Engine.Input
             {
                 strength = -1f;
             }
-            Direction = Vector2.Normalize(direction);
+            Direction = direction;
             Input = input;
             State = state;
             Strength = strength;

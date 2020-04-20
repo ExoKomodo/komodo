@@ -310,6 +310,18 @@ namespace Komodo.Core.Engine.Input
                     buttonState = mouseState.RightButton;
                     komodoInputState = buttonState == ButtonState.Pressed ? InputState.Down : InputState.Up;
                     return new InputInfo(input, komodoInputState, Vector2.Zero, 0f);
+                case Inputs.ThumbstickLeft:
+                    var thumbstickPosition = new Vector2(gamePadStates[playerIndex].ThumbSticks.Left);
+                    var strength = thumbstickPosition.Length();
+                    var direction = thumbstickPosition != Vector2.Zero ? Vector2.Normalize(thumbstickPosition) : Vector2.Zero;
+                    komodoInputState = strength == 0f ? InputState.Down : InputState.Up;
+                    return new InputInfo(input, komodoInputState, direction, strength);
+                case Inputs.ThumbstickRight:
+                    thumbstickPosition = new Vector2(gamePadStates[playerIndex].ThumbSticks.Right);
+                    strength = thumbstickPosition.Length();
+                    direction = thumbstickPosition != Vector2.Zero ? Vector2.Normalize(thumbstickPosition) : Vector2.Zero;
+                    komodoInputState = strength == 0f ? InputState.Down : InputState.Up;
+                    return new InputInfo(input, komodoInputState, direction, strength);
                 default:
                     var monogameButtonInput = InputMapper.ToMonoGameButton(input);
                     if (monogameButtonInput.HasValue)
