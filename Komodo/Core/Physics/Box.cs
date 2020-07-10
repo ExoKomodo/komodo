@@ -9,6 +9,8 @@ namespace Komodo.Core.Physics
     /// </summary>
     public class Box : IPhysicsShape
     {
+        #region Public
+        
         #region Constructors
         public Box(float width, float height, float depth, float mass)
         {
@@ -25,11 +27,9 @@ namespace Komodo.Core.Physics
             Depth = dimensions.Z;
             Mass = mass;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Depth of the Box.
         /// </summary>
@@ -113,27 +113,27 @@ namespace Komodo.Core.Physics
                 UpdateMomentOfInertia();
             }
         }
-        #endregion Public Members
-
-        #region Private Members
-        private float _depth { get; set; }
-        private float _height { get; set; }
-        private float _mass { get; set; }
-        private float _width { get; set; }
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         public IPhysicsShape GetScaledShape(Vector3 scale)
         {
             return new Box(Width * scale.X, Height * scale.Y, Depth * scale.Z, Mass);
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #region Private Member Methods
+        #endregion
+
+        #region Private
+
+        #region Members
+        private float _depth { get; set; }
+        private float _height { get; set; }
+        private float _mass { get; set; }
+        private float _width { get; set; }
+        #endregion
+
+        #region Member Methods
         /// <summary>
         /// Updates the moment of intertia. Called whenever relevant fields have been updated.
         /// </summary>
@@ -144,8 +144,8 @@ namespace Komodo.Core.Physics
             float z = Mass * (Width * Width + Height * Height) / 12f;
             MomentOfInertia = new Vector3(x, y, z);
         }
-        #endregion Private Member Methods
-        
-        #endregion Member Methods
+        #endregion
+
+        #endregion
     }
 }

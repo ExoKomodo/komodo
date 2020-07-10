@@ -8,6 +8,8 @@ namespace Komodo.Core.Engine.Input
     /// </summary>
     public readonly struct InputInfo : IEquatable<InputInfo>
     {
+        #region Public
+
         #region Constructors
         /// <summary>
         /// Creates InputInfo for digital inputs.
@@ -44,11 +46,9 @@ namespace Komodo.Core.Engine.Input
             State = state;
             Strength = strength;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Direction of the supplied <see cref="Komodo.Core.Engine.Input.Inputs"/>.
         /// </summary>
@@ -68,13 +68,9 @@ namespace Komodo.Core.Engine.Input
         /// Strength of the <see cref="Komodo.Core.Engine.Input.Inputs"/>.
         /// </summary>
         public float Strength { get; }
-        #endregion Public Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Compares the equality of InputInfo and an arbitrary type.
         /// </summary>
@@ -107,13 +103,9 @@ namespace Komodo.Core.Engine.Input
         {
             return Direction.GetHashCode() + Input.GetHashCode() + State.GetHashCode() + Strength.GetHashCode();
         }
-        #endregion Public Member Methods
-
-        #endregion Member Methods
+        #endregion
 
         #region Static Methods
-
-        #region Public Static Methods
         /// <returns>Whether or not the InputInfos are equivalent.</returns>
         public static bool operator ==(InputInfo left, InputInfo right)
         {
@@ -125,8 +117,8 @@ namespace Komodo.Core.Engine.Input
         {
             return !(left == right);
         }
-        #endregion Public Static Methods
+        #endregion
 
-        #endregion Static Methods
+        #endregion
     }
 }

@@ -4,16 +4,16 @@ namespace Komodo.Lib.Network
 {
     public sealed class Transaction
     {
+        #region Public
+
         #region Constructors
         public Transaction() 
         {
             Id = Guid.NewGuid();
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public readonly Guid Id;
         public Message Request
         {
@@ -45,13 +45,17 @@ namespace Komodo.Lib.Network
                 }
             }
         }
-        #endregion Public Members
+        #endregion
 
-        #region Private Members
+        #endregion
+
+        #region Private
+
+        #region Members
         private Message _request;
         private Message _response;
-        #endregion Private Members
+        #endregion
 
-        #endregion Members
+        #endregion
     }
 }

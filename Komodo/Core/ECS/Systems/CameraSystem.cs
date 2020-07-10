@@ -13,6 +13,8 @@ namespace Komodo.Core.ECS.Systems
     /// </summary>
     public class CameraSystem : ISystem<CameraComponent>
     {
+        #region Public
+
         #region Constructors
         /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
         public CameraSystem(Game game)
@@ -22,11 +24,9 @@ namespace Komodo.Core.ECS.Systems
             Game = game;
             _uninitializedComponents = new Queue<CameraComponent>();
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// All tracked <see cref="Komodo.Core.ECS.Components.CameraComponent"/> objects.
         /// </summary>
@@ -46,21 +46,9 @@ namespace Komodo.Core.ECS.Systems
         /// Whether or not the CameraSystem has called <see cref="Initialize()"/>.
         /// </summary>
         public bool IsInitialized { get; private set; }
-        #endregion Public Members
-
-        #region Private Members
-        /// <summary>
-        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.CameraComponent"/> objects.
-        /// All <see cref="Komodo.Core.ECS.Components.CameraComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
-        /// </summary>
-        private Queue<CameraComponent> _uninitializedComponents { get; }
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Entities.Entity"/> to the CameraSystem if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not already present.
         /// </summary>
@@ -181,9 +169,13 @@ namespace Komodo.Core.ECS.Systems
             }
             return false;
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #region Internal Member Methods
+        #endregion
+
+        #region Internal
+
+        #region Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.CameraComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.CameraComponent"/> is not initialized, it will be queued for initialization.
         /// </summary>
@@ -234,9 +226,21 @@ namespace Komodo.Core.ECS.Systems
                 }
             }
         }
-        #endregion Internal Member Methods
+        #endregion
 
-        #region Private Member Methods
+        #endregion
+
+        #region Private
+
+        #region Members
+        /// <summary>
+        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.CameraComponent"/> objects.
+        /// All <see cref="Komodo.Core.ECS.Components.CameraComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
+        /// </summary>
+        private Queue<CameraComponent> _uninitializedComponents { get; }
+        #endregion
+
+        #region Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.CameraComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.CameraComponent"/> is not initialized, it will be queued for initialization.
         /// </summary>
@@ -277,13 +281,9 @@ namespace Komodo.Core.ECS.Systems
         {
             return Components.Remove(componentToRemove);
         }
-        #endregion Private Member Methods
-
-        #endregion Member Methods
+        #endregion
 
         #region Static Methods
-
-        #region Private Static Methods
         /// <summary>
         /// Performs the update logic on all <see cref="Komodo.Core.ECS.Components.CameraComponent"/> objects.
         /// </summary>
@@ -292,8 +292,8 @@ namespace Komodo.Core.ECS.Systems
         {
             component.ViewMatrix = component.CalculateViewMatrix();
         }
-        #endregion Private Static Methods
+        #endregion
 
-        #endregion Static Methods
+        #endregion
     }
 }

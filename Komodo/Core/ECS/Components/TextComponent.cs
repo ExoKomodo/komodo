@@ -12,6 +12,8 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public class TextComponent : Drawable2DComponent
     {
+        #region Public
+
         #region Constructors
         /// <summary>
         /// Creates a TextComponent with a given <see cref="Microsoft.Xna.Framework.Graphics.SpriteFont"/>.
@@ -43,11 +45,9 @@ namespace Komodo.Core.ECS.Components
             Shader = shader;
             Text = text;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public override Vector2 Center => new Vector2(Width / 2, Height / 2);
 
         public Color Color { get; set; }
@@ -103,8 +103,8 @@ namespace Komodo.Core.ECS.Components
                 return size.X * Scale.X;
             }
         }
-        #endregion Public Members
+        #endregion
 
-        #endregion Members
+        #endregion
     }
 }

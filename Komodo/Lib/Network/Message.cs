@@ -4,6 +4,8 @@ namespace Komodo.Lib.Network
 {
     public class Message
     {
+        #region Public
+
         #region Constructors
         public Message()
         {
@@ -19,17 +21,15 @@ namespace Komodo.Lib.Network
             Id = Guid.NewGuid();
             TransactionId = Guid.Empty;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public string Data { get; set; }
         public string Endpoint { get; set; }
         public Guid Id { get; set; }
         public Guid TransactionId { get; set; }
-        #endregion Public Members
+        #endregion
 
-        #endregion Members
+        #endregion
     }
 }

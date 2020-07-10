@@ -20,6 +20,8 @@ namespace Komodo.Core
     /// </summary>
     public class Game : IDisposable
     {
+        #region Public
+
         #region Constructors
         /// <summary>
         /// Creates the Game instance, instantiating the underlying <see cref="Komodo.Core.MonoGame"/> instance, <see cref="Komodo.Core.Engine.Graphics.GraphicsManager"/>, and <see cref="Komodo.Core.ECS.Systems.ISystem"/> objects.
@@ -41,11 +43,9 @@ namespace Komodo.Core
             Render3DSystems = new List<Render3DSystem>();
             SoundSystem = new SoundSystem(this);
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Manages all <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
         /// </summary>
@@ -121,31 +121,9 @@ namespace Komodo.Core
                 }
             }
         }
-        #endregion Public Members
-        
-        #region Internal Members
-        /// <summary>
-        /// Provides access to MonoGame APIs.
-        /// </summary>
-        internal readonly MonoGame _monoGame;
-        #endregion Internal Members
-
-        #endregion Members
-
-        #region Static Members
-
-        #region Public Static Members
-        /// <summary>
-        /// Provides access to the content files compiled by the MonoGame Content Pipeline (Releases: https://github.com/MonoGame/MonoGame/releases).
-        /// </summary>
-        public static ContentManager Content { get; private set; }
-        #endregion Public Static Members
-
-        #endregion Static Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
 
         #region Add event handlers
         /// <summary>
@@ -346,7 +324,7 @@ namespace Komodo.Core
         {
             _monoGame.Window.ClientSizeChanged += handler;
         }
-        #endregion Add event handlers
+        #endregion
 
         #region Remove event handlers
         /// <summary>
@@ -420,7 +398,7 @@ namespace Komodo.Core
         {
             _monoGame.Window.ClientSizeChanged -= handler;
         }
-        #endregion Remove event handlers
+        #endregion
 
         /// <summary>
         /// Creates and begins tracking a new <see cref="Komodo.Core.ECS.Systems.PhysicsSystem"/>.
@@ -584,9 +562,27 @@ namespace Komodo.Core
                 system.PostUpdate(gameTime);
             }
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #region Static Members
+        /// <summary>
+        /// Provides access to the content files compiled by the MonoGame Content Pipeline (Releases: https://github.com/MonoGame/MonoGame/releases).
+        /// </summary>
+        public static ContentManager Content { get; private set; }
+        #endregion
+
+        #endregion
+
+        #region Internal
+
+        #region Internal Members
+        /// <summary>
+        /// Provides access to MonoGame APIs.
+        /// </summary>
+        internal readonly MonoGame _monoGame;
+        #endregion
+
+        #endregion
 
         #region IDisposable Support
         /// <summary>

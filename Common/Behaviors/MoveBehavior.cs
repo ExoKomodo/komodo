@@ -9,6 +9,8 @@ namespace Common.Behaviors
 {
     public class MoveBehavior : BehaviorComponent
     {
+        #region Public
+
         #region Constructors
         public MoveBehavior(int playerIndex) : base()
         {
@@ -20,28 +22,16 @@ namespace Common.Behaviors
             SprintFactor = 2f;
             Velocity = 50f;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public DynamicBodyComponent Body { get; private set; }
         public int PlayerIndex { get; set; }
         public float SprintFactor { get; set; }
         public float Velocity { get; set; }
-        #endregion Public Members
-
-        #region Protected Members
-        #endregion Protected Members
-
-        #region Private Members
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         public override void Initialize()
         {
             base.Initialize();
@@ -106,8 +96,8 @@ namespace Common.Behaviors
             //Body.Move(direction * Velocity);
             Body.ApplyForce(direction * Velocity);
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

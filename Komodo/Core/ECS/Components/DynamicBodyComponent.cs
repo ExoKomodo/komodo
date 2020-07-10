@@ -11,16 +11,16 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public class DynamicBodyComponent : RigidBodyComponent
     {
+        #region Public
+
         #region Constructors
         public DynamicBodyComponent(IPhysicsShape shape)
         {
             Shape = shape;
         }
-        #endregion Constructors
-
+        #endregion
+        
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Applies a force vector to the body with no regard for the point of application.
         /// </summary>
@@ -63,8 +63,8 @@ namespace Komodo.Core.ECS.Components
         {
             base.Initialize();
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

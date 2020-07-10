@@ -1,6 +1,7 @@
 using Komodo.Lib.Math;
 using BoundingBox = Microsoft.Xna.Framework.BoundingBox;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using MonoGameModel = Microsoft.Xna.Framework.Graphics.Model;
 
 namespace Komodo.Core.Engine.Graphics
 {
@@ -9,9 +10,11 @@ namespace Komodo.Core.Engine.Graphics
     /// </summary>
     public class Model
     {
+        #region Public
+
         #region Constructors
         /// <param name="monoGameModel"><see cref="Microsoft.Xna.Framework.Graphics.Model"/> data loaded in MonoGame's format.</param>
-        public Model(Microsoft.Xna.Framework.Graphics.Model monoGameModel)
+        public Model(MonoGameModel monoGameModel)
         {
             MonoGameModel = monoGameModel;
             BoundingBox = CalculateBoundingBox();
@@ -21,11 +24,9 @@ namespace Komodo.Core.Engine.Graphics
             Height = dimensions.Y;
             Width = dimensions.X;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Z dimensional extremity.
         /// </summary>
@@ -49,14 +50,14 @@ namespace Komodo.Core.Engine.Graphics
         /// <summary>
         /// Raw 3D model data.
         /// </summary>
-        public Microsoft.Xna.Framework.Graphics.Model MonoGameModel { get; private set; }
-        #endregion Public Members
+        public MonoGameModel MonoGameModel { get; private set; }
+        #endregion
 
-        #endregion Members
+        #endregion
+
+        #region Private
 
         #region Member Methods
-        
-        #region Private Member Methods
         /// <summary>
         /// Calculates the bounding box from the raw model data.
         /// </summary>
@@ -87,8 +88,8 @@ namespace Komodo.Core.Engine.Graphics
 
             return new BoundingBox(min.MonoGameVector, max.MonoGameVector);
         }
-        #endregion Private Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

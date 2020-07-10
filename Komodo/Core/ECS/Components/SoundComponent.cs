@@ -13,6 +13,8 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public class SoundComponent : Component
     {
+        #region Public
+
         #region Constructors
         /// <summary>
         /// Creates a SoundComponent with a filepath to a compiled <see cref="Microsoft.Xna.Framework.Audio.SoundEffect"/> content file.
@@ -26,21 +28,9 @@ namespace Komodo.Core.ECS.Components
             _instances = new Dictionary<Guid, SoundEffectInstance>();
             SoundPath = soundPath;
         }
-        #endregion Constructors
-
-        #region Destructor
-        /// <summary>
-        /// Stops all sound instance found in <see cref="_instances"/>.
-        /// </summary>
-        ~SoundComponent()
-        {
-            StopAll();
-        }
-        #endregion Destructor
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Raw sound data loaded from disk.
         /// </summary>
@@ -50,17 +40,9 @@ namespace Komodo.Core.ECS.Components
         /// Path of the <see cref="Microsoft.Xna.Framework.Audio.SoundEffect"/> if the SoundComponent was provided a model filepath via <see cref="SoundComponent.SoundComponent(string)"/>.
         /// </summary>
         public string SoundPath { get; }
-        #endregion Public Members
-
-        #region Internal Members
-        internal Dictionary<Guid, SoundEffectInstance> _instances { get; set;  }
-        #endregion Internal Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Changes the intensity of a valid sound instance found in <see cref="_instances"/>.
         /// </summary>
@@ -195,8 +177,26 @@ namespace Komodo.Core.ECS.Components
                 Stop(id);
             }
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
+
+        #region Internal
+
+        #region Members
+        internal Dictionary<Guid, SoundEffectInstance> _instances { get; set;  }
+        #endregion
+
+        #endregion
+
+        #region Destructor
+        /// <summary>
+        /// Stops all sound instance found in <see cref="_instances"/>.
+        /// </summary>
+        ~SoundComponent()
+        {
+            StopAll();
+        }
+        #endregion
     }
 }

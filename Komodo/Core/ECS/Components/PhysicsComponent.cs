@@ -10,25 +10,21 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public abstract class PhysicsComponent : Component
     {
+        #region Public
+
         #region Constructors
-        protected PhysicsComponent() : base(true, null)
+        public PhysicsComponent() : base(true, null)
         {
             Collisions = new Dictionary<Guid, Collision>();
         }
-        #endregion Constructors
+        #endregion
 
-        #region Member Methods
-
-        #region Public Member Methods
+        #region Members
         public Dictionary<Guid, Collision> Collisions { get; }
         public PhysicsSystem PhysicsSystem => Parent?.PhysicsSystem;
-        #endregion Public Member Methods
-        
-        #endregion Member Methods
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Virtual method initializing a PhysicsComponent.
         /// </summary>
@@ -39,8 +35,8 @@ namespace Komodo.Core.ECS.Components
                 IsInitialized = true;
             }
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

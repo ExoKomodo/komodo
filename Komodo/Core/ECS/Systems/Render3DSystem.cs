@@ -22,6 +22,8 @@ namespace Komodo.Core.ECS.Systems
     /// </summary>
     public class Render3DSystem : ISystem<Drawable3DComponent>
     {
+        #region Public
+
         #region Constructors
         /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
         public Render3DSystem(Game game)
@@ -33,11 +35,9 @@ namespace Komodo.Core.ECS.Systems
 
             _uninitializedComponents = new Queue<Drawable3DComponent>();
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// <see cref="Komodo.Core.ECS.Components.CameraComponent"/> to be used for rendering all tracked <see cref="Components"/>.
         /// </summary>
@@ -67,21 +67,9 @@ namespace Komodo.Core.ECS.Systems
         /// Texture filtering to use for 3D textures.
         /// </summary>
         public SamplerState TextureFilter { get; set; }
-        #endregion Public Members
-
-        #region Private Members
-        /// <summary>
-        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> objects.
-        /// All <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
-        /// </summary>
-        private Queue<Drawable3DComponent> _uninitializedComponents { get; }
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Entities.Entity"/> to the Drawable3DSystem if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not already present.
         /// </summary>
@@ -205,9 +193,13 @@ namespace Komodo.Core.ECS.Systems
             }
             return false;
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #region Internal Member Methods
+        #endregion
+
+        #region Internal
+
+        #region Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> is not initialized, it will be queued for initialization.
         /// </summary>
@@ -266,9 +258,21 @@ namespace Komodo.Core.ECS.Systems
         {
             return RemoveDrawable3DComponent(componentToRemove);
         }
-        #endregion Internal Member Methods
+        #endregion
 
-        #region Private Member Methods
+        #endregion
+
+        #region Private
+
+        #region Members
+        /// <summary>
+        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> objects.
+        /// All <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
+        /// </summary>
+        private Queue<Drawable3DComponent> _uninitializedComponents { get; }
+        #endregion
+
+        #region Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.Drawable3DComponent"/> is not initialized, it will be queued for initialization.
         /// </summary>
@@ -359,8 +363,8 @@ namespace Komodo.Core.ECS.Systems
         {
             return Components.Remove(componentToRemove);
         }
-        #endregion Private Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

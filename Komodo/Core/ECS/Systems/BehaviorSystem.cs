@@ -13,6 +13,8 @@ namespace Komodo.Core.ECS.Systems
     /// </summary>
     public class BehaviorSystem : ISystem<BehaviorComponent>
     {
+        #region Public
+
         #region Constructors
         /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
         public BehaviorSystem(Game game)
@@ -22,11 +24,9 @@ namespace Komodo.Core.ECS.Systems
             Game = game;
             _uninitializedComponents = new Queue<BehaviorComponent>();
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// All tracked <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
         /// </summary>
@@ -46,21 +46,9 @@ namespace Komodo.Core.ECS.Systems
         /// Whether or not the BehaviorSystem has called <see cref="Initialize()"/>.
         /// </summary>
         public bool IsInitialized { get; private set; }
-        #endregion Public Members
-
-        #region Private Members
-        /// <summary>
-        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
-        /// All <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
-        /// </summary>
-        private Queue<BehaviorComponent> _uninitializedComponents { get; }
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Entities.Entity"/> to the BehaviorSystem if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not already present.
         /// </summary>
@@ -181,9 +169,13 @@ namespace Komodo.Core.ECS.Systems
             }
             return false;
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #region Internal Member Methods
+        #endregion
+
+        #region Internal
+
+        #region Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> is not initialized, it will be queued for initialization.
         /// </summary>
@@ -234,7 +226,19 @@ namespace Komodo.Core.ECS.Systems
                 }
             }
         }
-        #endregion Internal Member Methods
+        #endregion
+
+        #endregion
+
+        #region Private
+
+        #region Members
+        /// <summary>
+        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects.
+        /// All <see cref="Komodo.Core.ECS.Components.BehaviorComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
+        /// </summary>
+        private Queue<BehaviorComponent> _uninitializedComponents { get; }
+        #endregion
 
         #region Private Member Methods
         /// <summary>
@@ -277,8 +281,8 @@ namespace Komodo.Core.ECS.Systems
         {
             return Components.Remove(componentToRemove);
         }
-        #endregion Protected Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

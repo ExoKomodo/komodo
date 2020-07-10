@@ -9,6 +9,8 @@ namespace Komodo.Core.Physics
     /// </summary>
     public class PhysicsMaterial
     {
+        #region Public
+        
         #region Constructors
         /// <summary>
         /// Creates a new physics material. Physics material names are unique identifiers.
@@ -36,11 +38,9 @@ namespace Komodo.Core.Physics
             _materials = new Dictionary<string, PhysicsMaterial>();
             _ = new PhysicsMaterial("default");
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// <see cref="AngularDamping"/> defines how an object's angular veloctity is reduced over time with no interaction from other physics objects.
         /// </summary>
@@ -168,30 +168,9 @@ namespace Komodo.Core.Physics
                 }
             }
         }
-        #endregion Public Members
-
-        #region Internal Members
-        internal float _angularDamping { get; set; }
-        internal float _angularDampingLimit { get; set; }
-        internal float _friction { get; set; }
-        internal float _linearDamping { get; set; }
-        internal float _linearDampingLimit { get; set; }
-        internal float _restitution { get; set; }
-        #endregion Internal Members
-
-        #endregion Members
-
-        #region Static Members
-
-        #region Private Static Members
-        private static Dictionary<string, PhysicsMaterial> _materials { get; set; }
-        #endregion Private Static Members
-
-        #endregion Static Members
+        #endregion
 
         #region Static Member Methods
-
-        #region Public Static Member Methods
         /// <summary>
         /// Provides the PhysicsMaterial instance for the given name.
         /// </summary>
@@ -208,8 +187,29 @@ namespace Komodo.Core.Physics
 
             return material;
         }
-        #endregion Public Static Member Methods
+        #endregion
 
-        #endregion Static Member Methods
+        #endregion
+        
+        #region Internal
+
+        #region Members
+        internal float _angularDamping { get; set; }
+        internal float _angularDampingLimit { get; set; }
+        internal float _friction { get; set; }
+        internal float _linearDamping { get; set; }
+        internal float _linearDampingLimit { get; set; }
+        internal float _restitution { get; set; }
+        #endregion
+
+        #endregion
+
+        #region Private
+
+        #region Static Members
+        private static Dictionary<string, PhysicsMaterial> _materials { get; set; }
+        #endregion
+
+        #endregion
     }
 }

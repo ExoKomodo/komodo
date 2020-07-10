@@ -20,6 +20,8 @@ namespace Komodo.Core.ECS.Systems
     /// </summary>
     public class PhysicsSystem : ISystem<PhysicsComponent>
     {
+        #region Public
+
         #region Constructors
         /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
         public PhysicsSystem(Game game)
@@ -29,11 +31,9 @@ namespace Komodo.Core.ECS.Systems
             Game = game;
             _uninitializedComponents = new Queue<PhysicsComponent>();
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// All tracked <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> objects.
         /// </summary>
@@ -53,21 +53,9 @@ namespace Komodo.Core.ECS.Systems
         /// Whether or not the PhysicsSystem has called <see cref="Initialize()"/>.
         /// </summary>
         public bool IsInitialized { get; private set; }
-        #endregion Public Members
-
-        #region Private Members
-        /// <summary>
-        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> objects.
-        /// All <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
-        /// </summary>
-        private Queue<PhysicsComponent> _uninitializedComponents { get; }
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Entities.Entity"/> to the PhysicsSystem if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not already present.
         /// </summary>
@@ -213,9 +201,13 @@ namespace Komodo.Core.ECS.Systems
             }
             return false;
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #region Internal Member Methods
+        #endregion
+
+        #region Internal
+
+        #region Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> is not initialized, it will be queued for initialization.
         /// </summary>
@@ -276,9 +268,21 @@ namespace Komodo.Core.ECS.Systems
                 HandleCollisions();
             }
         }
-        #endregion Internal Member Methods
+        #endregion
 
-        #region Private Member Methods
+        #endregion
+
+        #region Private
+
+        #region Members
+        /// <summary>
+        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> objects.
+        /// All <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
+        /// </summary>
+        private Queue<PhysicsComponent> _uninitializedComponents { get; }
+        #endregion
+
+        #region Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.PhysicsComponent"/> is not initialized, it will be queued for initialization.
         /// </summary>
@@ -444,13 +448,9 @@ namespace Komodo.Core.ECS.Systems
         {
             return Components.Remove(componentToRemove);
         }
-        #endregion Protected Member Methods
-
-        #endregion Member Methods
+        #endregion
 
         #region Static Methods
-
-        #region Private Static Methods
         /// <summary>
         /// Performs an AABB AABB collision check.
         /// </summary>
@@ -713,8 +713,8 @@ namespace Komodo.Core.ECS.Systems
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             body.Parent.Position += body.PositionDelta * delta;
         }
-        #endregion Private Static Methods
+        #endregion
 
-        #endregion Static Methods
+        #endregion
     }
 }

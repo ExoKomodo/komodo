@@ -9,6 +9,8 @@ namespace Komodo.Core.Physics
     /// </summary>
     public class Collision
     {
+        #region Public
+
         #region Constructors
         public Collision(bool isColliding, Vector3 normal, float penetrationDepth)
         {
@@ -17,11 +19,9 @@ namespace Komodo.Core.Physics
             PenetrationDepth = penetrationDepth;
             _isResolved = false;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Correction vector for the collision. Adding this to the affected object's position will separate the collision.
         /// </summary>
@@ -41,12 +41,16 @@ namespace Komodo.Core.Physics
         /// Depth of penetration of the collision.
         /// </summary>
         public readonly float PenetrationDepth;
-        #endregion Public Members
+        #endregion
 
-        #region Internal Members
+        #endregion
+
+        #region Internal
+
+        #region Members
         internal bool _isResolved { get; set; }
-        #endregion Internal Members
+        #endregion
 
-        #endregion Members
+        #endregion
     }
 }

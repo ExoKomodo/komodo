@@ -10,6 +10,8 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public class SpriteComponent : Drawable2DComponent
     {
+        #region Public
+
         #region Constructors
         /// <summary>
         /// Creates a SpriteComponent with a given <see cref="Komodo.Core.Engine.Graphics.Texture"/>.
@@ -36,11 +38,9 @@ namespace Komodo.Core.ECS.Components
             Shader = shader;
             TexturePath = texturePath;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public override Vector2 Center => Texture != null ? new Vector2(Texture.Width / 2, Texture.Height / 2) : Vector2.Zero;
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace Komodo.Core.ECS.Components
                 return Texture.Width * Parent.Scale.X;
             }
         }
-        #endregion Public Members
+        #endregion
 
-        #endregion Members
+        #endregion
     }
 }

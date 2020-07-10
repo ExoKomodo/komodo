@@ -11,30 +11,21 @@ namespace Common.Behaviors
 {
     public class CubeBehavior : BehaviorComponent
     {
+        #region Public
+
         #region Constructors
         public CubeBehavior(string modelPath) : base()
         {
             ModelPath = modelPath;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public string ModelPath { get; protected set; }
         public Drawable3DComponent RootComponent { get; protected set; }
-        #endregion Public Members
-
-        #region Protected Members
-        private bool _createdBoxes { get; set; }
-        #endregion Protected Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
-
         public override void Initialize()
         {
             base.Initialize();
@@ -78,8 +69,16 @@ namespace Common.Behaviors
                 Parent.Scale = scale;
             }
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
+
+        #region Protected
+
+        #region Members
+        private bool _createdBoxes { get; set; }
+        #endregion
+
+        #endregion
     }
 }

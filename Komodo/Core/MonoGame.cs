@@ -7,32 +7,25 @@ namespace Komodo.Core
     /// </summary>
     internal class MonoGame : Microsoft.Xna.Framework.Game
     {
+        #region Internal
+
         #region Constructors
         /// <summary>
         /// Defines the root directory of content files.
         /// </summary>
         /// /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
-        public MonoGame(Game game)
+        internal MonoGame(Game game)
         {
             _game = game;
             Content.RootDirectory = "Content/MonoGame";
         }
-        #endregion Constructors
+        #endregion
 
-        #region Members
+        #endregion
 
-        #region Private Members
-        /// <summary>
-        /// Reference to current <see cref="Komodo.Core.Game"/> instance.
-        /// </summary>
-        private Game _game { get; }
-        #endregion Private Members
-
-        #endregion Members
+        #region Protected
 
         #region Member Methods
-
-        #region Protected Member Methods
         /// <summary>
         /// Passthrough function to <see cref="Komodo.Core.Game.Draw(GameTime)"/>.
         /// </summary>
@@ -71,8 +64,19 @@ namespace Komodo.Core
 
             base.Update(gameTime);
         }
-        #endregion Protected Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
+
+        #region Private
+
+        #region Members
+        /// <summary>
+        /// Reference to current <see cref="Komodo.Core.Game"/> instance.
+        /// </summary>
+        private Game _game { get; }
+        #endregion
+
+        #endregion
     }
 }

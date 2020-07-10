@@ -12,6 +12,8 @@ namespace Komodo.Lib.Network
 {
     public class Client
     {
+        #region Public
+
         #region Constructors
         public Client(string serverName, int port, SocketAsyncEventArgs socketArgs = null)
         {
@@ -32,25 +34,14 @@ namespace Komodo.Lib.Network
             _transactions = new ConcurrentDictionary<Guid, Transaction>();
             _socketArguments = socketArgs ?? new SocketAsyncEventArgs();
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public IPAddress IP;
         public int Port { get; set; }
-        #endregion Public Members
-
-        #region Protected Members
-        protected ConcurrentDictionary<Guid, Transaction> _transactions { get; set; }
-        protected SocketAsyncEventArgs _socketArguments { get; set; }
-        #endregion Protected Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         public Transaction Send<T>(T data, string endpoint) => SendAsync(data, endpoint).Result;
         public Transaction Send(string data, string endpoint) => SendAsync(data, endpoint).Result;
         public async Task<Transaction> SendAsync<T>(T data, string endpoint) => await SendAsync(JsonSerializer.Serialize<T>(data), endpoint);
@@ -102,16 +93,17 @@ namespace Komodo.Lib.Network
             _transactions[transaction.Id] = transaction;
             return transaction;
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
 
-        #region Static Methods
+        #region Protected
 
-        #region Protected Static Methods
-        
-        #endregion Protected Static Methods
+        #region Members
+        protected ConcurrentDictionary<Guid, Transaction> _transactions { get; set; }
+        protected SocketAsyncEventArgs _socketArguments { get; set; }
+        #endregion
 
-        #endregion Static Methods
+        #endregion
     }
 }

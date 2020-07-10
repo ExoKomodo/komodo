@@ -10,16 +10,16 @@ namespace Komodo.Core.ECS.Components
     /// </remarks>
     public class TriggerBodyComponent : RigidBodyComponent
     {
+        #region Public
+
         #region Constructors
         public TriggerBodyComponent(IPhysicsShape shape)
         {
             Shape = shape;
         }
-        #endregion Constructors
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Initializes a TriggerBodyComponent.
         /// </summary>
@@ -27,8 +27,8 @@ namespace Komodo.Core.ECS.Components
         {
             base.Initialize();
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

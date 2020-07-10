@@ -7,6 +7,8 @@ namespace Komodo.Core.Engine.Graphics
     /// </summary>
     public readonly struct Resolution : IEquatable<Resolution>
     {
+        #region Public
+
         #region Constructors
         /// <param name="width">Width of screen.</param>
         /// <param name="height">Width of screen.</param>
@@ -15,11 +17,9 @@ namespace Komodo.Core.Engine.Graphics
             Width = width;
             Height = height;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Aspect ratio of the resolution.
         /// </summary>
@@ -34,13 +34,9 @@ namespace Komodo.Core.Engine.Graphics
         /// Width of the screen resolution.
         /// </summary>
         public int Width { get; }
-        #endregion Public Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Compares the equality of Resolution and an arbitrary type.
         /// </summary>
@@ -73,13 +69,9 @@ namespace Komodo.Core.Engine.Graphics
         {
             return Width.GetHashCode() + Height.GetHashCode();
         }
-        #endregion Public Member Methods
-
-        #endregion Member Methods
+        #endregion
 
         #region Static Methods
-
-        #region Public Static Methods
         /// <returns>Whether or not the Resolutions are equivalent.</returns>
         public static bool operator ==(Resolution left, Resolution right)
         {
@@ -91,8 +83,8 @@ namespace Komodo.Core.Engine.Graphics
         {
             return !(left == right);
         }
-        #endregion Public Static Methods
+        #endregion
 
-        #endregion Static Methods
+        #endregion
     }
 }

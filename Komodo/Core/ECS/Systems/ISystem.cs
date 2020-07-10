@@ -14,7 +14,6 @@ namespace Komodo.Core.ECS.Systems
     {
         #region Members
 
-        #region Public Members
         /// <summary>
         /// All tracked <see cref="T"/> objects.
         /// </summary>
@@ -33,13 +32,11 @@ namespace Komodo.Core.ECS.Systems
         /// <summary>
         /// Whether or not the ISystem has called <see cref="Initialize()"/>.
         /// </summary>
-        public bool IsInitialized { get; }
-        #endregion Public Members
+        bool IsInitialized { get; }
 
-        #endregion Members
+        #endregion
 
         #region Member Methods
-        #region Public Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Entities.Entity"/> to the ISystem if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not already present.
         /// </summary>
@@ -50,7 +47,7 @@ namespace Komodo.Core.ECS.Systems
         /// <summary>
         /// Removes all <see cref="Komodo.Core.ECS.Entities.Entity"/> objects from the ISystem.
         /// </summary>
-        public void ClearEntities();
+        void ClearEntities();
 
         /// <summary>
         /// Should update the ISystem as well as all of it's <see cref="T"/> objects.
@@ -74,16 +71,15 @@ namespace Komodo.Core.ECS.Systems
         /// </summary>
         /// <param name="entityID">Unique identifier for the <see cref="Komodo.Core.ECS.Entities.Entity"/>.</param>
         /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Entities.Entity"/> was removed from this ISystem's <see cref="Entities"/>. Will return false if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not present in <see cref="Entities"/>.</returns>
-        public bool RemoveEntity(Guid entityID);
+        bool RemoveEntity(Guid entityID);
 
         /// <summary>
         /// Removes a <see cref="Komodo.Core.ECS.Entities.Entity"/> from the ISystem, including all the <see cref="Komodo.Core.ECS.Entities.Entity"/>'s <see cref="Komodo.Core.ECS.Components.Component"/> objects.
         /// </summary>
         /// <param name="entityToRemove"><see cref="Komodo.Core.ECS.Entities.Entity"/> to remove.</param>
         /// <returns>Whether or not the <see cref="Komodo.Core.ECS.Entities.Entity"/> was removed from this ISystem's <see cref="Entities"/>. Will return false if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not present in <see cref="Entities"/>.</returns>
-        public bool RemoveEntity(Entity entityToRemove);
-        #endregion Public Member Methods
+        bool RemoveEntity(Entity entityToRemove);
 
-        #endregion Member Methods
+        #endregion
     }
 }
