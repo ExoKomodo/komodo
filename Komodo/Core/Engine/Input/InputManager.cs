@@ -8,6 +8,7 @@ using GamePad = Microsoft.Xna.Framework.Input.GamePad;
 using GamePadState = Microsoft.Xna.Framework.Input.GamePadState;
 using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 using KeyboardState = Microsoft.Xna.Framework.Input.KeyboardState;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Mouse = Microsoft.Xna.Framework.Input.Mouse;
 using MouseState = Microsoft.Xna.Framework.Input.MouseState;
 
@@ -291,7 +292,7 @@ namespace Komodo.Core.Engine.Input
 
         #region Static Methods
         /// <summary>
-        /// Retrives <see cref="Komodo.Core.Engine.Input.InputInfo"/> for the given <see cref="Komodo.Core.Engine.Input.Inputs"/>.
+        /// Retrieves <see cref="Komodo.Core.Engine.Input.InputInfo"/> for the given <see cref="Komodo.Core.Engine.Input.Inputs"/>.
         /// </summary>
         /// <param name="input">Identifier for the device input to query.</param>
         /// <param name="playerIndex">Identifier for the player to query.</param>
@@ -348,9 +349,9 @@ namespace Komodo.Core.Engine.Input
                     }
                     
                     var monogameKeyInput = InputMapper.ToMonoGameKey(input);
-                    if (monogameKeyInput.HasValue)
+                    if (monogameKeyInput != Keys.None)
                     {
-                        bool isDown = keyboardState.IsKeyDown(monogameKeyInput.Value);
+                        bool isDown = keyboardState.IsKeyDown(monogameKeyInput);
                         komodoInputState = isDown ? InputState.Down : InputState.Up;
                     }
                     
