@@ -8,6 +8,8 @@ namespace Common.Behaviors
 {
     public class CameraBehavior : BehaviorComponent
     {
+        #region Public
+
         #region Constructors
         public CameraBehavior(CameraComponent camera, int playerIndex) : base()
         {
@@ -19,27 +21,15 @@ namespace Common.Behaviors
             Camera = camera;
             PanVelocity = 50f;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public CameraComponent Camera { get; set; }
         public int PlayerIndex { get; set; }
         public float PanVelocity { get; set; }
-        #endregion Public Members
-
-        #region Protected Members
-        #endregion Protected Members
-
-        #region Private Members
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         public override void Update(GameTime gameTime)
         {
             var cameraLeft = InputManager.GetAction("camera_left", PlayerIndex);
@@ -73,8 +63,8 @@ namespace Common.Behaviors
             );
             Camera.Move(cameraMove);
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

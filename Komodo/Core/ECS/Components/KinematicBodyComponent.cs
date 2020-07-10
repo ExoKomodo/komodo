@@ -11,24 +11,20 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public class KinematicBodyComponent : RigidBodyComponent
     {
+        #region Public
+
         #region Constructors
         public KinematicBodyComponent(IPhysicsShape shape)
         {
             Shape = shape;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public Vector3 PositionDelta { get; internal set; }
-        #endregion Public Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Initializes a KinematicBodyComponent.
         /// </summary>
@@ -52,8 +48,8 @@ namespace Komodo.Core.ECS.Components
             }
             PositionDelta += movement;
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

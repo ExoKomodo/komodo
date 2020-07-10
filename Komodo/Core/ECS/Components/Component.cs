@@ -14,8 +14,10 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public abstract class Component
     {
+        #region Public
+
         #region Constructors
-        protected Component(bool isEnabled = true, Entity parent = null)
+        public Component(bool isEnabled = true, Entity parent = null)
         {
             ID = Guid.NewGuid();
             IsEnabled = isEnabled;
@@ -24,8 +26,6 @@ namespace Komodo.Core.ECS.Components
         #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Each Component maintains a reference to the <see cref="Komodo.Core.Game"/> instance.
         /// </summary>
@@ -131,8 +131,8 @@ namespace Komodo.Core.ECS.Components
                 }
             }
         }
-        #endregion Public Members
+        #endregion
 
-        #endregion Members
+        #endregion
     }
 }

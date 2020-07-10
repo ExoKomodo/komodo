@@ -28,6 +28,8 @@ namespace Komodo.Core.ECS.Systems
     /// </summary>
     public class Render2DSystem : ISystem<Drawable2DComponent>
     {
+        #region Public
+
         #region Constructors
         /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
         public Render2DSystem(Game game)
@@ -39,11 +41,9 @@ namespace Komodo.Core.ECS.Systems
 
             _uninitializedComponents = new Queue<Drawable2DComponent>();
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// <see cref="Komodo.Core.ECS.Components.CameraComponent"/> to be used for rendering all tracked <see cref="Components"/>.
         /// </summary>
@@ -73,21 +73,9 @@ namespace Komodo.Core.ECS.Systems
         /// Texture filtering to use for 2D sprites and fonts.
         /// </summary>
         public SamplerState TextureFilter { get; set; }
-        #endregion Public Members
-
-        #region Private Members
-        /// <summary>
-        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
-        /// All <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
-        /// </summary>
-        private Queue<Drawable2DComponent> _uninitializedComponents { get; }
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Entities.Entity"/> to the Drawable2DSystem if the <see cref="Komodo.Core.ECS.Entities.Entity"/> is not already present.
         /// </summary>
@@ -211,9 +199,13 @@ namespace Komodo.Core.ECS.Systems
             }
             return false;
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #region Internal Member Methods
+        #endregion
+
+        #region Internal
+
+        #region Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> is not initialized, it will be queued for initialization.
         /// </summary>
@@ -258,9 +250,21 @@ namespace Komodo.Core.ECS.Systems
         {
             return RemoveDrawable2DComponent(componentToRemove);
         }
-        #endregion Internal Member Methods
+        #endregion
 
-        #region Private Member Methods
+        #endregion
+
+        #region Private
+
+        #region Members
+        /// <summary>
+        /// Tracks all potentially uninitialized <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects.
+        /// All <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> objects will be initialized in the <see cref="Initialize"/>, <see cref="PreUpdate(GameTime)"/>, or <see cref="PostUpdate(GameTime)"/> methods.
+        /// </summary>
+        private Queue<Drawable2DComponent> _uninitializedComponents { get; }
+        #endregion
+
+        #region Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> to relevant <see cref="Components"/>. If the <see cref="Komodo.Core.ECS.Components.Drawable2DComponent"/> is not initialized, it will be queued for initialization.
         /// </summary>
@@ -469,8 +473,8 @@ namespace Komodo.Core.ECS.Systems
         {
             return Components.Remove(componentToRemove);
         }
-        #endregion Private Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

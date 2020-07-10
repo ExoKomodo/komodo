@@ -10,6 +10,8 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public class Drawable3DComponent : Component
     {
+        #region Public
+
         #region Constructors
         /// <summary>
         /// Creates a Drawable3DComponent with a given <see cref="Komodo.Core.Engine.Graphics.Model"/>.
@@ -38,11 +40,9 @@ namespace Komodo.Core.ECS.Components
             Texture = null;
             TexturePath = null;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Provides a <see cref="Microsoft.Xna.Framework.BoundingBox"/> representing the bounds of the model.
         /// </summary>
@@ -127,8 +127,8 @@ namespace Komodo.Core.ECS.Components
                 return ModelData.Width * Parent.Scale.X;
             }
         }
-        #endregion Public Members
+        #endregion
 
-        #endregion Members
+        #endregion
     }
 }

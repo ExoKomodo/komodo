@@ -8,8 +8,6 @@ namespace Komodo.Core.Physics
     public interface IPhysicsShape
     {
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Mass of the given shape.
         /// </summary>
@@ -18,16 +16,10 @@ namespace Komodo.Core.Physics
         /// Moment of inertia for the given shape. This is usually a calculated value based on mass, location of vertices, etc.
         /// </summary>
         Vector3 MomentOfInertia { get; }
-        #endregion Public Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         IPhysicsShape GetScaledShape(Vector3 scale);
-        #endregion Public Member Methods
-
-        #endregion Member Methods
+        #endregion
     }
 }

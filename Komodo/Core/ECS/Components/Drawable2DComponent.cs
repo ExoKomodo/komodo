@@ -11,15 +11,15 @@ namespace Komodo.Core.ECS.Components
     /// </summary>4
     public abstract class Drawable2DComponent : Component
     {
+        #region Public
+
         #region Constructors
-        protected Drawable2DComponent(bool isEnabled = true, Entity parent = null) : base(isEnabled, parent)
+        public Drawable2DComponent(bool isEnabled = true, Entity parent = null) : base(isEnabled, parent)
         {
         }
         #endregion
-
+        
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Center point of the rendered Component.
         /// </summary>
@@ -44,8 +44,8 @@ namespace Komodo.Core.ECS.Components
         /// Width of the rendered Component.
         /// </summary>
         public abstract float Width { get; }
-        #endregion Public Members
+        #endregion
 
-        #endregion Members
+        #endregion
     }
 }

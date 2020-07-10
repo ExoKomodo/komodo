@@ -6,10 +6,9 @@ namespace Komodo.Lib.Compression
 {
     public static class GZIP
     {
+        #region Public
 
         #region Static Methods
-
-        #region Public Static Methods
         public static byte[] Compress(string data) => Compress(Encoding.ASCII.GetBytes(data));
         public static byte[] Compress(byte[] data)
         {
@@ -39,8 +38,8 @@ namespace Komodo.Lib.Compression
             return decompressedStream.ToArray();
         }
         
-        #endregion Public Static Methods
+        #endregion
 
-        #endregion Static Methods
+        #endregion
     }
 }

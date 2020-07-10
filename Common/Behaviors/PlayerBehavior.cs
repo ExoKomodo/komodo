@@ -9,24 +9,20 @@ namespace Common.Behaviors
 {
     public class PlayerBehavior : BehaviorComponent
     {
+        #region Public
+
         #region Constructors
         public PlayerBehavior(int playerIndex) : base()
         {
             PlayerIndex = playerIndex;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public int PlayerIndex { get; }
-        #endregion Public Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         public override void Initialize()
         {
             base.Initialize();
@@ -41,8 +37,8 @@ namespace Common.Behaviors
         public override void Update(GameTime gameTime)
         {
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

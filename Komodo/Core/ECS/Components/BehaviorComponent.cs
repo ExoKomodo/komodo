@@ -8,15 +8,15 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public abstract class BehaviorComponent : Component
     {
+        #region Public
+
         #region Constructors
-        protected BehaviorComponent() : base(true, null)
+        public BehaviorComponent() : base(true, null)
         {
         }
-        #endregion Constructors
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Virtual method initializing a BehaviorComponent.
         /// </summary>
@@ -33,8 +33,8 @@ namespace Komodo.Core.ECS.Components
         /// </summary>
         /// <param name="gameTime">Time passed since last <see cref="Update"/></param>
         public abstract void Update(GameTime gameTime);
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

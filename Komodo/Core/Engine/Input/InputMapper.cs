@@ -10,15 +10,15 @@ namespace Komodo.Core.Engine.Input
     /// </summary>
     internal static class InputMapper
     {
-        #region Static Methods
+        #region Internal
 
-        #region Public Static Methods
+        #region Static Methods
         /// <summary>
         /// Converts <see cref="Microsoft.Xna.Framework.Input.Buttons"/> to <see cref="Komodo.Core.Engine.Input.Inputs"/>.
         /// </summary>
         /// <param name="button">MonoGame button.</param>
         /// <returns>Converted MonoGame button.</returns>
-        public static Inputs ToInputs(Buttons button)
+        internal static Inputs ToInputs(Buttons button)
         {
             return button switch
             {
@@ -48,7 +48,7 @@ namespace Komodo.Core.Engine.Input
         /// </summary>
         /// <param name="key">MonoGame key.</param>
         /// <returns>Converted MonoGame key.</returns>
-        public static Inputs ToInputs(Keys key)
+        internal static Inputs ToInputs(Keys key)
         {
             return key switch
             {
@@ -116,7 +116,7 @@ namespace Komodo.Core.Engine.Input
         /// </summary>
         /// <param name="buttonState">MonoGame button state.</param>
         /// <returns>Converted MonoGame button state.</returns>
-        public static InputState ToInputState(ButtonState buttonState)
+        internal static InputState ToInputState(ButtonState buttonState)
         {
             return buttonState switch
             {
@@ -131,7 +131,7 @@ namespace Komodo.Core.Engine.Input
         /// </summary>
         /// <param name="keyState">MonoGame key state.</param>
         /// <returns>Converted MonoGame key state.</returns>
-        public static InputState ToInputState(KeyState keyState)
+        internal static InputState ToInputState(KeyState keyState)
         {
             return keyState switch
             {
@@ -146,7 +146,7 @@ namespace Komodo.Core.Engine.Input
         /// </summary>
         /// <param name="input">Komodo input.</param>
         /// <returns>Converted Komodo input as <see cref="Microsoft.Xna.Framework.Input.Buttons"/>.</returns>
-        public static Buttons? ToMonoGameButton(Inputs input)
+        internal static Buttons? ToMonoGameButton(Inputs input)
         {
             return input switch
             {
@@ -176,7 +176,7 @@ namespace Komodo.Core.Engine.Input
         /// </summary>
         /// <param name="input">Komodo input.</param>
         /// <returns>Converted Komodo input as <see cref="Microsoft.Xna.Framework.Input.Keys"/>.</returns>
-        public static Keys? ToMonoGameKey(Inputs input)
+        internal static Keys? ToMonoGameKey(Inputs input)
         {
             return input switch
             {
@@ -238,8 +238,8 @@ namespace Komodo.Core.Engine.Input
                 _ => null,
             };
         }
-        #endregion Public Static Methods
+        #endregion
 
-        #endregion Static Methods
+        #endregion
     }
 }

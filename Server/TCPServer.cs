@@ -14,29 +14,21 @@ namespace Server
 {  
     public class TCPServer
     {
+        #region Public
+
         #region Constructors
         public TCPServer(int port)
         {
             Port = port;
             _routes = new ConcurrentDictionary<string, Action<Message>>();
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public int Port { get; set; }
-        #endregion Public Members
-
-        #region Protected Members
-        public ConcurrentDictionary<string, Action<Message>> _routes;
-        #endregion Protected Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         public void RegisterAction([NotNull] string endpoint, [NotNull] Action<Message> messageHandler)
         {
             _routes[endpoint] = messageHandler;
@@ -68,9 +60,17 @@ namespace Server
                 cancellation.Cancel();
             }
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #region Protected Member Methods
+        #endregion
+
+        #region Protected
+
+        #region Members
+        public ConcurrentDictionary<string, Action<Message>> _routes;
+        #endregion
+
+        #region Member Methods
         protected async void HandleConnection([NotNull] TcpClient client)
         {
             await Task.Yield();
@@ -115,15 +115,8 @@ namespace Server
             }
         }
 
-        #endregion Protected Member Methods
+        #endregion
 
-        #endregion Member Methods
-
-        #region Static Methods
-
-        #region Protected Static Methods
-        #endregion Protected Static Methods
-
-        #endregion Static Methods
+        #endregion
     }
 }

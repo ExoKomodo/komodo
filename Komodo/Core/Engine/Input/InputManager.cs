@@ -18,65 +18,9 @@ namespace Komodo.Core.Engine.Input
     /// </summary>
     public static class InputManager
     {
-        /// <summary>
-        /// Sets up the input maps and input device states.
-        /// </summary>
-        static InputManager()
-        {
-            _inputMaps = new Dictionary<string, List<Inputs>>[4];
-            for (int i = 0; i < _inputMaps.Length; i++)
-            {
-                _inputMaps[i] = new Dictionary<string, List<Inputs>>();
-            }
-            _gamePadStates = new GamePadState[4];
-            _previousGamePadStates = new GamePadState[4];
-            Update();
-        }
-
-        #region Static Members
-        
-        #region Private Static Members
-        /// <summary>
-        /// Current state of all 4 supported gamepads.
-        /// </summary>
-        private static GamePadState[] _gamePadStates { get; set; }
-
-        /// <summary>
-        /// State of input maps for all 4 supported players.
-        /// </summary>
-        private static Dictionary<string, List<Inputs>>[] _inputMaps { get; }
-
-        /// <summary>
-        /// Current state of 1 supported keyboard.
-        /// </summary>
-        private static KeyboardState _keyboardState { get; set; }
-
-        /// <summary>
-        /// Current state of 1 supported mouse.
-        /// </summary>
-        private static MouseState _mouseState { get; set; }
-
-        /// <summary>
-        /// Previous state of all 4 supported gamepads.
-        /// </summary>
-        private static GamePadState[] _previousGamePadStates { get; set; }
-
-        /// <summary>
-        /// Previous state of 1 supported keyboard.
-        /// </summary>
-        private static KeyboardState _previousKeyboardState { get; set; }
-
-        /// <summary>
-        /// Previous state of 1 supported mouse.
-        /// </summary>
-        private static MouseState _previousMouseState { get; set; }
-        #endregion Private Static Members
-        
-        #endregion Static Members
+        #region Public
 
         #region Static Methods
-        
-        #region Public Static Methods
         /// <summary>
         /// Adds an input mapping to the specified player.
         /// </summary>
@@ -277,9 +221,13 @@ namespace Komodo.Core.Engine.Input
         {
             Mouse.SetPosition(x, y);
         }
-        #endregion Public Static Methods
+        #endregion
 
-        #region Internal Static Methods
+        #endregion
+
+        #region Internal
+
+        #region Static Methods
         /// <summary>
         /// Updates current and previous input states across all input devices.
         /// </summary>
@@ -298,10 +246,50 @@ namespace Komodo.Core.Engine.Input
                 _gamePadStates[i] = GamePad.GetState(playerIndex);
             }
         }
-        #endregion Internal Static Methods
+        #endregion
 
+        #endregion
 
-        #region Private Static Methods
+        #region Private
+
+        #region Static Members
+        /// <summary>
+        /// Current state of all 4 supported gamepads.
+        /// </summary>
+        private static GamePadState[] _gamePadStates { get; set; }
+
+        /// <summary>
+        /// State of input maps for all 4 supported players.
+        /// </summary>
+        private static Dictionary<string, List<Inputs>>[] _inputMaps { get; }
+
+        /// <summary>
+        /// Current state of 1 supported keyboard.
+        /// </summary>
+        private static KeyboardState _keyboardState { get; set; }
+
+        /// <summary>
+        /// Current state of 1 supported mouse.
+        /// </summary>
+        private static MouseState _mouseState { get; set; }
+
+        /// <summary>
+        /// Previous state of all 4 supported gamepads.
+        /// </summary>
+        private static GamePadState[] _previousGamePadStates { get; set; }
+
+        /// <summary>
+        /// Previous state of 1 supported keyboard.
+        /// </summary>
+        private static KeyboardState _previousKeyboardState { get; set; }
+
+        /// <summary>
+        /// Previous state of 1 supported mouse.
+        /// </summary>
+        private static MouseState _previousMouseState { get; set; }
+        #endregion
+
+        #region Static Methods
         /// <summary>
         /// Retrives <see cref="Komodo.Core.Engine.Input.InputInfo"/> for the given <see cref="Komodo.Core.Engine.Input.Inputs"/>.
         /// </summary>
@@ -386,8 +374,25 @@ namespace Komodo.Core.Engine.Input
                 _ => PlayerIndex.One,
             };
         }
-        #endregion Private Static Methods
-        
-        #endregion Static Methods
+        #endregion
+
+        #endregion
+
+        #region Static Constructor
+        /// <summary>
+        /// Sets up the input maps and input device states.
+        /// </summary>
+        static InputManager()
+        {
+            _inputMaps = new Dictionary<string, List<Inputs>>[4];
+            for (int i = 0; i < _inputMaps.Length; i++)
+            {
+                _inputMaps[i] = new Dictionary<string, List<Inputs>>();
+            }
+            _gamePadStates = new GamePadState[4];
+            _previousGamePadStates = new GamePadState[4];
+            Update();
+        }
+        #endregion
     }
 }

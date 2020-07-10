@@ -8,16 +8,16 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public class StaticBodyComponent : RigidBodyComponent
     {
+        #region Public
+
         #region Constructors
         public StaticBodyComponent(IPhysicsShape shape)
         {
             Shape = shape;
         }
-        #endregion Constructors
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Initializes a StaticBodyComponent.
         /// </summary>
@@ -25,8 +25,8 @@ namespace Komodo.Core.ECS.Components
         {
             base.Initialize();
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

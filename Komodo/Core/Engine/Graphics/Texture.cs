@@ -10,6 +10,8 @@ namespace Komodo.Core.Engine.Graphics
     /// </summary>
     public class Texture
     {
+        #region Public
+
         #region Constructors
         /// <summary>
         /// Creates a Texture from <see cref="Microsoft.Xna.Framework.Graphics.Texture2D"/> data.
@@ -65,11 +67,9 @@ namespace Komodo.Core.Engine.Graphics
             CreateMonoGameTexture(graphicsManager);
         }
 
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Height of the Texture data.
         /// </summary>
@@ -96,9 +96,24 @@ namespace Komodo.Core.Engine.Graphics
         /// Raw MonoGame <see cref="Microsoft.Xna.Framework.Graphics.Texture2D"/>.
         /// </summary>
         public Texture2D MonoGameTexture { get; private set; }
-        #endregion Public Members
+        #endregion
 
-        #region Private Members
+        #region Member Methods
+        /// <summary>
+        /// Accessor for raw <see cref="Microsoft.Xna.Framework.Color"/> data.
+        /// </summary>
+        /// <returns></returns>
+        public Color[] GetData()
+        {
+            return _data;
+        }
+        #endregion
+
+        #endregion
+        
+        #region Private
+
+        #region Members
         /// <summary>
         /// Used to store the Texture height from <see cref="Initialize"/> to be used in <see cref="CreateMonoGameTexture(GraphicsManager)"/>.
         /// </summary>
@@ -113,24 +128,9 @@ namespace Komodo.Core.Engine.Graphics
         /// Raw <see cref="Microsoft.Xna.Framework.Color"/> data.
         /// </summary>
         private Color[] _data;
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
-        /// <summary>
-        /// Accessor for raw <see cref="Microsoft.Xna.Framework.Color"/> data.
-        /// </summary>
-        /// <returns></returns>
-        public Color[] GetData()
-        {
-            return _data;
-        }
-        #endregion Public Member Methods
-
-        #region Private Member Methods
         /// <summary>
         /// 
         /// </summary>
@@ -204,8 +204,8 @@ namespace Komodo.Core.Engine.Graphics
         {
             _data = value;
         }
-        #endregion Private Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

@@ -15,6 +15,8 @@ namespace Komodo.Core.ECS.Entities
     /// </summary>
     public class Entity
     {
+        #region Public
+
         #region Constructors
         /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
         public Entity([NotNull] Game game)
@@ -27,11 +29,9 @@ namespace Komodo.Core.ECS.Entities
             Rotation = Vector3.Zero;
             Scale = Vector3.One;
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// All tracked <see cref="Komodo.Core.ECS.Components.Component"/> objects.
         /// </summary>
@@ -91,13 +91,9 @@ namespace Komodo.Core.ECS.Entities
         /// Scaling for the entire entity. Scales all child <see cref="Komodo.Core.ECS.Components.Component"/> objects.
         /// </summary>
         public Vector3 Scale { get; set; }
-        #endregion Public Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Adds a <see cref="Komodo.Core.ECS.Components.Component"/> to the relevant <see cref="Komodo.Core.ECS.Systems.ISystem"/>. <see cref="AddComponent(Component)"/> will also remove the <see cref="Komodo.Core.ECS.Components.Component"/> from any Entity and <see cref="Komodo.Core.ECS.Systems.ISystem"/> it was attached to before.
         /// </summary>
@@ -243,8 +239,8 @@ namespace Komodo.Core.ECS.Entities
             }
             return false;
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

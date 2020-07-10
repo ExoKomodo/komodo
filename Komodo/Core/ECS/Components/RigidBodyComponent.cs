@@ -10,16 +10,16 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public abstract class RigidBodyComponent : PhysicsComponent
     {
+        #region Public
+        
         #region Constructors
-        protected RigidBodyComponent()
+        public RigidBodyComponent()
         {
             Material = PhysicsMaterial.GetPhysicsMaterial("default");
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Rotational velocity.
         /// </summary>
@@ -72,18 +72,9 @@ namespace Komodo.Core.ECS.Components
         /// Current torque applied to the RigidBodyComponent.
         /// </summary>
         public Vector3 Torque { get; internal set; }
-        #endregion Public Members
-
-        #region Internal Members
-        internal PhysicsMaterial _material { get; set; }
-        internal IPhysicsShape _shape { get; set; }
-        #endregion Internal Members
-
-        #endregion Members
-
+        #endregion
+        
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Initializes a RigidBodyComponent.
         /// </summary>
@@ -91,8 +82,17 @@ namespace Komodo.Core.ECS.Components
         {
             base.Initialize();
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
+
+        #region Internal
+
+        #region Members
+        internal PhysicsMaterial _material { get; set; }
+        internal IPhysicsShape _shape { get; set; }
+        #endregion
+
+        #endregion
     }
 }

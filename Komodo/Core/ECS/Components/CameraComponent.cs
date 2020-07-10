@@ -16,6 +16,8 @@ namespace Komodo.Core.ECS.Components
     /// </summary>
     public class CameraComponent : Component
     {
+        #region Public
+
         #region Constructors
         public CameraComponent() : base(true, null)
         {
@@ -29,11 +31,9 @@ namespace Komodo.Core.ECS.Components
             Rotation = Vector3.Zero;
             Zoom = 1;
         }
-        #endregion Constructors
-
+        #endregion
+        
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Backward direction for current view matrix.
         /// </summary>
@@ -289,29 +289,9 @@ namespace Komodo.Core.ECS.Components
                 ClampZoom(value);
             }
         }
-        #endregion Public Members
-
-        #region Private Members
-        private float _farPlane { get; set; }
-
-        private float _fieldOfView { get; set; }
-
-        private float _maximumZoom = float.MaxValue;
-
-        private float _minimumZoom { get; set; }
-
-        private float _nearPlane { get; set; }
-
-        private Matrix _viewMatrix { get; set; }
-
-        private float _zoom { get; set; }
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Checks whether or not a <see cref="Microsoft.Xna.Framework.Point"/> is contained within the <see cref="BoundingFrustum"/> of the CameraComponent.
         /// </summary>
@@ -435,9 +415,13 @@ namespace Komodo.Core.ECS.Components
         {
             ClampZoom(Zoom - deltaZoom);
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #region Internal Member Methods
+        #endregion
+
+        #region Internal
+
+        #region Member Methods
         /// <summary>
         /// Calculates the <see cref="ViewMatrix"/> by creating a look-at Matrix.
         /// </summary>
@@ -463,9 +447,29 @@ namespace Komodo.Core.ECS.Components
                 up.MonoGameVector
             );
         }
-        #endregion Internal Member Methods
+        #endregion
 
-        #region Private Member Methods
+        #endregion
+    
+        #region Private
+
+        #region Members
+        private float _farPlane { get; set; }
+
+        private float _fieldOfView { get; set; }
+
+        private float _maximumZoom = float.MaxValue;
+
+        private float _minimumZoom { get; set; }
+
+        private float _nearPlane { get; set; }
+
+        private Matrix _viewMatrix { get; set; }
+
+        private float _zoom { get; set; }
+        #endregion
+
+        #region Member Methods
         /// <summary>
         /// Clamps <see cref="Zoom"/> between <see cref="MaximumZoom"/> and <see cref="MinimumZoom"/> based on the passed value.
         /// </summary>
@@ -480,8 +484,8 @@ namespace Komodo.Core.ECS.Components
                 MinimumZoom
             );
         }
-        #endregion Private Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
     }
 }

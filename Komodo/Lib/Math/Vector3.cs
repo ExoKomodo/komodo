@@ -8,6 +8,8 @@ namespace Komodo.Lib.Math
 {
     public readonly struct Vector3 : IEquatable<Vector3>
     {
+        #region Public
+
         #region Constructors
         public Vector3(MonoGameVector3 vector) : this(vector.X, vector.Y, vector.Z)
         {
@@ -21,9 +23,7 @@ namespace Komodo.Lib.Math
         {
             MonoGameVector = new MonoGameVector3(x, y, z);
         }
-        #endregion Constructors
-
-        #region Members
+        #endregion
 
         #region Public Members
         public MonoGameVector3 MonoGameVector { get; }
@@ -147,38 +147,11 @@ namespace Komodo.Lib.Math
                 return new Vector3(Z, Y, X);
             }
         }
-        #endregion Swizzling
+        #endregion
 
-        #endregion Public Members
-
-        #endregion Members
-
-        #region Static Members
-
-        #region Public Static Members
-        public static Vector3 One => new Vector3(1f, 1f, 1f);
-        public static Vector3 Zero => new Vector3();
-        public static Vector3 Up => new Vector3(0f, 1f, 0f);
-        public static Vector3 Down => -Up;
-        public static Vector3 Right => new Vector3(1f, 0f, 0f);
-        public static Vector3 Left => -Right;
-        public static Vector3 Back => new Vector3(0f, 0f, 1f);
-        public static Vector3 Forward => -Back;
-        public static Vector3 Max(Vector3 left, Vector3 right)
-        {
-            return new Vector3(MonoGameVector3.Max(left.MonoGameVector, right.MonoGameVector));
-        }
-        public static Vector3 Min(Vector3 left, Vector3 right)
-        {
-            return new Vector3(MonoGameVector3.Min(left.MonoGameVector, right.MonoGameVector));
-        }
-        #endregion Public Static Members
-
-        #endregion Static Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         public override bool Equals(object obj)
         {
             if (obj is Vector3 other)
@@ -200,13 +173,28 @@ namespace Komodo.Lib.Math
         {
             return MonoGameVector.Length();
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #region Static Members
+        public static Vector3 One => new Vector3(1f, 1f, 1f);
+        public static Vector3 Zero => new Vector3();
+        public static Vector3 Up => new Vector3(0f, 1f, 0f);
+        public static Vector3 Down => -Up;
+        public static Vector3 Right => new Vector3(1f, 0f, 0f);
+        public static Vector3 Left => -Right;
+        public static Vector3 Back => new Vector3(0f, 0f, 1f);
+        public static Vector3 Forward => -Back;
+        public static Vector3 Max(Vector3 left, Vector3 right)
+        {
+            return new Vector3(MonoGameVector3.Max(left.MonoGameVector, right.MonoGameVector));
+        }
+        public static Vector3 Min(Vector3 left, Vector3 right)
+        {
+            return new Vector3(MonoGameVector3.Min(left.MonoGameVector, right.MonoGameVector));
+        }
+        #endregion
 
         #region Static Methods
-
-        #region Public Static Methods
         public static Vector3 operator +(Vector3 vector) => vector;
         public static Vector3 operator -(Vector3 vector) => new Vector3(-vector.X, -vector.Y, -vector.Z);
 
@@ -327,8 +315,8 @@ namespace Komodo.Lib.Math
             var reflection = MonoGameVector3.Reflect(vectorToReflect.MonoGameVector, normal.MonoGameVector);
             return new Vector3(reflection);
         }
-        #endregion Public Static Methods
+        #endregion
 
-        #endregion Static Methods
+        #endregion
     }
 }

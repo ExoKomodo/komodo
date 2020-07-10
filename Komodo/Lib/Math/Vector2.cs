@@ -8,6 +8,8 @@ namespace Komodo.Lib.Math
 {
     public readonly struct Vector2 : IEquatable<Vector2>
     {
+        #region Public
+
         #region Constructors
         public Vector2(MonoGameVector2 vector) : this(vector.X, vector.Y)
         {
@@ -21,11 +23,9 @@ namespace Komodo.Lib.Math
         {
             MonoGameVector = new MonoGameVector2(x, y);
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         public MonoGameVector2 MonoGameVector { get; }
         public float X
         {
@@ -59,27 +59,11 @@ namespace Komodo.Lib.Math
                 return new Vector2(Y, X);
             }
         }
-        #endregion Swizzling
-        #endregion Public Members
-
-        #endregion Members
-
-        #region Static Members
-
-        #region Public Static Members
-        public static Vector2 One => new Vector2(1f, 1f);
-        public static Vector2 Down => new Vector2(0f, -1f);
-        public static Vector2 Left => new Vector2(-1f, 0f);
-        public static Vector2 Right => new Vector2(1f, 0f);
-        public static Vector2 Up => new Vector2(0f, 1f);
-        public static Vector2 Zero => new Vector2();
-        #endregion Public Static Members
-
-        #endregion Static Members
+        #endregion
+        
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         public override bool Equals(object obj)
         {
             if (obj is Vector2 other)
@@ -101,13 +85,18 @@ namespace Komodo.Lib.Math
         {
             return MonoGameVector.Length();
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #region Static Members
+        public static Vector2 One => new Vector2(1f, 1f);
+        public static Vector2 Down => new Vector2(0f, -1f);
+        public static Vector2 Left => new Vector2(-1f, 0f);
+        public static Vector2 Right => new Vector2(1f, 0f);
+        public static Vector2 Up => new Vector2(0f, 1f);
+        public static Vector2 Zero => new Vector2();
+        #endregion
 
         #region Static Methods
-
-        #region Public Static Methods
         public static Vector2 operator +(Vector2 vector) => vector;
         public static Vector2 operator -(Vector2 vector) => new Vector2(-vector.X, -vector.Y);
 
@@ -213,8 +202,8 @@ namespace Komodo.Lib.Math
             var reflection = MonoGameVector2.Reflect(vectorToReflect.MonoGameVector, normal.MonoGameVector);
             return new Vector2(reflection);
         }
-        #endregion Public Static Methods
+        #endregion
 
-        #endregion Static Methods
+        #endregion
     }
 }

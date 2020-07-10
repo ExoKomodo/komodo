@@ -15,6 +15,8 @@ namespace Komodo.Core.Engine.Graphics
     /// </summary>
     public class GraphicsManager
     {
+        #region Public
+
         #region Constructors
         /// <param name="game">Reference to current <see cref="Komodo.Core.Game"/> instance.</param>
         public GraphicsManager(Game game)
@@ -22,11 +24,9 @@ namespace Komodo.Core.Engine.Graphics
             Game = game;
             GraphicsDeviceManager = new GraphicsDeviceManager(_monoGame);
         }
-        #endregion Constructors
+        #endregion
 
         #region Members
-
-        #region Public Members
         /// <summary>
         /// Reference to current <see cref="Komodo.Core.Game"/> instance.
         /// </summary>
@@ -118,20 +118,9 @@ namespace Komodo.Core.Engine.Graphics
                 }
             }
         }
-        #endregion Public Members
-
-        #region Private Members
-        /// <summary>
-        /// Accessor for the underlying <see cref="Komodo.Core.MonoGame"/>.
-        /// </summary>
-        private MonoGame _monoGame => Game?._monoGame;
-        #endregion Private Members
-
-        #endregion Members
+        #endregion
 
         #region Member Methods
-
-        #region Public Member Methods
         /// <summary>
         /// Applies pending changes to the <see cref="Microsoft.Xna.Framework.GraphicsDeviceManager"/>.
         /// </summary>
@@ -247,8 +236,19 @@ namespace Komodo.Core.Engine.Graphics
                 GraphicsDeviceManager.ApplyChanges();
             }
         }
-        #endregion Public Member Methods
+        #endregion
 
-        #endregion Member Methods
+        #endregion
+
+        #region Private
+
+        #region Members
+        /// <summary>
+        /// Accessor for the underlying <see cref="Komodo.Core.MonoGame"/>.
+        /// </summary>
+        private MonoGame _monoGame => Game?._monoGame;
+        #endregion
+
+        #endregion
     }
 }
