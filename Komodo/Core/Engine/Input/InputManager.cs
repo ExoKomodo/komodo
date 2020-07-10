@@ -342,7 +342,7 @@ namespace Komodo.Core.Engine.Input
                     var thumbstickPosition = new Vector2(gamePadStates[playerIndex].ThumbSticks.Left);
                     var strength = thumbstickPosition.Length();
                     var direction = thumbstickPosition != Vector2.Zero ? Vector2.Normalize(thumbstickPosition) : Vector2.Zero;
-                    komodoInputState = strength == 0f ? InputState.Down : InputState.Up;
+                    komodoInputState = strength == 0f ? InputState.Up : InputState.Down;
                     return new InputInfo(input, komodoInputState, direction, strength);
                 case Inputs.ThumbstickRight:
                     thumbstickPosition = new Vector2(gamePadStates[playerIndex].ThumbSticks.Right);
