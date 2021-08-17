@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <WarnOn>3390;$(WarnOn)</WarnOn>
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
+
+    <!-- TODO: Make the constants runtime-configurable if possible AND desired -->
+    <!--<DefineConstants>$(DefineConstants);DEBUG</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);TREAT_OPENGL_LINK_FAILURE_AS_ERROR</DefineConstants>-->
+    <!--<DefineConstants>$(DefineConstants);INLINE_LOGGER</DefineConstants>-->
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Logging.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL1_0.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL1_1.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL1_2.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL1_3.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL1_4.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL1_5.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL2_0.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL2_1.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL3_0.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL3_1.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL3_2.fs" />
+    <Compile Include="Backends/OpenGL/Api/Constants/OpenGL3_3.fs" />
+    <Compile Include="Backends/OpenGL/Api/Common.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL1_0.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL1_1.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL1_2.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL1_3.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL1_4.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL1_5.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL2_0.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL2_1.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL3_0.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL3_1.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL3_2.fs" />
+    <Compile Include="Backends/OpenGL/Api/OpenGL3_3.fs" />
+    <Compile Include="Backends/OpenGL/Module.fs" />
+    <Compile Include="Graphics/Display.fs" />
+    <Compile Include="Engine/Internals.fs" />
+    <Compile Include="Game.fs" />
+    <ProjectReference Include="..\ThirdParty\SDL2\SDL2Bindings.csproj" />
+    <PackageReference Include="FSharp.Core" Version="5.0.2">
+      <GeneratePathProperty></GeneratePathProperty>
+    </PackageReference>
+  </ItemGroup>
+</Project>

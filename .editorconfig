@@ -1,7 +1,0 @@
-﻿[*.cs]
-
-# IDE1006: Naming Styles
-dotnet_diagnostic.IDE1006.severity = none
-
-# CA1031: Do not catch general exception types
-dotnet_diagnostic.CA1031.severity = suggestion

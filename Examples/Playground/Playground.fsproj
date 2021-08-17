@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <WarnOn>3390;$(WarnOn)</WarnOn>
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
+
+    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+     <DefineConstants>$(DefineConstants);TREAT_OPENGL_LINK_FAILURE_AS_ERROR</DefineConstants>
+     <DefineConstants>$(DefineConstants);INLINE_LOGGER</DefineConstants> 
+    <Configurations>Release;Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Shaders\fragment.glsl" />
+    <Content Include="Resources\Shaders\vertex.glsl" />
+    <Content Include="Resources\Shaders\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="Program.fs" />
+    <ProjectReference Include="..\..\Komodo\Komodo.fsproj">
+      <Properties Condition="$(DefineConstants.Contains('DEBUG'))">
+        DefineConstants=$(DefineConstants);DEBUG
+      </Properties>
+      <Properties Condition="$(DefineConstants.Contains('TREAT_OPENGL_LINK_FAILURE_AS_ERROR'))">
+        DefineConstants=$(DefineConstants);TREAT_OPENGL_LINK_FAILURE_AS_ERROR
+      </Properties>
+      <Properties Condition="$(DefineConstants.Contains('INLINE_LOGGER'))">
+        DefineConstants=$(DefineConstants);INLINE_LOGGER
+      </Properties>
+    </ProjectReference>
+    <PackageReference Include="FSharp.Core" Version="5.0.2">
+      <GeneratePathProperty></GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Argu" Version="6.1.1">
+      <GeneratePathProperty></GeneratePathProperty>
+    </PackageReference>
+  </ItemGroup>
+</Project>

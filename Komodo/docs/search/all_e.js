@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['target_81',['Target',['../class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_camera_component.html#aa0e154bd9501f5b9f8f4012f4611d380',1,'Komodo::Core::ECS::Components::CameraComponent']]],
-  ['text_82',['Text',['../class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_text_component.html#a731b9f5222f9fdb95392009dcba7dbb9',1,'Komodo::Core::ECS::Components::TextComponent']]],
-  ['textcomponent_83',['TextComponent',['../class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_text_component.html',1,'Komodo.Core.ECS.Components.TextComponent'],['../class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_text_component.html#a787df2de068ea71c8c5a62ba07d837f2',1,'Komodo.Core.ECS.Components.TextComponent.TextComponent(SpriteFont font, Color color, Effect shader, string text=null)'],['../class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_text_component.html#a60c319408c0d2bdc7f7e9b8a93c23972',1,'Komodo.Core.ECS.Components.TextComponent.TextComponent(string fontPath, Color color, Effect shader, string text=null)']]],
-  ['texture_84',['Texture',['../class_komodo_1_1_core_1_1_engine_1_1_graphics_1_1_texture.html',1,'Komodo.Core.Engine.Graphics.Texture'],['../class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_drawable3_d_component.html#a9dc9562153be4eabb9f799a4d5d4fab5',1,'Komodo.Core.ECS.Components.Drawable3DComponent.Texture()'],['../class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_sprite_component.html#a07cd3aa451a886be2d23e22b07d0405a',1,'Komodo.Core.ECS.Components.SpriteComponent.Texture()']]],
-  ['texturepath_85',['TexturePath',['../class_komodo_1_1_core_1_1_e_c_s_1_1_components_1_1_sprite_component.html#aa35b95bc9ab160682d94e8cec370ba86',1,'Komodo::Core::ECS::Components::SpriteComponent']]],
-  ['transaction_86',['Transaction',['../class_komodo_1_1_lib_1_1_network_1_1_transaction.html',1,'Komodo::Lib::Network']]]
-];

@@ -1,0 +1,463 @@
+[<AutoOpen>]
+module Komodo.Backends.OpenGL.Api.Constants.OpenGL3_0
+
+[<Literal>]
+let GL_COMPARE_REF_TO_TEXTURE = 0x884Eu
+[<Literal>]
+let GL_CLIP_DISTANCE0 = 0x3000u
+[<Literal>]
+let GL_CLIP_DISTANCE1 = 0x3001u
+[<Literal>]
+let GL_CLIP_DISTANCE2 = 0x3002u
+[<Literal>]
+let GL_CLIP_DISTANCE3 = 0x3003u
+[<Literal>]
+let GL_CLIP_DISTANCE4 = 0x3004u
+[<Literal>]
+let GL_CLIP_DISTANCE5 = 0x3005u
+[<Literal>]
+let GL_CLIP_DISTANCE6 = 0x3006u
+[<Literal>]
+let GL_CLIP_DISTANCE7 = 0x3007u
+[<Literal>]
+let GL_MAX_CLIP_DISTANCES = 0x0D32u
+[<Literal>]
+let GL_MAJOR_VERSION = 0x821Bu
+[<Literal>]
+let GL_MINOR_VERSION = 0x821Cu
+[<Literal>]
+let GL_NUM_EXTENSIONS = 0x821Du
+[<Literal>]
+let GL_CONTEXT_FLAGS = 0x821Eu
+[<Literal>]
+let GL_COMPRESSED_RED = 0x8225u
+[<Literal>]
+let GL_COMPRESSED_RG = 0x8226u
+[<Literal>]
+let GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT = 0x00000001u
+[<Literal>]
+let GL_RGBA32F = 0x8814u
+[<Literal>]
+let GL_RGB32F = 0x8815u
+[<Literal>]
+let GL_RGBA16F = 0x881Au
+[<Literal>]
+let GL_RGB16F = 0x881Bu
+[<Literal>]
+let GL_VERTEX_ATTRIB_ARRAY_INTEGER = 0x88FDu
+[<Literal>]
+let GL_MAX_ARRAY_TEXTURE_LAYERS = 0x88FFu
+[<Literal>]
+let GL_MIN_PROGRAM_TEXEL_OFFSET = 0x8904u
+[<Literal>]
+let GL_MAX_PROGRAM_TEXEL_OFFSET = 0x8905u
+[<Literal>]
+let GL_CLAMP_READ_COLOR = 0x891Cu
+[<Literal>]
+let GL_FIXED_ONLY = 0x891Du
+[<Literal>]
+let GL_MAX_VARYING_COMPONENTS = 0x8B4Bu
+[<Literal>]
+let GL_TEXTURE_1D_ARRAY = 0x8C18u
+[<Literal>]
+let GL_PROXY_TEXTURE_1D_ARRAY = 0x8C19u
+[<Literal>]
+let GL_TEXTURE_2D_ARRAY = 0x8C1Au
+[<Literal>]
+let GL_PROXY_TEXTURE_2D_ARRAY = 0x8C1Bu
+[<Literal>]
+let GL_TEXTURE_BINDING_1D_ARRAY = 0x8C1Cu
+[<Literal>]
+let GL_TEXTURE_BINDING_2D_ARRAY = 0x8C1Du
+[<Literal>]
+let GL_R11F_G11F_B10F = 0x8C3Au
+[<Literal>]
+let GL_UNSIGNED_INT_10F_11F_11F_REV = 0x8C3Bu
+[<Literal>]
+let GL_RGB9_E5 = 0x8C3Du
+[<Literal>]
+let GL_UNSIGNED_INT_5_9_9_9_REV = 0x8C3Eu
+[<Literal>]
+let GL_TEXTURE_SHARED_SIZE = 0x8C3Fu
+[<Literal>]
+let GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH = 0x8C76u
+[<Literal>]
+let GL_TRANSFORM_FEEDBACK_BUFFER_MODE = 0x8C7Fu
+[<Literal>]
+let GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS = 0x8C80u
+[<Literal>]
+let GL_TRANSFORM_FEEDBACK_VARYINGS = 0x8C83u
+[<Literal>]
+let GL_TRANSFORM_FEEDBACK_BUFFER_START = 0x8C84u
+[<Literal>]
+let GL_TRANSFORM_FEEDBACK_BUFFER_SIZE = 0x8C85u
+[<Literal>]
+let GL_PRIMITIVES_GENERATED = 0x8C87u
+[<Literal>]
+let GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN = 0x8C88u
+[<Literal>]
+let GL_RASTERIZER_DISCARD = 0x8C89u
+[<Literal>]
+let GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS = 0x8C8Au
+[<Literal>]
+let GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS = 0x8C8Bu
+[<Literal>]
+let GL_INTERLEAVED_ATTRIBS = 0x8C8Cu
+[<Literal>]
+let GL_SEPARATE_ATTRIBS = 0x8C8Du
+[<Literal>]
+let GL_TRANSFORM_FEEDBACK_BUFFER = 0x8C8Eu
+[<Literal>]
+let GL_TRANSFORM_FEEDBACK_BUFFER_BINDING = 0x8C8Fu
+[<Literal>]
+let GL_RGBA32UI = 0x8D70u
+[<Literal>]
+let GL_RGB32UI = 0x8D71u
+[<Literal>]
+let GL_RGBA16UI = 0x8D76u
+[<Literal>]
+let GL_RGB16UI = 0x8D77u
+[<Literal>]
+let GL_RGBA8UI = 0x8D7Cu
+[<Literal>]
+let GL_RGB8UI = 0x8D7Du
+[<Literal>]
+let GL_RGBA32I = 0x8D82u
+[<Literal>]
+let GL_RGB32I = 0x8D83u
+[<Literal>]
+let GL_RGBA16I = 0x8D88u
+[<Literal>]
+let GL_RGB16I = 0x8D89u
+[<Literal>]
+let GL_RGBA8I = 0x8D8Eu
+[<Literal>]
+let GL_RGB8I = 0x8D8Fu
+[<Literal>]
+let GL_RED_INTEGER = 0x8D94u
+[<Literal>]
+let GL_GREEN_INTEGER = 0x8D95u
+[<Literal>]
+let GL_BLUE_INTEGER = 0x8D96u
+[<Literal>]
+let GL_RGB_INTEGER = 0x8D98u
+[<Literal>]
+let GL_RGBA_INTEGER = 0x8D99u
+[<Literal>]
+let GL_BGR_INTEGER = 0x8D9Au
+[<Literal>]
+let GL_BGRA_INTEGER = 0x8D9Bu
+[<Literal>]
+let GL_SAMPLER_1D_ARRAY = 0x8DC0u
+[<Literal>]
+let GL_SAMPLER_2D_ARRAY = 0x8DC1u
+[<Literal>]
+let GL_SAMPLER_1D_ARRAY_SHADOW = 0x8DC3u
+[<Literal>]
+let GL_SAMPLER_2D_ARRAY_SHADOW = 0x8DC4u
+[<Literal>]
+let GL_SAMPLER_CUBE_SHADOW = 0x8DC5u
+[<Literal>]
+let GL_UNSIGNED_INT_VEC2 = 0x8DC6u
+[<Literal>]
+let GL_UNSIGNED_INT_VEC3 = 0x8DC7u
+[<Literal>]
+let GL_UNSIGNED_INT_VEC4 = 0x8DC8u
+[<Literal>]
+let GL_INT_SAMPLER_1D = 0x8DC9u
+[<Literal>]
+let GL_INT_SAMPLER_2D = 0x8DCAu
+[<Literal>]
+let GL_INT_SAMPLER_3D = 0x8DCBu
+[<Literal>]
+let GL_INT_SAMPLER_CUBE = 0x8DCCu
+[<Literal>]
+let GL_INT_SAMPLER_1D_ARRAY = 0x8DCEu
+[<Literal>]
+let GL_INT_SAMPLER_2D_ARRAY = 0x8DCFu
+[<Literal>]
+let GL_UNSIGNED_INT_SAMPLER_1D = 0x8DD1u
+[<Literal>]
+let GL_UNSIGNED_INT_SAMPLER_2D = 0x8DD2u
+[<Literal>]
+let GL_UNSIGNED_INT_SAMPLER_3D = 0x8DD3u
+[<Literal>]
+let GL_UNSIGNED_INT_SAMPLER_CUBE = 0x8DD4u
+[<Literal>]
+let GL_UNSIGNED_INT_SAMPLER_1D_ARRAY = 0x8DD6u
+[<Literal>]
+let GL_UNSIGNED_INT_SAMPLER_2D_ARRAY = 0x8DD7u
+[<Literal>]
+let GL_QUERY_WAIT = 0x8E13u
+[<Literal>]
+let GL_QUERY_NO_WAIT = 0x8E14u
+[<Literal>]
+let GL_QUERY_BY_REGION_WAIT = 0x8E15u
+[<Literal>]
+let GL_QUERY_BY_REGION_NO_WAIT = 0x8E16u
+[<Literal>]
+let GL_BUFFER_ACCESS_FLAGS = 0x911Fu
+[<Literal>]
+let GL_BUFFER_MAP_LENGTH = 0x9120u
+[<Literal>]
+let GL_BUFFER_MAP_OFFSET = 0x9121u
+[<Literal>]
+let GL_DEPTH_COMPONENT32F = 0x8CACu
+[<Literal>]
+let GL_DEPTH32F_STENCIL8 = 0x8CADu
+[<Literal>]
+let GL_FLOAT_32_UNSIGNED_INT_24_8_REV = 0x8DADu
+[<Literal>]
+let GL_INVALID_FRAMEBUFFER_OPERATION = 0x0506u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING = 0x8210u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE = 0x8211u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE = 0x8212u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE = 0x8213u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE = 0x8214u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE = 0x8215u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE = 0x8216u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE = 0x8217u
+[<Literal>]
+let GL_FRAMEBUFFER_DEFAuT = 0x8218u
+[<Literal>]
+let GL_FRAMEBUFFER_UNDEFINED = 0x8219u
+[<Literal>]
+let GL_DEPTH_STENCIL_ATTACHMENT = 0x821Au
+[<Literal>]
+let GL_MAX_RENDERBUFFER_SIZE = 0x84E8u
+[<Literal>]
+let GL_DEPTH_STENCIL = 0x84F9u
+[<Literal>]
+let GL_UNSIGNED_INT_24_8 = 0x84FAu
+[<Literal>]
+let GL_DEPTH24_STENCIL8 = 0x88F0u
+[<Literal>]
+let GL_TEXTURE_STENCIL_SIZE = 0x88F1u
+[<Literal>]
+let GL_TEXTURE_RED_TYPE = 0x8C10u
+[<Literal>]
+let GL_TEXTURE_GREEN_TYPE = 0x8C11u
+[<Literal>]
+let GL_TEXTURE_BLUE_TYPE = 0x8C12u
+[<Literal>]
+let GL_TEXTURE_ALPHA_TYPE = 0x8C13u
+[<Literal>]
+let GL_TEXTURE_DEPTH_TYPE = 0x8C16u
+[<Literal>]
+let GL_UNSIGNED_NORMALIZED = 0x8C17u
+[<Literal>]
+let GL_FRAMEBUFFER_BINDING = 0x8CA6u
+[<Literal>]
+let GL_DRAW_FRAMEBUFFER_BINDING = 0x8CA6u
+[<Literal>]
+let GL_RENDERBUFFER_BINDING = 0x8CA7u
+[<Literal>]
+let GL_READ_FRAMEBUFFER = 0x8CA8u
+[<Literal>]
+let GL_DRAW_FRAMEBUFFER = 0x8CA9u
+[<Literal>]
+let GL_READ_FRAMEBUFFER_BINDING = 0x8CAAu
+[<Literal>]
+let GL_RENDERBUFFER_SAMPLES = 0x8CABu
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE = 0x8CD0u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME = 0x8CD1u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL = 0x8CD2u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE = 0x8CD3u
+[<Literal>]
+let GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER = 0x8CD4u
+[<Literal>]
+let GL_FRAMEBUFFER_COMPLETE = 0x8CD5u
+[<Literal>]
+let GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT = 0x8CD6u
+[<Literal>]
+let GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT = 0x8CD7u
+[<Literal>]
+let GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER = 0x8CDBu
+[<Literal>]
+let GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER = 0x8CDCu
+[<Literal>]
+let GL_FRAMEBUFFER_UNSUPPORTED = 0x8CDDu
+[<Literal>]
+let GL_MAX_COLOR_ATTACHMENTS = 0x8CDFu
+[<Literal>]
+let GL_COLOR_ATTACHMENT0 = 0x8CE0u
+[<Literal>]
+let GL_COLOR_ATTACHMENT1 = 0x8CE1u
+[<Literal>]
+let GL_COLOR_ATTACHMENT2 = 0x8CE2u
+[<Literal>]
+let GL_COLOR_ATTACHMENT3 = 0x8CE3u
+[<Literal>]
+let GL_COLOR_ATTACHMENT4 = 0x8CE4u
+[<Literal>]
+let GL_COLOR_ATTACHMENT5 = 0x8CE5u
+[<Literal>]
+let GL_COLOR_ATTACHMENT6 = 0x8CE6u
+[<Literal>]
+let GL_COLOR_ATTACHMENT7 = 0x8CE7u
+[<Literal>]
+let GL_COLOR_ATTACHMENT8 = 0x8CE8u
+[<Literal>]
+let GL_COLOR_ATTACHMENT9 = 0x8CE9u
+[<Literal>]
+let GL_COLOR_ATTACHMENT10 = 0x8CEAu
+[<Literal>]
+let GL_COLOR_ATTACHMENT11 = 0x8CEBu
+[<Literal>]
+let GL_COLOR_ATTACHMENT12 = 0x8CECu
+[<Literal>]
+let GL_COLOR_ATTACHMENT13 = 0x8CEDu
+[<Literal>]
+let GL_COLOR_ATTACHMENT14 = 0x8CEEu
+[<Literal>]
+let GL_COLOR_ATTACHMENT15 = 0x8CEFu
+[<Literal>]
+let GL_COLOR_ATTACHMENT16 = 0x8CF0u
+[<Literal>]
+let GL_COLOR_ATTACHMENT17 = 0x8CF1u
+[<Literal>]
+let GL_COLOR_ATTACHMENT18 = 0x8CF2u
+[<Literal>]
+let GL_COLOR_ATTACHMENT19 = 0x8CF3u
+[<Literal>]
+let GL_COLOR_ATTACHMENT20 = 0x8CF4u
+[<Literal>]
+let GL_COLOR_ATTACHMENT21 = 0x8CF5u
+[<Literal>]
+let GL_COLOR_ATTACHMENT22 = 0x8CF6u
+[<Literal>]
+let GL_COLOR_ATTACHMENT23 = 0x8CF7u
+[<Literal>]
+let GL_COLOR_ATTACHMENT24 = 0x8CF8u
+[<Literal>]
+let GL_COLOR_ATTACHMENT25 = 0x8CF9u
+[<Literal>]
+let GL_COLOR_ATTACHMENT26 = 0x8CFAu
+[<Literal>]
+let GL_COLOR_ATTACHMENT27 = 0x8CFBu
+[<Literal>]
+let GL_COLOR_ATTACHMENT28 = 0x8CFCu
+[<Literal>]
+let GL_COLOR_ATTACHMENT29 = 0x8CFDu
+[<Literal>]
+let GL_COLOR_ATTACHMENT30 = 0x8CFEu
+[<Literal>]
+let GL_COLOR_ATTACHMENT31 = 0x8CFFu
+[<Literal>]
+let GL_DEPTH_ATTACHMENT = 0x8D00u
+[<Literal>]
+let GL_STENCIL_ATTACHMENT = 0x8D20u
+[<Literal>]
+let GL_FRAMEBUFFER = 0x8D40u
+[<Literal>]
+let GL_RENDERBUFFER = 0x8D41u
+[<Literal>]
+let GL_RENDERBUFFER_WIDTH = 0x8D42u
+[<Literal>]
+let GL_RENDERBUFFER_HEIGHT = 0x8D43u
+[<Literal>]
+let GL_RENDERBUFFER_INTERNAL_FORMAT = 0x8D44u
+[<Literal>]
+let GL_STENCIL_INDEX1 = 0x8D46u
+[<Literal>]
+let GL_STENCIL_INDEX4 = 0x8D47u
+[<Literal>]
+let GL_STENCIL_INDEX8 = 0x8D48u
+[<Literal>]
+let GL_STENCIL_INDEX16 = 0x8D49u
+[<Literal>]
+let GL_RENDERBUFFER_RED_SIZE = 0x8D50u
+[<Literal>]
+let GL_RENDERBUFFER_GREEN_SIZE = 0x8D51u
+[<Literal>]
+let GL_RENDERBUFFER_BLUE_SIZE = 0x8D52u
+[<Literal>]
+let GL_RENDERBUFFER_ALPHA_SIZE = 0x8D53u
+[<Literal>]
+let GL_RENDERBUFFER_DEPTH_SIZE = 0x8D54u
+[<Literal>]
+let GL_RENDERBUFFER_STENCIL_SIZE = 0x8D55u
+[<Literal>]
+let GL_FRAMEBUFFER_INCOMPLETE_MuTISAMPLE = 0x8D56u
+[<Literal>]
+let GL_MAX_SAMPLES = 0x8D57u
+[<Literal>]
+let GL_FRAMEBUFFER_SRGB = 0x8DB9u
+[<Literal>]
+let GL_HALF_FLOAT = 0x140Bu
+[<Literal>]
+let GL_MAP_READ_BIT = 0x0001u
+[<Literal>]
+let GL_MAP_WRITE_BIT = 0x0002u
+[<Literal>]
+let GL_MAP_INVALIDATE_RANGE_BIT = 0x0004u
+[<Literal>]
+let GL_MAP_INVALIDATE_BUFFER_BIT = 0x0008u
+[<Literal>]
+let GL_MAP_FLUSH_EXPLICIT_BIT = 0x0010u
+[<Literal>]
+let GL_MAP_UNSYNCHRONIZED_BIT = 0x0020u
+[<Literal>]
+let GL_COMPRESSED_RED_RGTC1 = 0x8DBBu
+[<Literal>]
+let GL_COMPRESSED_SIGNED_RED_RGTC1 = 0x8DBCu
+[<Literal>]
+let GL_COMPRESSED_RG_RGTC2 = 0x8DBDu
+[<Literal>]
+let GL_COMPRESSED_SIGNED_RG_RGTC2 = 0x8DBEu
+[<Literal>]
+let GL_RG = 0x8227u
+[<Literal>]
+let GL_RG_INTEGER = 0x8228u
+[<Literal>]
+let GL_R8 = 0x8229u
+[<Literal>]
+let GL_R16 = 0x822Au
+[<Literal>]
+let GL_RG8 = 0x822Bu
+[<Literal>]
+let GL_RG16 = 0x822Cu
+[<Literal>]
+let GL_R16F = 0x822Du
+[<Literal>]
+let GL_R32F = 0x822Eu
+[<Literal>]
+let GL_RG16F = 0x822Fu
+[<Literal>]
+let GL_RG32F = 0x8230u
+[<Literal>]
+let GL_R8I = 0x8231u
+[<Literal>]
+let GL_R8UI = 0x8232u
+[<Literal>]
+let GL_R16I = 0x8233u
+[<Literal>]
+let GL_R16UI = 0x8234u
+[<Literal>]
+let GL_R32I = 0x8235u
+[<Literal>]
+let GL_R32UI = 0x8236u
+[<Literal>]
+let GL_RG8I = 0x8237u
+[<Literal>]
+let GL_RG8UI = 0x8238u
+[<Literal>]
+let GL_RG16I = 0x8239u
+[<Literal>]
+let GL_RG16UI = 0x823Au
+[<Literal>]
+let GL_RG32I = 0x823Bu
+[<Literal>]
+let GL_RG32UI = 0x823Cu
