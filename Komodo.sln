@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{6D
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Playground", "Examples\Playground\Playground.fsproj", "{629C50BD-48AE-4F16-A9D3-46A8567BE058}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGLBindings", "ThirdParty\OpenGL\OpenGLBindings.csproj", "{D875E3BB-61D7-49EF-AE2C-E65100046EE1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,23 +62,10 @@ Global
 		{629C50BD-48AE-4F16-A9D3-46A8567BE058}.Release|x64.Build.0 = Release|Any CPU
 		{629C50BD-48AE-4F16-A9D3-46A8567BE058}.Release|x86.ActiveCfg = Release|Any CPU
 		{629C50BD-48AE-4F16-A9D3-46A8567BE058}.Release|x86.Build.0 = Release|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Debug|x64.Build.0 = Debug|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Debug|x86.Build.0 = Debug|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Release|x64.ActiveCfg = Release|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Release|x64.Build.0 = Release|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Release|x86.ActiveCfg = Release|Any CPU
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2E5FD0D7-FD8C-4A37-8858-761E0AF1DA79} = {009ECAA0-45AE-4D83-8966-58A02425619A}
 		{629C50BD-48AE-4F16-A9D3-46A8567BE058} = {6D9C179B-8867-4A90-970B-0E9D811DB761}
-		{D875E3BB-61D7-49EF-AE2C-E65100046EE1} = {009ECAA0-45AE-4D83-8966-58A02425619A}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
